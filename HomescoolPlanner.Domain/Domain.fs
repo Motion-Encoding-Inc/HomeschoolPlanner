@@ -21,25 +21,25 @@ type SchedulePreview =
       End   : System.DateOnly
       Items : Occurrence list }
 
-module Scheduler =
-    val materialize :
-        strategy:PlanStrategy ->
-        allowedDays:DayMask ->
-        startDate:System.DateOnly ->
-        endDate:System.DateOnly ->
-        units:int option ->
-        minutesPerDay:int option ->
-        lookahead:int ->
-        SchedulePreview
+//module Scheduler =
+//    val materialize :
+//        strategy:PlanStrategy ->
+//        allowedDays:DayMask ->
+//        startDate:System.DateOnly ->
+//        endDate:System.DateOnly ->
+//        units:int option ->
+//        minutesPerDay:int option ->
+//        lookahead:int ->
+//        SchedulePreview
 
-    val applySkip :
-        strategy:PlanStrategy ->
-        skipDate:System.DateOnly ->
-        current:SchedulePreview ->
-        SchedulePreview
+//    val applySkip :
+//        strategy:PlanStrategy ->
+//        skipDate:System.DateOnly ->
+//        current:SchedulePreview ->
+//        SchedulePreview
 
-    val applyComplete :
-        current:SchedulePreview ->
-        date:System.DateOnly ->
-        unitOrMinutes:int ->
-        SchedulePreview
+//    val applyComplete :
+//        current:SchedulePreview ->
+//        date:System.DateOnly ->
+//        unitOrMinutes:int ->
+//        SchedulePreview

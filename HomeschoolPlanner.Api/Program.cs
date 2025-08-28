@@ -1,4 +1,5 @@
 using HomeschoolPlanner.Api.Middleware;
+using HomeschoolPlanner.Api.Services;
 using HomeschoolPlanner.Data;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -11,9 +12,41 @@ var builder = WebApplication.CreateBuilder(args);
 // 1) ProblemDetails
 builder.Services.AddProblemDetails();
 
-// 2) EF Core (Azure SQL)
+
+// === DB provider switch ===
+var dbProvider = builder.Configuration["DB_PROVIDER"] ?? "SqlServer";
 builder.Services.AddDbContext<AppDbContext>(opts =>
-    opts.UseSqlServer(builder.Configuration.GetConnectionString("Sql")));
+{
+    if (string.Equals(dbProvider, "Sqlite", StringComparison.OrdinalIgnoreCase))
+    {
+        var cs = builder.Configuration.GetConnectionString("Sqlite")
+                 ?? "Data Source=dev.db";
+        opts.UseSqlite(cs);
+    }
+    else if (string.Equals(dbProvider, "InMemory", StringComparison.OrdinalIgnoreCase))
+    {
+        opts.UseInMemoryDatabase("homeschool");
+    }
+    else
+    {
+        // default: SQL Server (for your machine/Azure)
+        var cs = builder.Configuration.GetConnectionString("Sql")
+                 ?? "Server=(localdb)\\MSSQLLocalDB;Database=HomeschoolPlanner;Trusted_Connection=True;MultipleActiveResultSets=true";
+        opts.UseSqlServer(cs);
+    }
+});
+
+var storageMode = builder.Configuration["Storage:Mode"] ?? "Fake";
+if (storageMode.Equals("Fake", StringComparison.OrdinalIgnoreCase))
+{
+    builder.Services.AddSingleton<IStorageService, FakeStorageService>();
+}
+else
+{
+    // TODO: real Azure implementation later
+    builder.Services.AddSingleton<IStorageService, FakeStorageService>(); // temporary fallback
+}
+
 
 //// 3) Auth (JWT placeholder — wire real keys later)
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

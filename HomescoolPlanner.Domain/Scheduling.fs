@@ -9,46 +9,46 @@ module DayMask =
     let contains (mask: DayMask) (day: DayOfWeek) =
         (mask &&& (1 <<< int day)) <> 0
 
-module Scheduler =
+//module Scheduler =
 
-    val materialize :
-        strategy:PlanStrategy ->
-        allowedDays:DayMask ->
-        startDate:DateOnly ->
-        endDate:DateOnly ->
-        units:int option ->             // for Book/Custom
-        minutesPerDay:int option ->     // for Time
-        lookahead:int ->
-        SchedulePreview
+    //val materialize :
+    //    strategy:PlanStrategy ->
+    //    allowedDays:DayMask ->
+    //    startDate:DateOnly ->
+    //    endDate:DateOnly ->
+    //    units:int option ->             // for Book/Custom
+    //    minutesPerDay:int option ->     // for Time
+    //    lookahead:int ->
+    //    SchedulePreview
 
-    val applySkip :
-        strategy:PlanStrategy ->
-        skipDate:DateOnly ->
-        current:SchedulePreview ->
-        SchedulePreview
+    //val applySkip :
+    //    strategy:PlanStrategy ->
+    //    skipDate:DateOnly ->
+    //    current:SchedulePreview ->
+    //    SchedulePreview
 
-    val applyComplete :
-        current:SchedulePreview ->
-        date:DateOnly ->
-        unitOrMinutes:int ->
-        SchedulePreview
+    //val applyComplete :
+    //    current:SchedulePreview ->
+    //    date:DateOnly ->
+    //    unitOrMinutes:int ->
+    //    SchedulePreview
 
-// Temporary stub implementations so API compiles immediately
-module SchedulerImpl =
-    open Scheduler
+//// Temporary stub implementations so API compiles immediately
+//module SchedulerImpl =
+//    open Scheduler
 
-    let private empty start finish =
-        { Start = start; End = finish; Items = [] }
+//    let private empty start finish =
+//        { Start = start; End = finish; Items = [] }
 
-    let materialize
-        (strategy:PlanStrategy)
-        (allowedDays:DayMask)
-        (startDate:DateOnly)
-        (endDate:DateOnly)
-        (units:int option)
-        (minutesPerDay:int option)
-        (lookahead:int) : SchedulePreview =
-        empty startDate endDate
+//    let materialize
+//        (strategy:PlanStrategy)
+//        (allowedDays:DayMask)
+//        (startDate:DateOnly)
+//        (endDate:DateOnly)
+//        (units:int option)
+//        (minutesPerDay:int option)
+//        (lookahead:int) : SchedulePreview =
+//        empty startDate endDate
 
-    let applySkip _strategy _skipDate current = current
-    let applyComplete current _date _amt      = current
+//    let applySkip _strategy _skipDate current = current
+//    let applyComplete current _date _amt      = current

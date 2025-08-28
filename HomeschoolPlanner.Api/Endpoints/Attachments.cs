@@ -1,4 +1,6 @@
-﻿using HomeschoolPlanner.Data;
+﻿using HomeschoolPlanner.Api.Services;
+using HomeschoolPlanner.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HomeschoolPlanner.Api.Endpoints
 {
@@ -6,25 +8,38 @@ namespace HomeschoolPlanner.Api.Endpoints
     {
         public record StartUploadRequest(Guid SubjectId, string FileName, string MimeType, long SizeBytes);
         public record StartUploadResponse(string UploadUrl, string BlobPath);
+        public record ConfirmUploadRequest(Guid SubjectId, string BlobPath, string FileName, string MimeType, long SizeBytes);
 
-        public static IResult RequestUpload(StartUploadRequest r, IConfiguration cfg)
+        public static async Task<IResult> RequestUpload(
+            [FromBody] StartUploadRequest r,
+            IStorageService storage)
         {
-            // Validate mime/size here; 100MB cap
-            // Generate SAS URL (Azure.Storage.Blobs)
-            // Return { uploadUrl, blobPath } for client to PUT/POST directly
-            return Results.Ok(new StartUploadResponse(
-                UploadUrl: "https://storage/..../sas",
-                BlobPath: $"attachments/{Guid.NewGuid()}-{r.FileName}"
-            ));
+            // TODO: validate mime/size if you want guardrails
+            var (url, path) = await storage.StartUploadAsync(r.FileName, r.MimeType, r.SizeBytes);
+            return Results.Ok(new StartUploadResponse(url, path));
         }
 
-        public static async Task<IResult> ConfirmUpload(AppDbContext db, Attachment a)
+        public static async Task<IResult> ConfirmUpload(
+            [FromBody] ConfirmUploadRequest r,
+            AppDbContext db,
+            IStorageService storage)
         {
-            a.Id = Guid.NewGuid();
+            await storage.ConfirmUploadAsync(r.SubjectId, r.BlobPath, r.FileName, r.MimeType, r.SizeBytes);
+
+            var a = new Attachment
+            {
+                Id = Guid.NewGuid(),
+                SubjectId = r.SubjectId,
+                FileName = r.FileName,
+                MimeType = r.MimeType,
+                SizeBytes = r.SizeBytes,
+                BlobPath = r.BlobPath,
+                CreatedUtc = DateTime.UtcNow
+            };
             db.Attachments.Add(a);
             await db.SaveChangesAsync();
+
             return Results.Created($"/api/v1/attachments/{a.Id}", a);
         }
     }
-
 }
