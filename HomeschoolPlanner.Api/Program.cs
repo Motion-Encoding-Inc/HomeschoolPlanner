@@ -48,7 +48,7 @@ else
 }
 
 
-//// 3) Auth (JWT placeholder — wire real keys later)
+//// 3) Auth (JWT placeholder  wire real keys later)
 //builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 //    .AddJwtBearer();
 
@@ -88,14 +88,15 @@ var app = builder.Build();
 app.UseMiddleware<ProblemDetailsMiddleware>();
 app.UseStatusCodePages(); // pairs well with ProblemDetails for non-exception 4xx/5xx
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Uncomment Swagger once OpenAPI packages are configured.
+//if (app.Environment.IsDevelopment())
+//{
+//    app.UseSwagger();
+//    app.UseSwaggerUI();
+//}
 
 app.UseCors("default");
-app.UseAuthentication();
+//app.UseAuthentication();
 app.UseAuthorization();
 
 // Health
