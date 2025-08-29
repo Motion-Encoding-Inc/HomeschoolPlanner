@@ -1,1 +1,13 @@
 GET http://localhost:5137/healthz
+
+### List (should be empty first run)
+GET http://localhost:5137/api/v1/learners
+
+### Create
+POST http://localhost:5137/api/v1/learners
+Content-Type: application/json
+
+{ "name": "Alice", "grade": "4" }
+
+### List again
+GET http://localhost:5137/api/v1/learners

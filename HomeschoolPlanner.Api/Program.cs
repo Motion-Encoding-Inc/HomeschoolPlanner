@@ -1,5 +1,6 @@
 using HomeschoolPlanner.Api.Middleware;
 using HomeschoolPlanner.Api.Services;
+using HomeschoolPlanner.Api.Endpoints;
 using HomeschoolPlanner.Data;
 //using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Mvc;
@@ -110,8 +111,8 @@ var v1 = app.MapGroup("/api/v1");
 //v1.MapPost("/auth/login", AuthEndpoints.Login);
 
 //// Learners
-//v1.MapGet("/learners", LearnerEndpoints.List);
-//v1.MapPost("/learners", LearnerEndpoints.Create);
+v1.MapGet("/learners", LearnerEndpoints.List);
+v1.MapPost("/learners", LearnerEndpoints.Create);
 //v1.MapGet("/learners/{id:guid}", LearnerEndpoints.Get);
 //v1.MapPut("/learners/{id:guid}", LearnerEndpoints.Update);
 //v1.MapDelete("/learners/{id:guid}", LearnerEndpoints.Delete);
@@ -143,3 +144,5 @@ var v1 = app.MapGroup("/api/v1");
 //v1.MapGet("/ics/{learnerPublicId}.ics", IcsEndpoints.GetCalendar);
 
 app.Run();
+
+public partial class Program { }
