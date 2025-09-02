@@ -125,9 +125,9 @@ v1.MapPost("/subjects", SubjectEndpoints.Create);
 v1.MapPost("/resources", ResourceEndpoints.Create);
 v1.MapPost("/resources/{id:guid}/units/bulk", ResourceEndpoints.BulkUnits);
 
-//// Plans (+ schedule materialization)
-//v1.MapPost("/plans", PlanEndpoints.Create);
-//v1.MapGet("/plans/{id:guid}/schedule", PlanEndpoints.GetSchedule);
+// Plans (+ schedule materialization)
+v1.MapPost("/plans", PlanEndpoints.Create);
+v1.MapGet("/plans/{id:guid}/schedule", PlanEndpoints.GetSchedule);
 
 //// Task actions
 //v1.MapPost("/tasks/{id:guid}/complete", TaskEndpoints.Complete);
