@@ -20,3 +20,15 @@ Content-Type: application/json
 
 ### List subjects
 GET http://localhost:5137/api/v1/subjects?learnerId=<REPLACE_WITH_LEARNER_ID>
+
+### Create resource
+POST http://localhost:5137/api/v1/resources
+Content-Type: application/json
+
+{ "subjectId": "<REPLACE_WITH_SUBJECT_ID>", "type": 1, "title": "Algebra" }
+
+### Bulk add resource units
+POST http://localhost:5137/api/v1/resources/<REPLACE_WITH_RESOURCE_ID>/units/bulk
+Content-Type: application/json
+
+["Lesson 1", "Lesson 2"]

@@ -1,6 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Reflection.Emit;
 
 namespace HomeschoolPlanner.Data;
 
@@ -43,26 +41,6 @@ public class User
     public string Email { get; set; } = "";
     public byte[] PasswordHash { get; set; } = Array.Empty<byte>(); // placeholder
     public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
-}
-
-public enum ResourceType { Book = 1, Time = 2, Custom = 3 }
-
-public class Resource
-{
-    public Guid Id { get; set; }
-    public Guid SubjectId { get; set; }
-    public ResourceType Type { get; set; }
-    public string Title { get; set; } = "";
-    public int? MinutesPerOccurrence { get; set; }   // for Time resources
-    public int? MaxUnitsPerDay { get; set; }         // pacing guardrail
-}
-
-public class ResourceUnit
-{
-    public Guid Id { get; set; }
-    public Guid ResourceId { get; set; }
-    public int Index { get; set; }                   // 1..N (chapter/lesson/etc)
-    public string Label { get; set; } = "";          // "Lesson 12"
 }
 
 public class Plan
