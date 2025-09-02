@@ -22,6 +22,7 @@ public class AppDbContext : DbContext
     {
         b.Entity<User>().HasIndex(x => x.Email).IsUnique();
         b.Entity<Learner>().HasIndex(x => new { x.UserId, x.Name });
+        b.Entity<Subject>().HasIndex(x => new { x.LearnerId, x.Title });
         b.Entity<ResourceUnit>().HasIndex(x => new { x.ResourceId, x.Index }).IsUnique();
 
         b.Entity<Plan>()
@@ -42,14 +43,6 @@ public class User
     public string Email { get; set; } = "";
     public byte[] PasswordHash { get; set; } = Array.Empty<byte>(); // placeholder
     public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
-}
-
-public class Subject
-{
-    public Guid Id { get; set; }
-    public Guid LearnerId { get; set; }
-    public string Title { get; set; } = "";
-    public string? ColorHex { get; set; }
 }
 
 public enum ResourceType { Book = 1, Time = 2, Custom = 3 }
