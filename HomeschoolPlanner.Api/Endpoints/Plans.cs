@@ -28,6 +28,9 @@ public static class PlanEndpoints
     /// Generate a schedule preview for a plan.
     public static async Task<IResult> GetSchedule(Guid id, DateOnly from, int days, AppDbContext db)
     {
+        if (days <= 0 || days > 365)
+            return Results.BadRequest(new { error = "days must be between 1 and 365" });
+
         var plan = await db.Plans.FindAsync(id);
         if (plan == null)
             return Results.NotFound();
