@@ -20,3 +20,9 @@ Plans: create + schedule preview (calls F#)
 ## Results
 * `dotnet test` passes for all tests including new PlanTests.
 * Confidence: ~0.86
+## Follow-up (2025-09-02 19:30 UTC)
+* Added validation for `days` parameter in schedule endpoint per review.
+* Wrote README instructions on building, testing, and running the demo.
+## Results (2025-09-02 19:32 UTC)
+* `dotnet test` still passes after days validation and README update.
+* Confidence: ~0.92
