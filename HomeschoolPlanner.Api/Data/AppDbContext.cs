@@ -43,17 +43,6 @@ public class User
     public DateTime CreatedUtc { get; set; } = DateTime.UtcNow;
 }
 
-public class Plan
-{
-    public Guid Id { get; set; }
-    public Guid ResourceId { get; set; }
-    public DateOnly StartDate { get; set; }
-    public DateOnly EndDate { get; set; }
-    public int AllowedDaysMask { get; set; }         // bitmask Mon..Sun
-    public string Strategy { get; set; } = "push";   // push | catchup | smart(later)
-    public int LookaheadDays { get; set; } = 7;
-}
-
 public class TaskOccurrence
 {
     public Guid Id { get; set; }
