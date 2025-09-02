@@ -118,8 +118,8 @@ v1.MapPost("/learners", LearnerEndpoints.Create);
 //v1.MapDelete("/learners/{id:guid}", LearnerEndpoints.Delete);
 
 //// Subjects
-//v1.MapGet("/subjects", SubjectEndpoints.List);
-//v1.MapPost("/subjects", SubjectEndpoints.Create);
+v1.MapGet("/subjects", SubjectEndpoints.List);
+v1.MapPost("/subjects", SubjectEndpoints.Create);
 
 //// Resources (+units)
 //v1.MapPost("/resources", ResourceEndpoints.Create);
