@@ -54,3 +54,11 @@ week.html should reflect the Week Preview wireframe (day cards, chips, CTA), and
 * Docs folder hosts demo HTML with relative links for GitHub Pages.
 * `dotnet test` failed: .NET 9.0 SDK unavailable in container.
 * Confidence: 0.85
+## Follow-up (2025-09-06 19:32 UTC)
+* Add GitHub Actions workflow to sync demo files into docs on push to main.
+* Ensure workflow copies HTML and commits changes to docs.
+* Run dotnet test.
+## Results
+* Added GitHub Actions workflow to sync demo files to docs on main pushes.
+* `dotnet test` passed after installing .NET SDK.
+* Confidence: 0.9
