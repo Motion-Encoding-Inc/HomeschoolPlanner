@@ -1,17 +1,26 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Demo Landing</title>
-</head>
-<body>
-  <h1>Homeschool Planner Demo</h1>
-  <nav>
-    <!-- relative links for GitHub Pages -->
-    <ul>
-      <li><a class="demo" href="week.html">Week Preview</a></li>
-      <li><a class="demo" href="day.html">Day Detail</a></li>
-    </ul>
-  </nav>
-</body>
-</html>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Homeschool Planner — Demos</title>
+<link rel="stylesheet" href="demo.css"/>
+</head><body>
+<!-- demo landing page using centralized tokens -->
+<div class="app">
+  <header class="appbar"><div class="bar"><h1>Homeschool Planner — Demo Pages</h1></div></header>
+  <main>
+    <section class="card pad">
+      <p>Static previews of the mobile UI (no backend calls yet).</p>
+      <div class="links">
+        <a class="demo" href="week.html"><span>Week Preview (mobile)</span><span class="muted">cards + chips + totals</span></a>
+        <a class="demo" href="day.html"><span>Day Detail (mobile)</span><span class="muted">timeline + sticky actions</span></a>
+      </div>
+    </section>
+    <section class="card pad">
+      <h2 style="margin:.1rem 0 .5rem;font-size:1rem">How to view locally</h2>
+      <ol style="margin:0;padding-left:1.1rem">
+        <li>Run <code>dotnet run --project HomeschoolPlanner.Api</code></li>
+        <li>Open <code>/demo</code> on the printed port</li>
+      </ol>
+    </section>
+  </main>
+</div>
+</body></html>
