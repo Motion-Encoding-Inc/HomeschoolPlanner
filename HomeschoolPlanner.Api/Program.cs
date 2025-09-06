@@ -89,6 +89,13 @@ var app = builder.Build();
 app.UseMiddleware<ProblemDetailsMiddleware>();
 app.UseStatusCodePages(); // pairs well with ProblemDetails for non-exception 4xx/5xx
 
+// Serve static demo files from wwwroot/demo so we can preview UI mockups without running the full app.
+app.UseDefaultFiles();   // enables index.html discovery
+app.UseStaticFiles();
+
+// Convenience redirect: /demo -> /demo/index.html
+app.MapGet("/demo", () => Results.Redirect("/demo/index.html"));
+
 // Uncomment Swagger once OpenAPI packages are configured.
 //if (app.Environment.IsDevelopment())
 //{
