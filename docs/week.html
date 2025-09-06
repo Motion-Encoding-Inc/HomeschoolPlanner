@@ -1,65 +1,79 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Week Preview</title>
-  <style>
-    body { font-family: sans-serif; }
-    .week { display: flex; gap: 1rem; flex-wrap: wrap; }
-    .day-card { border: 1px solid #ccc; padding: 1rem; width: 120px; border-radius: 8px; }
-    .chips { margin-top: 0.5rem; }
-    .chip { background: #eef; padding: 2px 6px; border-radius: 4px; display: inline-block; margin: 2px 2px 0 0; font-size: 0.8rem; }
-    .link { margin-top: 1rem; display: block; text-align: center; background: #0af; color: white; padding: 0.5rem; border-radius: 4px; text-decoration: none; }
-  </style>
-</head>
-<body>
-  <h1>Week Preview</h1>
-  <div class="week">
-    <div class="day-card">
-      <h2>Mon</h2>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Week Preview — Homeschool Planner</title>
+<link rel="stylesheet" href="demo.css"/>
+</head><body>
+<!-- week preview demo using shared tokens -->
+<div class="app">
+  <header class="appbar"><div class="bar"><h1>Week Preview — Allen</h1></div></header>
+
+  <main>
+    <section class="card pad">
       <div class="chips">
-        <span class="chip">Math</span>
-        <span class="chip">Reading</span>
+        <span class="pill">Target 180m/day</span>
+        <span class="pill">Planned 175m avg</span>
       </div>
-      <!-- relative link to day detail -->
-      <a class="link" href="day.html">Open ▸</a>
-    </div>
-    <div class="day-card">
-      <h2>Tue</h2>
-      <div class="chips">
-        <span class="chip">Science</span>
-        <span class="chip">History</span>
+      <div class="days">
+        <button class="daychip active">Mon 9</button><button class="daychip">Tue 10</button>
+        <button class="daychip">Wed 11</button><button class="daychip">Thu 12</button><button class="daychip">Fri 13</button>
       </div>
-      <!-- relative link to day detail -->
-      <a class="link" href="day.html">Open ▸</a>
-    </div>
-    <div class="day-card">
-      <h2>Wed</h2>
-      <div class="chips">
-        <span class="chip">Art</span>
-        <span class="chip">Music</span>
+    </section>
+
+    <section class="card pad week" aria-label="Week cards">
+      <div class="day">
+        <div class="day-h"><div><strong>Mon</strong> <span class="muted">• 175m</span></div>
+          <a class="btn" href="day.html" aria-label="Open Monday detail">Open ▸</a></div>
+        <div class="blocks">
+          <div class="block">English 35m</div><div class="block">History 60m</div>
+          <div class="block">Math (Saxon) 60m</div><div class="block">Piano 20m</div>
+        </div>
       </div>
-      <!-- relative link to day detail -->
-      <a class="link" href="day.html">Open ▸</a>
-    </div>
-    <div class="day-card">
-      <h2>Thu</h2>
-      <div class="chips">
-        <span class="chip">PE</span>
-        <span class="chip">Math</span>
+
+      <div class="day">
+        <div class="day-h"><div><strong>Tue</strong> <span class="muted">• 175m</span></div>
+          <a class="btn" href="day.html">Open ▸</a></div>
+        <div class="blocks">
+          <div class="block">English 35m</div><div class="block">History 60m</div>
+          <div class="block warn">△ Back-to-back 120m without break — insert 10m</div>
+          <div class="block">Math (Saxon) 60m</div><div class="block">Piano 20m</div>
+        </div>
       </div>
-      <!-- relative link to day detail -->
-      <a class="link" href="day.html">Open ▸</a>
-    </div>
-    <div class="day-card">
-      <h2>Fri</h2>
-      <div class="chips">
-        <span class="chip">Reading</span>
-        <span class="chip">Science</span>
+
+      <!-- Wed/Thu/Fri … same pattern -->
+      <div class="day"><div class="day-h"><div><strong>Wed</strong> <span class="muted">• 175m</span></div>
+        <a class="btn" href="day.html">Open ▸</a></div>
+        <div class="blocks"><div class="block">English 35m</div><div class="block">History 60m</div>
+          <div class="block">Math (Saxon) 60m</div><div class="block">Piano 20m</div></div></div>
+
+      <div class="day"><div class="day-h"><div><strong>Thu</strong> <span class="muted">• 175m</span></div>
+        <a class="btn" href="day.html">Open ▸</a></div>
+        <div class="blocks"><div class="block">English 35m</div><div class="block">History 60m</div>
+          <div class="block">Math (Saxon) 60m</div><div class="block">Piano 20m</div></div></div>
+
+      <div class="day"><div class="day-h"><div><strong>Fri</strong> <span class="muted">• 175m</span></div>
+        <a class="btn" href="day.html">Open ▸</a></div>
+        <div class="blocks"><div class="block">English 35m</div><div class="block">History 60m</div>
+          <div class="block">Math (Saxon) 60m</div><div class="block">Piano 20m</div></div></div>
+    </section>
+
+    <section class="card pad">
+      <div class="chips" style="margin-bottom:.75rem">
+        <button class="chip" id="sug-hist">Apply: History M/W/F</button>
+        <button class="chip" id="sug-sci">Apply: Science T/Th</button>
       </div>
-      <!-- relative link to day detail -->
-      <a class="link" href="day.html">Open ▸</a>
-    </div>
-  </div>
-</body>
-</html>
+      <button class="btn primary" id="autobal" style="width:100%">Auto-balance to fit daily target →</button>
+    </section>
+  </main>
+
+  <div class="toast" id="toast" role="status" aria-live="polite">Applied suggestion.</div>
+</div>
+
+<script>
+  const toast=document.getElementById('toast');
+  function showToast(msg){ toast.textContent=msg; toast.style.display='block';
+    setTimeout(()=>toast.style.display='none',1600); }
+  document.getElementById('sug-hist').onclick = ()=>showToast('History set to M/W/F');
+  document.getElementById('sug-sci').onclick  = ()=>showToast('Science set to T/Th');
+  document.getElementById('autobal').onclick  = ()=>showToast('Auto-balanced to target');
+</script>
+</body></html>

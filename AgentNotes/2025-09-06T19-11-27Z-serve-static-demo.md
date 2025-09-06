@@ -62,3 +62,11 @@ week.html should reflect the Week Preview wireframe (day cards, chips, CTA), and
 * Added GitHub Actions workflow to sync demo files to docs on main pushes.
 * `dotnet test` passed after installing .NET SDK.
 * Confidence: 0.9
+
+## Follow-up (2025-09-06 20:11 UTC)
+* Centralize demo tokens via shared CSS; refactor index and week HTML to match Day detail style.
+
+## Results
+* Added shared demo.css and updated index/week pages (and docs mirror) to use unified tokens.
+* `dotnet test` succeeded; verified demo assets served via curl.
+* Confidence: 0.88
