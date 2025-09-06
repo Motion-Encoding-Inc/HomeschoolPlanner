@@ -1,0 +1,36 @@
+name: Sync demo to docs (GitHub Pages)
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'HomeschoolPlanner.Api/wwwroot/demo/**'
+      - '.github/workflows/pages-demo-sync.yml'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare docs folder
+        run: |
+          mkdir -p docs
+          cp -f HomeschoolPlanner.Api/wwwroot/demo/index.html docs/index.html
+          cp -f HomeschoolPlanner.Api/wwwroot/demo/week.html  docs/week.html
+          cp -f HomeschoolPlanner.Api/wwwroot/demo/day.html   docs/day.html
+          # make links relative for GitHub Pages
+          sed -i 's|href="/demo/week.html"|href="week.html"|g' docs/index.html || true
+          sed -i 's|href="/demo/day.html"|href="day.html"|g'   docs/index.html || true
+          sed -i 's|href="/demo/day.html"|href="day.html"|g'   docs/week.html || true
+
+      - name: Commit docs update
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add docs
+          if git diff --cached --quiet; then
+            echo "No changes."
+          else
+            git commit -m "Docs: sync demo from wwwroot/demo"
+            git push
+          fi
