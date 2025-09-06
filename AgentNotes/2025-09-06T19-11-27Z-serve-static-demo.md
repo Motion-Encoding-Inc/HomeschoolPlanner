@@ -42,3 +42,15 @@ week.html should reflect the Week Preview wireframe (day cards, chips, CTA), and
 * Static demo files are served via new middleware and /demo redirect.
 * Verified pages load and all tests pass.
 * Confidence: 0.9
+## Follow-up (2025-09-06 19:27 UTC)
+* Mirror demo in /docs for GitHub Pages.
+* Copy index, week, day HTML and adjust links to be relative.
+* Run dotnet test and commit.
+## Follow-up (2025-09-06 19:31 UTC)
+* Copied demo HTML into docs/ and updated links to be relative.
+* Added comments to clarify GitHub Pages mirror.
+* Next: run dotnet test.
+## Results
+* Docs folder hosts demo HTML with relative links for GitHub Pages.
+* `dotnet test` failed: .NET 9.0 SDK unavailable in container.
+* Confidence: 0.85
