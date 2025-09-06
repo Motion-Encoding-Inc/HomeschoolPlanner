@@ -70,3 +70,11 @@ week.html should reflect the Week Preview wireframe (day cards, chips, CTA), and
 * Added shared demo.css and updated index/week pages (and docs mirror) to use unified tokens.
 * `dotnet test` succeeded; verified demo assets served via curl.
 * Confidence: 0.88
+## Follow-up (2025-09-06 20:17 UTC)
+* Polish Pages demo for mobile: add theme color & favicon.
+* Ensure demo.css is copied and linked via sync workflow.
+## Results
+* Added theme color meta and SVG favicon to demo index/week (docs and wwwroot) with shared CSS link.
+* Copied demo.css into docs and updated Pages sync workflow to include it.
+* `dotnet test` passed with 4 tests.
+* Confidence: 0.9
