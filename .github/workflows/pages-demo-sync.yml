@@ -18,6 +18,7 @@ jobs:
           cp -f HomeschoolPlanner.Api/wwwroot/demo/index.html docs/index.html
           cp -f HomeschoolPlanner.Api/wwwroot/demo/week.html  docs/week.html
           cp -f HomeschoolPlanner.Api/wwwroot/demo/day.html   docs/day.html
+          cp -f HomeschoolPlanner.Api/wwwroot/demo/demo.css   docs/demo.css
           # make links relative for GitHub Pages
           sed -i 's|href="/demo/week.html"|href="week.html"|g' docs/index.html || true
           sed -i 's|href="/demo/day.html"|href="day.html"|g'   docs/index.html || true
