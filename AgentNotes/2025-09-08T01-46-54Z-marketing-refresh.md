@@ -19,3 +19,11 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Updated marketing landing with spacious styling and rotating carousel, mirrored to docs for GitHub Pages.
 * Tests built and ran via .NET 9 SDK (installed manually).
 * Confidence: 0.86
+## Follow-up (2025-09-08 17:14 UTC)
+* Plan to introduce warm light/dark theme tokens and toggle with persistence for landing pages in marketing and docs.
+* Will update CSS, HTML, JS accordingly and run dotnet build/test after changes.
+## Results (2025-09-08 17:17 UTC)
+* Introduced light/dark theme tokens with warm palette and toggle button on landing pages under docs and marketing.
+* Theme preference stored in localStorage; persisted across sessions.
+* Ran `dotnet build` and `dotnet test` successfully.
+* Confidence: 0.87
