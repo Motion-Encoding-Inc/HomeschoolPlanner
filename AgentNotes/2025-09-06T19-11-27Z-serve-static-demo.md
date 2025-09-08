@@ -78,3 +78,11 @@ week.html should reflect the Week Preview wireframe (day cards, chips, CTA), and
 * Copied demo.css into docs and updated Pages sync workflow to include it.
 * `dotnet test` passed with 4 tests.
 * Confidence: 0.9
+
+## Follow-up (2025-09-08 17:16 UTC)
+* Apply shared theme tokens and add theme toggle to demo pages.
+
+## Results
+* Demo pages now support Light/Dark themes with toggle.
+* `dotnet test` passed (4 tests).
+* Confidence: 0.84

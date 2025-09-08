@@ -1,11 +1,18 @@
-/* Centralized tokens and layout for demo pages */
-:root{
+/* shared theme from landing */
+:root[data-theme="light"]{
+  --bg:#fdfcf9; --panel:#ffffff; --fg:#1a1f2b; --muted:#6b7280;
+  --primary:#3367ff; --accent:#00b37e; --warn:#ffc857; --border:#e2e8f0; --chip:#f3f4f6;
+  --shadow:0 4px 16px rgba(0,0,0,.1); --radius:16px; --maxw:430px;
+}
+:root[data-theme="dark"]{
   --bg:#0b0c10; --panel:#111319; --fg:#e8ecf1; --muted:#9aa6b2;
   --primary:#7aa2ff; --accent:#5ee1a9; --warn:#ffc857; --border:#202532; --chip:#1a1f2b;
   --shadow:0 6px 24px rgba(0,0,0,.35); --radius:16px; --maxw:430px;
 }
+
+/* existing demo styles follow… */
 *{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:linear-gradient(180deg,#0a0b0f 0%,#0b0c10 80%);color:var(--fg);
+body{margin:0;background:var(--bg);color:var(--fg);
      font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
 a{color:var(--primary);text-decoration:none}
 .app{max-width:var(--maxw);margin-inline:auto;min-height:100%;display:flex;flex-direction:column}

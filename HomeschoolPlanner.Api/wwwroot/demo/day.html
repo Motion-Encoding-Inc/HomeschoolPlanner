@@ -1,28 +1,37 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Day Detail</title>
-  <style>
-    body { font-family: sans-serif; margin: 0; }
-    .timeline { padding: 1rem; }
-    .item { margin-bottom: 1rem; }
-    .time { font-weight: bold; }
-    .actions { position: sticky; bottom: 0; background: #fff; padding: 1rem; border-top: 1px solid #ccc; text-align: center; }
-    .actions button { margin: 0 0.5rem; }
-  </style>
-</head>
-<body>
-  <h1>Day Detail</h1>
-  <div class="timeline">
-    <div class="item"><span class="time">09:00</span> Math Lesson</div>
-    <div class="item"><span class="time">10:00</span> Reading</div>
-    <div class="item"><span class="time">11:00</span> Science Lab</div>
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="theme-color" content="#0b0c10" />
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Ccircle cx='32' cy='32' r='30' fill='%23111319'/%3E%3Cpath d='M18 36h28M18 24h20' stroke='%237aa2ff' stroke-width='4' stroke-linecap='round'/%3E%3C/svg%3E" />
+<link rel="stylesheet" href="demo.css" />
+<title>Day Detail — Homeschool Planner</title>
+</head><body>
+<div class="app">
+  <header class="appbar"><div class="bar"><h1>Day Detail</h1></div></header>
+  <div style="display:flex;justify-content:flex-end;padding:.5rem 1rem 0">
+    <button id="theme-toggle" class="btn" aria-label="Toggle theme">☀︎ / ☾</button>
   </div>
-  <div class="actions">
-    <button>Complete</button>
-    <button>Skip</button>
-    <button>Extra</button>
+  <main>
+    <section class="card pad">
+      <div class="blocks">
+        <div class="block"><strong>09:00</strong> Math Lesson</div>
+        <div class="block"><strong>10:00</strong> Reading</div>
+        <div class="block"><strong>11:00</strong> Science Lab</div>
+      </div>
+    </section>
+  </main>
+  <div class="actions" style="position:sticky;bottom:0;margin-top:auto;background:var(--panel);border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:center;padding:1rem;">
+    <button class="btn primary">Complete</button>
+    <button class="btn">Skip</button>
+    <button class="btn">Extra</button>
   </div>
-</body>
-</html>
+</div>
+<script>
+(function(){const k='hs_theme', d=document.documentElement, prefers=matchMedia('(prefers-color-scheme: dark)').matches;
+  d.setAttribute('data-theme', localStorage.getItem(k)|| (prefers?'dark':'light'));
+  document.getElementById('theme-toggle')?.addEventListener('click', ()=>{
+    const next = d.getAttribute('data-theme')==='dark'?'light':'dark'; d.setAttribute('data-theme',next); localStorage.setItem(k,next);
+  });
+})();
+</script>
+</body></html>
+
