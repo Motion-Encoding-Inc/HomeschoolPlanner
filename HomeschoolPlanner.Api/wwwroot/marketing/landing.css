@@ -1,13 +1,40 @@
-/* Marketing landing styles with spacious layout and soft cards */
-:root{
-  --bg:#0e0f12; --panel:#14161b; --soft:#1b1e25; --fg:#eef2f8; --muted:#b9c0d4;
-  --brand:#64b5f6; --brand-2:#81c784; --border:#222736; --shadow:0 10px 30px rgba(0,0,0,.35);
-  --radius:18px; --maxw:1120px; --gutter:22px;
+/* ========== Theme tokens ========== */
+:root[data-theme="light"]{
+  --bg:#f6f7fb;            /* paper */
+  --panel:#ffffff;         /* card */
+  --soft:#f2f4f8;          /* soft panel */
+  --fg:#19202a;            /* ink */
+  --muted:#5a6676;         /* secondary */
+  --brand:#3a80ff;         /* ink blue */
+  --brand-2:#5ab99b;       /* sage/teal accent */
+  --border:#dde3ee;
+  --shadow:0 10px 26px rgba(10,20,40,.08);
+  --radius:18px;
+  --maxw:1120px; --gutter:22px;
 }
-*{box-sizing:border-box} body{margin:0;background:linear-gradient(180deg,#0a0b0f,#0e0f12 80%);color:var(--fg);
-  font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial}
-a{color:#9fd1ff;text-decoration:none} a:hover{color:#c8e1ff}
+
+:root[data-theme="dark"]{
+  --bg:#0e0f12;
+  --panel:#14161b;
+  --soft:#1b1e25;
+  --fg:#eef2f8;
+  --muted:#b9c0d4;
+  --brand:#64b5f6;
+  --brand-2:#81c784;
+  --border:#222736;
+  --shadow:0 10px 30px rgba(0,0,0,.35);
+  --radius:18px;
+  --maxw:1120px; --gutter:22px;
+}
+
+/* base */
+*{box-sizing:border-box}
+body{margin:0;background:linear-gradient(180deg,var(--bg),var(--bg) 80%);color:var(--fg);
+     font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto}
+a{color:var(--brand);text-decoration:none}
+a:hover{opacity:.9}
 .container{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+/* …(keep the rest of your layout rules unchanged; just rely on the new vars)… */
 header{position:sticky;top:0;z-index:10;background:rgba(14,15,18,.6);backdrop-filter:blur(8px);border-bottom:1px solid #1f2330}
 .nav{display:flex;align-items:center;justify-content:space-between;padding:14px 0}
 .logo{display:flex;align-items:center;gap:.6rem;font-weight:800;letter-spacing:.2px}
