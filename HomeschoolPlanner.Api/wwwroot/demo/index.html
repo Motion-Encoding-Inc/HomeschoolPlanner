@@ -7,7 +7,15 @@
 </head><body>
 <!-- demo landing page using centralized tokens -->
 <div class="app">
-  <header class="appbar"><div class="bar"><h1>Homeschool Planner — Demo Pages</h1></div></header>
+  <header class="appbar"><div class="bar"><h1>Homeschool Planner — Demo Pages</h1><button id="theme-toggle" class="btn" style="margin-left:auto" aria-label="Toggle theme">☀︎ / ☾</button></div></header>
+  <script>
+  (function(){const k='hs_theme', d=document.documentElement, prefers=matchMedia('(prefers-color-scheme: dark)').matches;
+    d.setAttribute('data-theme', localStorage.getItem(k)|| (prefers?'dark':'light'));
+    document.getElementById('theme-toggle')?.addEventListener('click', ()=>{
+      const next = d.getAttribute('data-theme')==='dark'?'light':'dark'; d.setAttribute('data-theme',next); localStorage.setItem(k,next);
+    });
+  })();
+  </script>
   <main>
     <section class="card pad">
       <p>Static previews of the mobile UI (no backend calls yet).</p>
