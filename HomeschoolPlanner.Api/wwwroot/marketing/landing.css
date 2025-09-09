@@ -72,3 +72,43 @@ h1{font-size:clamp(2.2rem,4vw,3.2rem);line-height:1.1;margin:.2rem 0 1rem}
 @media(max-width:960px){.grid-3,.grid-2{grid-template-columns:1fr}}
 .muted{color:var(--muted)}
 .footer{padding:36px 0;color:#9aa4bf;text-align:center}
+/* ========== MOBILE RESPONSIVE PATCH ========== */
+
+/* Small phones (≤ 600px) */
+@media (max-width: 600px){
+
+  /* Give the page some breathing room on narrow viewports */
+  .container{padding:0 18px}
+
+  /* Hero becomes one column; tighten vertical rhythm */
+  .hero{grid-template-columns:1fr; gap:24px}
+  h1{font-size:clamp(1.8rem, 8vw, 2.4rem); margin-bottom:18px}
+  .lead{font-size:1rem; margin-bottom:14px}
+
+  /* Hero bullets as a single vertical list, not two-up */
+  .hero-bullets{display:grid; grid-template-columns:1fr; gap:10px}
+  .hero-card{padding:18px}
+
+  /* CTA buttons: full width, stacked */
+  .btn-row, .pills{gap:.6rem}
+  .btn-row{flex-direction:column; align-items:stretch}
+  .btn-row .btn{width:100%}
+
+  /* Carousel: use aspect-ratio instead of a fixed min-height */
+  .carousel{border-radius:16px}
+  .slide{min-height:auto; aspect-ratio: 16 / 9; background-size:cover; background-position:center}
+
+  /* Feature/pain grids collapse to one column */
+  .grid-2{grid-template-columns:1fr; gap:18px}
+  .grid-3{grid-template-columns:1fr; gap:18px}
+
+  /* Cards a touch tighter on phones */
+  .card{padding:18px}
+}
+
+/* Tight phones (≤ 360px) – small type/spacing safety net */
+@media (max-width: 360px){
+  h1{font-size:clamp(1.6rem, 8.8vw, 2.2rem)}
+  .lead{font-size:.95rem}
+  .btn{padding:.9rem 1rem; border-radius:12px}
+}

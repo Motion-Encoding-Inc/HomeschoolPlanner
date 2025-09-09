@@ -35,3 +35,10 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Introduced segmented mode switch and --ctaText token for per-theme CTA color.
 * Ran `dotnet build` and `dotnet test` successfully.
 * Confidence: 0.89
+## Follow-up (2025-09-09 21:56 UTC)
+* Apply mobile responsive patch to landing page CSS in marketing and docs.
+* Ensure patch covers hero, carousel, buttons, grids per provided snippet and run dotnet build/test after changes.
+## Results (2025-09-09 21:57 UTC)
+* Added mobile responsive CSS patch to landing pages under marketing and docs to improve small-screen layout.
+* Attempted `dotnet build` and `dotnet test` but `dotnet` SDK is unavailable in environment.
+* Confidence: 0.84
