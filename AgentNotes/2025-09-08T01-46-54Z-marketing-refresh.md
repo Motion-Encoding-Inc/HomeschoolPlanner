@@ -27,3 +27,11 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Theme preference stored in localStorage; persisted across sessions.
 * Ran `dotnet build` and `dotnet test` successfully.
 * Confidence: 0.87
+## Follow-up (2025-09-09 21:15 UTC)
+* Implement OS-based Scholar/Forge auto-selection with live follow if user hasn't chosen.
+* Add persistence script and CTA color tokens for marketing and docs.
+## Results (2025-09-09 21:18 UTC)
+* Added OS-aware Scholar/Forge theme detection with live follow until user picks and persistence across marketing and docs.
+* Introduced segmented mode switch and --ctaText token for per-theme CTA color.
+* Ran `dotnet build` and `dotnet test` successfully.
+* Confidence: 0.89
