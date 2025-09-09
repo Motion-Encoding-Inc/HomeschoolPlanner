@@ -3,64 +3,318 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Homeschool Planner</title>
-  <link rel="stylesheet" href="landing.css"/>
+  <title>Scholar’s Forge Planner — Homeschool, Your Way</title>
+  <meta name="description" content="Plan from books, time, or custom activities. Skip → Catch-up or Do Extra with a tap. Track progress and export clean reports—homeschool, your way."/>
+  <meta name="theme-color" content="#f9f6f3"/>
+
+  <style>
+    /* ========= THEME TOKENS =========
+       Scholar  = Light (sky blue + soft purple)
+       Forge    = Dark  (ember red + orange)                               */
+    /* Segmented control — Scholar (blue) / Forge (red+orange) */
+    .mode-switch{
+      display:inline-flex; gap:0; border:1px solid var(--border);
+      background:color-mix(in oklab, var(--paper) 80%, var(--tint));
+      border-radius:14px; padding:3px; box-shadow:var(--shadow)
+    }
+    .mode-switch button{
+      all:unset; cursor:pointer; padding:.55rem .9rem; border-radius:10px;
+      font-weight:800; line-height:1; min-width:84px; text-align:center;
+      color:var(--ink);
+    }
+    /* active states: Scholar blue on the left, Forge ember on the right */
+    :root[data-theme="scholar"] #mode-scholar,
+    .mode-switch button.active[data-mode="scholar"]{
+      background:linear-gradient(180deg,#3a80ff,#6b8bff);
+      color:#fff; -webkit-text-stroke:.6px rgba(0,0,0,.55);
+    }
+    :root[data-theme="forge"] #mode-forge,
+    .mode-switch button.active[data-mode="forge"]{
+      background:linear-gradient(180deg,#ff6b6b,#ff9f45);
+      color:#140a00; -webkit-text-stroke:.4px rgba(0,0,0,.35);
+    }
+
+    :root[data-theme="scholar"]{
+      --bg:#f9f6f3;
+      --paper:#ffffff;
+      --tint:#f6f0ff;         /* soft lavender */
+      --ink:#273040;
+      --muted:#6a7586;
+      --brand:#3a80ff;        /* sky blue */
+      --brand-2:#b68cff;      /* soft purple */
+      --accent:#5ab99b;       /* sage for success */
+      --ember:#f5c078;        /* warm highlight */
+      --border:#e7e1dc;
+      --shadow:0 14px 40px rgba(22,16,9,.08);
+      --radius:20px; --gutter:28px; --maxw:1200px;
+    }
+    :root[data-theme="forge"]{
+      --bg:#0e0f12;
+      --paper:#14161b;
+      --tint:#1b1e25;
+      --ink:#eef2f8;
+      --muted:#b9c0d4;
+      --brand:#ff6b6b;        /* ember red */
+      --brand-2:#ff9f45;      /* orange */
+      --accent:#81c784;       /* success */
+      --ember:#ffd08c;
+      --border:#222736;
+      --shadow:0 18px 46px rgba(0,0,0,.35);
+      --radius:20px; --gutter:28px; --maxw:1200px;
+    }
+    /* Hero bullet list (replaces dotted squircles) */
+    .hero-bullets{margin:0; padding:0; list-style:none; display:grid; gap:12px}
+    .hero-bullets li{
+      display:flex; gap:.75rem; align-items:flex-start;
+      color:var(--muted); font-weight:600
+    }
+    .hero-bullets li::before{
+      content:""; width:10px; height:10px; margin-top:.5rem; border-radius:50%;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2)); flex:0 0 10px;
+      box-shadow:0 0 0 3px color-mix(in oklab, var(--paper) 80%, var(--tint));
+    }
+    /* Primary CTA — white text with subtle black outline for readability */
+    .btn.primary{
+      background:linear-gradient(180deg,var(--brand),var(--brand-2));
+      border:1px solid color-mix(in oklab, var(--brand) 65%, var(--brand-2));
+      color:rgba(0, 0, 0, 1);
+    }
+    /* Scholar = light → white text */
+    :root[data-theme="scholar"] .btn.primary { color:#fff; }
+
+    /* Forge = dark → black text */
+    :root[data-theme="forge"] .btn.primary { color:#000; }
+
+    /* Global spacing nudge */
+    section{padding:110px 0}        /* was ~96px */
+    .hero{gap:40px}                  /* more space between copy and image */
+    .grid-2{gap:36px} .grid-3{gap:34px}
+    h1{margin-bottom:26px} .lead{margin-bottom:22px}
+    .hero-card{padding:28px}
+
+    /* ========= Base layout & typography (airier) ========= */
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      background:
+        radial-gradient(1100px 600px at 6% -10%, #ffe9db, transparent 55%),
+        linear-gradient(180deg,var(--bg),var(--bg) 85%);
+      color:var(--ink);
+      font:17px/1.7 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      letter-spacing:.1px;
+    }
+    a{color:var(--brand);text-decoration:none}
+    a:hover{opacity:.92}
+    .container{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+
+    header{
+      position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);
+      backdrop-filter:blur(10px);
+      background:color-mix(in oklab, var(--bg) 70%, transparent);
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
+    .brand{display:flex;align-items:center;gap:.8rem;font-weight:900;letter-spacing:.3px}
+    .mark{width:40px;height:40px;border-radius:12px;
+      background:linear-gradient(135deg,var(--brand),var(--brand-2));
+      box-shadow:var(--shadow)}
+    .links{display:flex;align-items:center;gap:1.2rem}
+    .btn{display:inline-flex;align-items:center;justify-content:center;padding:1rem 1.2rem;border-radius:14px;border:1px solid var(--border);font-weight:800}
+    .btn.ghost{background:transparent}
+
+    /* ========= Hero (more whitespace) ========= */
+    section{padding:96px 0;border-top:1px solid color-mix(in oklab, var(--border) 70%, transparent)}
+    .hero{display:grid;gap:36px;grid-template-columns:1.1fr 1fr;align-items:center}
+    @media(max-width:980px){.hero{grid-template-columns:1fr}}
+    h1{font-size:clamp(2.4rem,4.6vw,3.6rem);line-height:1.08;margin:0 0 22px}
+    .lead{color:var(--muted);font-size:1.2rem;max-width:64ch}
+
+    .hero-card{background:linear-gradient(180deg,var(--paper),var(--tint));border:1px solid var(--border);
+      border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .pills{display:flex;flex-wrap:wrap;gap:.7rem;margin:.9rem 0 0}
+    .pill{padding:.7rem 1rem;border:1px dashed color-mix(in oklab, var(--border) 80%, #cbd5e1);
+      border-radius:999px;background:color-mix(in oklab, var(--paper) 75%, var(--tint));font-weight:600}
+
+    /* Carousel (keep simple) */
+    .carousel{position:relative;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:var(--tint);box-shadow:var(--shadow)}
+    .slide{display:none;min-height:420px;background:#0f121a center/cover no-repeat}
+    .slide.active{display:block}
+    .dots{display:flex;gap:.6rem;justify-content:center;padding:.8rem}
+    .dot{width:10px;height:10px;border-radius:50%;background:color-mix(in oklab, var(--border) 65%, var(--paper));border:1px solid var(--border)}
+    .dot.active{background:var(--brand)}
+
+    /* Feature + Why sections (roomier grids) */
+    h2{font-size:clamp(1.8rem,3vw,2.4rem);margin:0 0 14px}
+    .muted{color:var(--muted)}
+    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+    @media(max-width:980px){.grid-3,.grid-2{grid-template-columns:1fr}}
+    .card{background:linear-gradient(180deg,var(--paper),var(--tint));border:1px solid var(--border);
+      border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+    .bullet{display:flex;gap:.9rem;align-items:flex-start;margin:12px 0}
+    .dotline{width:12px;height:12px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--brand-2));margin-top:.4rem}
+
+    /* Footer */
+    footer{padding:44px 0;color:color-mix(in oklab, var(--muted) 85%, var(--ink))}
+    .foot{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .sep{opacity:.35}
+  </style>
 </head>
 <body>
-<!-- Main marketing landing page -->
-<header>
-  <div class="container nav">
-    <a class="logo" href="/"><span class="logo-mark"></span>Homeschool Planner</a>
-    <nav>
-      <a href="#how">How it works</a>
-      <a href="/demo">Demo</a>
-      <button id="theme-toggle" class="btn ghost" aria-label="Toggle theme">☀︎ / ☾</button>
-    </nav>
-  </div>
-</header>
-
-<!-- Hero section with rotating screenshots -->
-<section class="container hero" aria-labelledby="hero-title">
-  <div>
-    <h1 id="hero-title">Homeschool, your way — fast plans, flexible days.</h1>
-    <p class="lead">Plan from books, time, or custom activities. Skip → Catch-up, or Do Extra with a tap. Export portfolios and weekly reports when you need them.</p>
-    <div class="hero-card" aria-label="Highlights">
-      <div class="pills">
-        <span class="pill">Scan ISBN → auto plan</span>
-        <span class="pill">Skip • Push • Double</span>
-        <span class="pill">Portfolio & reports</span>
-        <span class="pill">Progress by subject</span>
-      </div>
-      <div class="row">
+  <!-- NAV -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Scholar’s Forge Planner">
+        <span class="mark" aria-hidden="true"></span>
+        <span>Scholar’s Forge Planner</span>
+      </a>
+      <div class="links">
+        <a href="#how">How it works</a>
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <!-- Segmented mode switch -->
+        <div class="mode-switch" role="tablist" aria-label="Theme mode">
+          <button id="mode-scholar" role="tab" aria-selected="true">Scholar</button>
+          <button id="mode-forge" role="tab" aria-selected="false">Forge</button>
+        </div>
         <a class="btn primary" href="/demo">See mobile preview</a>
-        <a class="btn ghost" href="#how">How it works</a>
       </div>
     </div>
-  </div>
-  <div class="carousel" aria-label="Screenshots">
-    <div class="slide active" style="background-image:url('https://images.unsplash.com/photo-1584697964192-0f2fb47b5f1a?q=80&w=1200&auto=format&fit=crop');"></div>
-    <div class="slide"        style="background-image:url('https://images.unsplash.com/photo-1606326608606-3b5a9d79b2a7?q=80&w=1200&auto=format&fit=crop');"></div>
-    <div class="slide"        style="background-image:url('https://images.unsplash.com/photo-1555529669-e69e7aa0ba9a?q=80&w=1200&auto=format&fit=crop');"></div>
-    <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span></div>
-  </div>
-</section>
+  </header>
 
-<section class="container" id="how">
-  <h2>How it works</h2>
-  <div class="grid-2">
-    <div class="card">
-      <h3>Plan quickly</h3>
-      <p class="muted">Scan ISBNs to auto plan books.</p>
-    </div>
-    <div class="card">
-      <h3>Flexible days</h3>
-      <p class="muted">Skip, push, or double assignments anytime.</p>
-    </div>
-  </div>
-</section>
+  <!-- HERO -->
+  <main>
+    <section class="container hero" aria-labelledby="hero-title">
+      <div>
+        <br>
+        <span class="pill" aria-hidden="true">Homeschool, Your Way</span>
+        <h1 id="hero-title">Yes, you can homeschool.</h1>
+        <p class="lead">
+          No one will love your kids like you do—why trust anyone else to raise them? Scholar’s Forge
+          gives you tools to <strong>plan flexibly</strong>, <strong>document confidently</strong>,
+          and help students take ownership of learning. :contentReference[oaicite:3]{index=3}
+        </p>
+        <div class="hero-card" aria-label="Highlights">
+          <ul class="hero-bullets">
+            <li><strong>Plan</strong> from books, time, or custom activities</li>
+            <li><strong>Skip • Push • Double</strong> — real-life rescheduling</li>
+            <li><strong>Portfolio evidence</strong> & weekly reports</li>
+            <li><strong>Clear progress</strong> by subject</li>
+          </ul>
+          <div class="pills" style="margin-top:1rem">
+            <a class="btn primary" href="/demo">Try the Today/Week preview</a>
+            <a class="btn" href="#how">How it works</a>
+          </div>
+        </div>
+      </div>
 
-<footer class="footer">© <span id="year"></span> Homeschool Planner</footer>
-<script src="landing.js"></script>
-<script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+      <div class="carousel" aria-label="Screenshots">
+        <!-- Replace images later with owned shots -->
+        <div class="slide active" style="background-image:url('../images/LearningThroughPlay.png')"></div>
+        <div class="slide"        style="background-image:url('../images/MessyDayKitchenTableSchool.png')"></div>
+        <div class="slide"        style="background-image:url('../images/DiscoveryMoments.png')"></div>
+        <div class="slide"        style="background-image:url('../images/SiblingTeaching.png')"></div>
+        <div class="slide"        style="background-image:url('../images/WorksideLearning.png')"></div>
+        <div class="slide"        style="background-image:url('../images/WorksideLearning2.png')"></div>
+        <div class="slide"        style="background-image:url('../images/IndependantButSupported.png')"></div>
+        <div class="slide"        style="background-image:url('../images/IndependantButSupported2.png')"></div>
+        <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      </div>
+    </section>
+
+    <!-- WHY IT FITS REAL LIFE -->
+    <section class="container" id="how" aria-labelledby="how-title">
+      <h2 id="how-title">Designed around how families actually school</h2>
+      <p class="muted">Not a bell schedule—our <em>Week Preview</em> and <em>Day Detail</em> make it obvious what’s planned, what’s done, and what’s next. :contentReference[oaicite:4]{index=4}</p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Plan the way you teach</h3>
+          <p class="muted">Books, time blocks, or custom activities. Add Saxon, schedule free reading 30 minutes, or log that grocery-store math. :contentReference[oaicite:5]{index=5}</p>
+          <div class="bullet"><span class="dotline"></span><span><strong>Flexible pacing:</strong> <em>Skip</em> to push the timeline, <em>Catch-up</em> to keep the deadline, or <em>Do Extra</em> to pull work forward. :contentReference[oaicite:6]{index=6}</span></div>
+          <div class="bullet"><span class="dotline"></span><span><strong>Student agency:</strong> learners can choose order, skip, or double—with parent guardrails. :contentReference[oaicite:7]{index=7}</span></div>
+        </div>
+        <div class="card">
+          <h3>Documentation that makes sense</h3>
+          <div class="bullet"><span class="dotline"></span><span><strong>Portfolio evidence:</strong> photos/files/notes on any completion; export weekly summaries (CSV/PDF). :contentReference[oaicite:8]{index=8}</span></div>
+          <div class="bullet"><span class="dotline"></span><span><strong>Progress at a glance:</strong> bars & pace indicators keep everyone aligned. :contentReference[oaicite:9]{index=9}</span></div>
+          <div class="bullet"><span class="dotline"></span><span><strong>Optional calendar feed:</strong> show plans on calendars you already use. :contentReference[oaicite:10]{index=10}</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="container" id="features" aria-labelledby="features-title">
+      <h2 id="features-title">Everything you need to start</h2>
+      <div class="grid-3">
+        <div class="card"><strong>Fast planning</strong><p class="muted">Paste chapters or add time blocks in minutes; auto-schedule to your allowed days.</p></div>
+        <div class="card"><strong>Real-world rescheduling</strong><p class="muted">Skip, push, catch-up, or do extra—without breaking your plan. :contentReference[oaicite:11]{index=11}</p></div>
+        <div class="card"><strong>Portfolio & reports</strong><p class="muted">Evidence gallery and exportable PDFs/CSVs. :contentReference[oaicite:12]{index=12}</p></div>
+        <div class="card"><strong>Progress by subject</strong><p class="muted">On-track, ahead, or catching-up at a glance. :contentReference[oaicite:13]{index=13}</p></div>
+        <div class="card"><strong>Calendar feed</strong><p class="muted">Read-only iCal for your devices. :contentReference[oaicite:14]{index=14}</p></div>
+        <div class="card"><strong>Parent-first privacy</strong><p class="muted">Kids don’t need logins for MVP; you control exports. :contentReference[oaicite:15]{index=15}</p></div>
+      </div>
+    </section>
+
+    <!-- PRICING (placeholder) -->
+    <section class="container" id="pricing" aria-labelledby="pricing-title">
+      <h2 id="pricing-title">Simple, transparent pricing</h2>
+      <div class="grid-3">
+        <div class="card"><h3>Starter</h3><p class="muted">One learner. All core features.</p><a class="btn primary" href="#signup">Start free trial</a></div>
+        <div class="card"><h3>Family</h3><p class="muted">Up to five learners.</p><a class="btn primary" href="#signup">Start free trial</a></div>
+        <div class="card"><h3>Pro</h3><p class="muted">Co-ops & large families.</p><a class="btn primary" href="#signup">Start free trial</a></div>
+      </div>
+      <p class="muted" style="margin-top:12px">No credit card required to start. Cancel anytime.</p>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container foot">
+      <div class="brand"><span class="mark" aria-hidden="true"></span><span>Scholar’s Forge Planner</span></div>
+      <div>
+        <a href="#how">How it works</a><span class="sep"> • </span>
+        <a href="#features">Features</a><span class="sep"> • </span>
+        <a href="#pricing">Pricing</a>
+      </div>
+      <div>© <span id="year"></span> Scholar’s Forge LLC. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- MODE + CAROUSEL scripts -->
+  <script>
+
+    (function(){
+      const KEY='sf_theme';
+      const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
+      const initial = localStorage.getItem(KEY) || (prefersDark?'forge':'scholar');
+      const root = document.documentElement;
+      const bScholar = document.getElementById('mode-scholar');
+      const bForge   = document.getElementById('mode-forge');
+
+      function setMode(mode){
+        root.setAttribute('data-theme', mode);
+        localStorage.setItem(KEY, mode);
+        // ARIA + visual state
+        bScholar.classList.toggle('active', mode==='scholar');
+        bForge.classList.toggle('active', mode==='forge');
+        bScholar.setAttribute('aria-selected', mode==='scholar');
+        bForge.setAttribute('aria-selected', mode==='forge');
+        bScholar.dataset.mode='scholar'; bForge.dataset.mode='forge';
+      }
+
+      setMode(initial);
+      bScholar.addEventListener('click', ()=> setMode('scholar'));
+      bForge.addEventListener('click',   ()=> setMode('forge'));
+    })();
+
+    // Simple auto-rotating carousel
+    (function(){
+      const slides=[...document.querySelectorAll('.slide')];
+      const dots=[...document.querySelectorAll('.dot')];
+      let i=0; function show(n){slides.forEach((s,k)=>s.classList.toggle('active',k===n));
+                                dots.forEach((d,k)=>d.classList.toggle('active',k===n));}
+      if(slides.length){ show(0); setInterval(()=>{ i=(i+1)%slides.length; show(i); }, 4400); }
+      document.getElementById('year').textContent=new Date().getFullYear();
+    })();
+  </script>
 </body>
 </html>
