@@ -1,5 +1,5 @@
-/* Theme tokens: warm light/dark (non-pink) */
-:root[data-theme="light"]{
+/* Theme tokens: warm Scholar/Forge (non-pink) */
+:root[data-theme="scholar"]{
   --bg:#f9f6f3;          /* warm paper */
   --panel:#ffffff;       /* cards */
   --soft:#fff6ef;        /* soft peach tint for hero blocks */
@@ -7,11 +7,12 @@
   --muted:#697585;       /* secondary */
   --brand:#3a80ff;       /* ink blue */
   --accent:#5ab99b;      /* sage */
+  --ctaText:#fff;
   --border:#e7e1dc;
   --shadow:0 12px 36px rgba(22,16,9,.06);
   --radius:18px; --maxw:1120px; --gutter:24px;
 }
-:root[data-theme="dark"]{
+:root[data-theme="forge"]{
   --bg:#0e0f12;
   --panel:#14161b;
   --soft:#1b1e25;
@@ -19,6 +20,7 @@
   --muted:#b9c0d4;
   --brand:#64b5f6;
   --accent:#81c784;
+  --ctaText:#000;
   --border:#222736;
   --shadow:0 12px 36px rgba(0,0,0,.35);
   --radius:18px; --maxw:1120px; --gutter:24px;
@@ -33,6 +35,9 @@ color:var(--fg);font:16px/1.6 ui-sans-serif,system-ui,-apple-system,Segoe UI,Rob
 a{color:var(--brand);text-decoration:none}
 a:hover{opacity:.9}
 .container{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
+.mode-switch{display:inline-flex;gap:0;padding:2px;border:1px solid var(--border);border-radius:12px;}
+.mode-switch button{all:unset;cursor:pointer;padding:.5rem .8rem;min-width:80px;text-align:center;border-radius:10px;font-weight:800;color:var(--fg);}
+.mode-switch button.active{background:var(--brand);color:var(--ctaText);}
 header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.6);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--border)}
 @media (prefers-color-scheme: dark){
@@ -40,6 +45,6 @@ header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.6);backdrop
 }
 .hero-card,.card{background:linear-gradient(180deg,var(--panel),var(--soft));border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
 .pill{padding:.55rem .8rem;border:1px dashed #d7d1cc;border-radius:999px;background:#fffdfb}
-.btn.primary{background:linear-gradient(180deg,#7aa2ff,#547dff);color:#0b1533;border:1px solid #688fff;border-radius:12px;padding:.9rem 1.1rem;font-weight:800}
+.btn.primary{background:linear-gradient(180deg,#7aa2ff,#547dff);color:var(--ctaText);border:1px solid #688fff;border-radius:12px;padding:.9rem 1.1rem;font-weight:800}
 .btn.ghost{border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem}
 .carousel .slide{min-height:340px}

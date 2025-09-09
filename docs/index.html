@@ -9,6 +9,44 @@
   <!-- Favicon: reused in header/footer brand mark -->
   <link rel="icon" type="image/png" href="images/ico.png"/>
 
+  <script>
+/* Scholar/Forge first-visit default + live-follow if no user choice */
+(function () {
+  var KEY = 'sf_theme';              // persisted user choice, if any
+  var root = document.documentElement;
+  var saved = null;
+
+  try { saved = localStorage.getItem(KEY); } catch(_) {}
+
+  // Decide initial mode
+  var mode = saved;
+  if (!mode) {
+    // If the browser reports a preference, map dark→forge, light→scholar
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      mode = 'forge';
+    } else {
+      // Unknown/unsupported ⇒ default to Scholar (light)
+      mode = 'scholar';
+    }
+  }
+
+  root.setAttribute('data-theme', mode);
+
+  // If the user hasn't chosen yet, reflect OS changes live
+  if (!saved && window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function (e) {
+      // Only follow if the user still hasn't picked a theme
+      try { if (!localStorage.getItem(KEY)) {
+        root.setAttribute('data-theme', e.matches ? 'forge' : 'scholar');
+      }} catch(_) {}
+    };
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if (mql.addListener) mql.addListener(onChange); // Safari/legacy
+  }
+})();
+  </script>
+
   <style>
     /* ========= THEME TOKENS =========
        Scholar  = Light (sky blue + soft purple)
@@ -49,6 +87,7 @@
       --border:#e7e1dc;
       --shadow:0 14px 40px rgba(22,16,9,.08);
       --radius:20px; --gutter:28px; --maxw:1200px;
+      --ctaText:#fff;
     }
     :root[data-theme="forge"]{
       --bg:#0e0f12;
@@ -63,6 +102,7 @@
       --border:#222736;
       --shadow:0 18px 46px rgba(0,0,0,.35);
       --radius:20px; --gutter:28px; --maxw:1200px;
+      --ctaText:#000;
     }
     /* Hero bullet list (replaces dotted squircles) */
     .hero-bullets{margin:0; padding:0; list-style:none; display:grid; gap:12px}
@@ -79,13 +119,8 @@
     .btn.primary{
       background:linear-gradient(180deg,var(--brand),var(--brand-2));
       border:1px solid color-mix(in oklab, var(--brand) 65%, var(--brand-2));
-      color:rgba(0, 0, 0, 1);
+      color:var(--ctaText);
     }
-    /* Scholar = light → white text */
-    :root[data-theme="scholar"] .btn.primary { color:#fff; }
-
-    /* Forge = dark → black text */
-    :root[data-theme="forge"] .btn.primary { color:#000; }
 
     /* Global spacing nudge */
     section{padding:110px 0}        /* was ~96px */
@@ -293,42 +328,35 @@
     </div>
   </footer>
 
-  <!-- MODE + CAROUSEL scripts -->
+  <script src="landing.js"></script>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
   <script>
+/* Segmented “Scholar / Forge” toggle → persist user choice */
+(function () {
+  var KEY = 'sf_theme';
+  var root = document.documentElement;
+  var bScholar = document.getElementById('mode-scholar');
+  var bForge   = document.getElementById('mode-forge');
 
-    (function(){
-      const KEY='sf_theme';
-      const prefersDark = matchMedia('(prefers-color-scheme: dark)').matches;
-      const initial = localStorage.getItem(KEY) || (prefersDark?'forge':'scholar');
-      const root = document.documentElement;
-      const bScholar = document.getElementById('mode-scholar');
-      const bForge   = document.getElementById('mode-forge');
+  function setMode(mode, persist) {
+    root.setAttribute('data-theme', mode);
+    if (persist) {
+      try { localStorage.setItem(KEY, mode); } catch(_) {}
+    }
+    if (bScholar && bForge) {
+      bScholar.classList.toggle('active', mode === 'scholar');
+      bForge.classList.toggle('active',   mode === 'forge');
+      bScholar.setAttribute('aria-selected', mode === 'scholar');
+      bForge.setAttribute('aria-selected',   mode === 'forge');
+    }
+  }
 
-      function setMode(mode){
-        root.setAttribute('data-theme', mode);
-        localStorage.setItem(KEY, mode);
-        // ARIA + visual state
-        bScholar.classList.toggle('active', mode==='scholar');
-        bForge.classList.toggle('active', mode==='forge');
-        bScholar.setAttribute('aria-selected', mode==='scholar');
-        bForge.setAttribute('aria-selected', mode==='forge');
-        bScholar.dataset.mode='scholar'; bForge.dataset.mode='forge';
-      }
+  if (bScholar) bScholar.addEventListener('click', function(){ setMode('scholar', true); });
+  if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
 
-      setMode(initial);
-      bScholar.addEventListener('click', ()=> setMode('scholar'));
-      bForge.addEventListener('click',   ()=> setMode('forge'));
-    })();
-
-    // Simple auto-rotating carousel
-    (function(){
-      const slides=[...document.querySelectorAll('.slide')];
-      const dots=[...document.querySelectorAll('.dot')];
-      let i=0; function show(n){slides.forEach((s,k)=>s.classList.toggle('active',k===n));
-                                dots.forEach((d,k)=>d.classList.toggle('active',k===n));}
-      if(slides.length){ show(0); setInterval(()=>{ i=(i+1)%slides.length; show(i); }, 4400); }
-      document.getElementById('year').textContent=new Date().getFullYear();
-    })();
+  // Ensure the segmented control reflects whatever the head script chose
+  setMode(root.getAttribute('data-theme') || 'scholar', false);
+})();
   </script>
 </body>
 </html>
