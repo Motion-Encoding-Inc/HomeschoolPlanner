@@ -15,3 +15,15 @@ We need to hook up the button for C-Mobile Preview and try the today week previe
 - Buttons route directly to Week Preview demo.
 - `dotnet test` passed (4 tests).
 - Confidence: 0.9
+
+## Follow-up (2025-09-10 15:24 UTC)
+- Adjust landing page hero CTA to promote December beta.
+- Link should scroll to #beta section.
+- Will run `dotnet test` after changes.
+
+
+## Results (2025-09-10 15:27 UTC)
+- Hero CTA now reads "Join the December beta" linking to #beta.
+- `/root/.dotnet/dotnet test` passed (4 tests).
+- Confidence: 0.9
+
