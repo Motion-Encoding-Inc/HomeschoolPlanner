@@ -65,6 +65,9 @@ h1{font-size:clamp(2.2rem,4vw,3.2rem);line-height:1.1;margin:.2rem 0 1rem}
 .dots{display:flex;gap:.5rem;justify-content:center;padding:.6rem .8rem}
 .dot{width:8px;height:8px;border-radius:50%;background:#2a3344;border:1px solid var(--border)}
 .dot.active{background:#7aa2ff}
+/* Beta sign-up form */
+.beta-form{display:flex;gap:.6rem;margin-top:1rem}
+.beta-form input{flex:1;padding:.8rem 1rem;border:1px solid var(--border);border-radius:12px;font-size:1rem}
 /* Feature grids */
 .card{background:linear-gradient(180deg,var(--panel),var(--soft));border:1px solid var(--border);border-radius:var(--radius);padding:20px;box-shadow:var(--shadow)}
 .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
