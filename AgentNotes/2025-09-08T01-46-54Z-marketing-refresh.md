@@ -54,3 +54,11 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Build and tests succeed with .NET 9 SDK.
 * Confidence: 0.85
 
+## Follow-up (2025-09-10 15:25 UTC)
+* `rg` search showed "hello@scholarsforge.app" in marketing and docs index pages.
+* Replace contact email with `support@scholarsforge.com` in both locations.
+* Run `dotnet build` and `dotnet test` after changes.
+## Results (2025-09-10 15:26 UTC)
+* Replaced "hello@scholarsforge.app" with `support@scholarsforge.com` in marketing and docs landing pages.
+* `dotnet build` and `dotnet test` succeeded.
+* Confidence: 0.93
