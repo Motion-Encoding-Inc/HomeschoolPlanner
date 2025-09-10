@@ -11,7 +11,12 @@ We need to hook up the button for C-Mobile Preview and try the today week previe
 - Added inline comments explaining new links.
 - Next: run `dotnet test`.
 
+## Follow-up (2025-09-10 15:25 UTC)
+- Corrected header button to point to `/docs/week.html` so the preview link resolves properly.
+- Clarified intent with an inline comment.
+
 ## Results
 - Buttons route directly to Week Preview demo.
+- Header link now points to `/docs/week.html`.
 - `dotnet test` passed (4 tests).
-- Confidence: 0.9
+- Confidence: 0.95
