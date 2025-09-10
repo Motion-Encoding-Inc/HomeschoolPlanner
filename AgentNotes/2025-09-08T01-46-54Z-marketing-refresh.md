@@ -42,3 +42,15 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Added mobile responsive CSS patch to landing pages under marketing and docs to improve small-screen layout.
 * Attempted `dotnet build` and `dotnet test` but `dotnet` SDK is unavailable in environment.
 * Confidence: 0.84
+
+## Follow-up (2025-09-10 00:00 UTC)
+* Add "Beta testers" and "About us" sections above pricing in marketing landing page (docs & marketing).
+* Include email input/button and bullet expectations card; add About Us with founder and contact info.
+
+
+## Results (2025-09-10 00:15 UTC)
+* Inserted beta sign-up and about-us sections on landing pages in docs and marketing.
+* Added form styles in landing CSS.
+* Build and tests succeed with .NET 9 SDK.
+* Confidence: 0.85
+
