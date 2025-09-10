@@ -47,6 +47,7 @@ header{position:sticky;top:0;z-index:10;background:rgba(255,255,255,.6);backdrop
 .pill{padding:.55rem .8rem;border:1px dashed #d7d1cc;border-radius:999px;background:#fffdfb}
 .btn.primary{background:linear-gradient(180deg,#7aa2ff,#547dff);color:var(--ctaText);border:1px solid #688fff;border-radius:12px;padding:.9rem 1.1rem;font-weight:800}
 .btn.ghost{border:1px solid var(--border);border-radius:12px;padding:.9rem 1.1rem}
+.btn.disabled{display:inline-block;background:#d3d3d3;color:#666;border:1px solid #bbb;border-radius:12px;padding:.9rem 1.1rem;font-weight:800;cursor:not-allowed;pointer-events:none}
 .carousel .slide{min-height:340px}
 .beta-form{display:flex;gap:.6rem;margin-top:1rem}
 .beta-form input{flex:1;padding:.8rem 1rem;border:1px solid var(--border);border-radius:12px;font-size:1rem}
