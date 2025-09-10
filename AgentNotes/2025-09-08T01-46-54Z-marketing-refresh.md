@@ -70,3 +70,13 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Added disabled button styling to marketing and docs CSS.
 * Attempted `dotnet build`/`test`, but `dotnet` SDK unavailable; install attempt failed.
 * Confidence: 0.84
+## Follow-up (2025-09-10 22:04 UTC)
+* Need to extract inline CSS from index.html into shared landing.css and remove inline styles across static pages.
+* Plan to create utility classes and slide-specific classes in landing.css; update marketing and docs pages to reference them.
+* Will ensure demo pages use demo.css with no inline styles; delete redundant root wwwroot folder.
+## Results (2025-09-10 22:15 UTC)
+* Removed all inline `<style>` blocks and `style="..."` attributes from marketing and demo HTML pages.
+* Centralized styling in `landing.css` and `demo.css` with utility helpers and slide image classes; copied to API and docs mirrors.
+* Deleted obsolete root `wwwroot` folder to avoid stray inline CSS copies.
+* `DOTNET_ROOT=/usr/lib/dotnet dotnet build` and `dotnet test` both succeeded after installing .NET 9 SDK.
+* Confidence: 0.87

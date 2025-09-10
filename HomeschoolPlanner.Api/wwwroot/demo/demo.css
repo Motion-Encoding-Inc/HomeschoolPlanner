@@ -1,18 +1,11 @@
-/* shared theme from landing */
-:root[data-theme="light"]{
-  --bg:#fdfcf9; --panel:#ffffff; --fg:#1a1f2b; --muted:#6b7280;
-  --primary:#3367ff; --accent:#00b37e; --warn:#ffc857; --border:#e2e8f0; --chip:#f3f4f6;
-  --shadow:0 4px 16px rgba(0,0,0,.1); --radius:16px; --maxw:430px;
-}
-:root[data-theme="dark"]{
+/* Centralized tokens and layout for demo pages */
+:root{
   --bg:#0b0c10; --panel:#111319; --fg:#e8ecf1; --muted:#9aa6b2;
   --primary:#7aa2ff; --accent:#5ee1a9; --warn:#ffc857; --border:#202532; --chip:#1a1f2b;
   --shadow:0 6px 24px rgba(0,0,0,.35); --radius:16px; --maxw:430px;
 }
-
-/* existing demo styles follow… */
 *{box-sizing:border-box} html,body{height:100%}
-body{margin:0;background:var(--bg);color:var(--fg);
+body{margin:0;background:linear-gradient(180deg,#0a0b0f 0%,#0b0c10 80%);color:var(--fg);
      font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,"Helvetica Neue",Arial}
 a{color:var(--primary);text-decoration:none}
 .app{max-width:var(--maxw);margin-inline:auto;min-height:100%;display:flex;flex-direction:column}
@@ -47,3 +40,20 @@ a.demo{display:flex;justify-content:space-between;align-items:center;padding:.9r
 .block{padding:.65rem .75rem;border-radius:12px;border:1px solid var(--border);background:#0f121a}
 .warn{background:linear-gradient(180deg,#ffd585,#ffb347);border-color:#ffc66a;color:#2e2100}
 @media (min-width:440px){ body{font-size:16px} }
+/* utility helpers for spacing and layout */
+.mt-1{margin-top:1rem}
+.mt-8{margin-top:8px}
+.mt-12{margin-top:12px}
+.mb-075{margin-bottom:.75rem}
+.w-full{width:100%}
+.ml-auto{margin-left:auto}
+/* Day detail layout */
+.timeline{padding:1rem}
+.item{margin-bottom:1rem}
+.time{font-weight:bold}
+.actions{position:sticky;bottom:0;margin-top:auto;background:var(--panel);border-top:1px solid var(--border);display:flex;gap:.5rem;justify-content:center;padding:1rem}
+.actions button{margin:0 .5rem}
+/* Demo index helpers */
+.howto-title{margin:.1rem 0 .5rem;font-size:1rem}
+.howto-list{margin:0;padding-left:1.1rem}
+.top-links{display:flex;justify-content:flex-end;padding:.5rem 1rem 0}

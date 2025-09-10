@@ -46,157 +46,7 @@
   }
 })();
   </script>
-
-  <style>
-    /* ========= THEME TOKENS =========
-       Scholar  = Light (sky blue + soft purple)
-       Forge    = Dark  (ember red + orange)                               */
-    /* Segmented control — Scholar (blue) / Forge (red+orange) */
-    .mode-switch{
-      display:inline-flex; gap:0; border:1px solid var(--border);
-      background:color-mix(in oklab, var(--paper) 80%, var(--tint));
-      border-radius:14px; padding:3px; box-shadow:var(--shadow)
-    }
-    .mode-switch button{
-      all:unset; cursor:pointer; padding:.55rem .9rem; border-radius:10px;
-      font-weight:800; line-height:1; min-width:84px; text-align:center;
-      color:var(--ink);
-    }
-    /* active states: Scholar blue on the left, Forge ember on the right */
-    :root[data-theme="scholar"] #mode-scholar,
-    .mode-switch button.active[data-mode="scholar"]{
-      background:linear-gradient(180deg,#3a80ff,#6b8bff);
-      color:#fff; -webkit-text-stroke:.6px rgba(0,0,0,.55);
-    }
-    :root[data-theme="forge"] #mode-forge,
-    .mode-switch button.active[data-mode="forge"]{
-      background:linear-gradient(180deg,#ff6b6b,#ff9f45);
-      color:#140a00; -webkit-text-stroke:.4px rgba(0,0,0,.35);
-    }
-
-    :root[data-theme="scholar"]{
-      --bg:#f9f6f3;
-      --paper:#ffffff;
-      --tint:#f6f0ff;         /* soft lavender */
-      --ink:#273040;
-      --muted:#6a7586;
-      --brand:#3a80ff;        /* sky blue */
-      --brand-2:#b68cff;      /* soft purple */
-      --accent:#5ab99b;       /* sage for success */
-      --ember:#f5c078;        /* warm highlight */
-      --border:#e7e1dc;
-      --shadow:0 14px 40px rgba(22,16,9,.08);
-      --radius:20px; --gutter:28px; --maxw:1200px;
-      --ctaText:#fff;
-    }
-    :root[data-theme="forge"]{
-      --bg:#0e0f12;
-      --paper:#14161b;
-      --tint:#1b1e25;
-      --ink:#eef2f8;
-      --muted:#b9c0d4;
-      --brand:#ff6b6b;        /* ember red */
-      --brand-2:#ff9f45;      /* orange */
-      --accent:#81c784;       /* success */
-      --ember:#ffd08c;
-      --border:#222736;
-      --shadow:0 18px 46px rgba(0,0,0,.35);
-      --radius:20px; --gutter:28px; --maxw:1200px;
-      --ctaText:#000;
-    }
-    /* Hero bullet list (replaces dotted squircles) */
-    .hero-bullets{margin:0; padding:0; list-style:none; display:grid; gap:12px}
-    .hero-bullets li{
-      display:flex; gap:.75rem; align-items:flex-start;
-      color:var(--muted); font-weight:600
-    }
-    .hero-bullets li::before{
-      content:""; width:10px; height:10px; margin-top:.5rem; border-radius:50%;
-      background:linear-gradient(135deg,var(--brand),var(--brand-2)); flex:0 0 10px;
-      box-shadow:0 0 0 3px color-mix(in oklab, var(--paper) 80%, var(--tint));
-    }
-    /* Primary CTA — white text with subtle black outline for readability */
-    .btn.primary{
-      background:linear-gradient(180deg,var(--brand),var(--brand-2));
-      border:1px solid color-mix(in oklab, var(--brand) 65%, var(--brand-2));
-      color:var(--ctaText);
-    }
-
-    /* Global spacing nudge */
-    section{padding:110px 0}        /* was ~96px */
-    .hero{gap:40px}                  /* more space between copy and image */
-    .grid-2{gap:36px} .grid-3{gap:34px}
-    h1{margin-bottom:26px} .lead{margin-bottom:22px}
-    .hero-card{padding:28px}
-
-    /* ========= Base layout & typography (airier) ========= */
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      background:
-        radial-gradient(1100px 600px at 6% -10%, #ffe9db, transparent 55%),
-        linear-gradient(180deg,var(--bg),var(--bg) 85%);
-      color:var(--ink);
-      font:17px/1.7 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
-      letter-spacing:.1px;
-    }
-    a{color:var(--brand);text-decoration:none}
-    a:hover{opacity:.92}
-    .container{max-width:var(--maxw);margin:0 auto;padding:0 var(--gutter)}
-
-    header{
-      position:sticky;top:0;z-index:10;border-bottom:1px solid var(--border);
-      backdrop-filter:blur(10px);
-      background:color-mix(in oklab, var(--bg) 70%, transparent);
-    }
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 0}
-    .brand{display:flex;align-items:center;gap:.8rem;font-weight:900;letter-spacing:.3px}
-    .mark{width:40px;height:40px;border-radius:12px;
-      background:linear-gradient(135deg,var(--brand),var(--brand-2));
-      box-shadow:var(--shadow)}
-    /* Display the icon inside the colored mark without distorting */
-    .mark img{width:100%;height:100%;object-fit:contain;padding:4px;border-radius:inherit;display:block}
-    .links{display:flex;align-items:center;gap:1.2rem}
-    .btn{display:inline-flex;align-items:center;justify-content:center;padding:1rem 1.2rem;border-radius:14px;border:1px solid var(--border);font-weight:800}
-    .btn.ghost{background:transparent}
-
-    /* ========= Hero (more whitespace) ========= */
-    section{padding:96px 0;border-top:1px solid color-mix(in oklab, var(--border) 70%, transparent)}
-    .hero{display:grid;gap:36px;grid-template-columns:1.1fr 1fr;align-items:center}
-    @media(max-width:980px){.hero{grid-template-columns:1fr}}
-    h1{font-size:clamp(2.4rem,4.6vw,3.6rem);line-height:1.08;margin:0 0 22px}
-    .lead{color:var(--muted);font-size:1.2rem;max-width:64ch}
-
-    .hero-card{background:linear-gradient(180deg,var(--paper),var(--tint));border:1px solid var(--border);
-      border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
-    .pills{display:flex;flex-wrap:wrap;gap:.7rem;margin:.9rem 0 0}
-    .pill{padding:.7rem 1rem;border:1px dashed color-mix(in oklab, var(--border) 80%, #cbd5e1);
-      border-radius:999px;background:color-mix(in oklab, var(--paper) 75%, var(--tint));font-weight:600}
-
-    /* Carousel (keep simple) */
-    .carousel{position:relative;border-radius:var(--radius);border:1px solid var(--border);overflow:hidden;background:var(--tint);box-shadow:var(--shadow)}
-    .slide{display:none;min-height:420px;background:#0f121a center/cover no-repeat}
-    .slide.active{display:block}
-    .dots{display:flex;gap:.6rem;justify-content:center;padding:.8rem}
-    .dot{width:10px;height:10px;border-radius:50%;background:color-mix(in oklab, var(--border) 65%, var(--paper));border:1px solid var(--border)}
-    .dot.active{background:var(--brand)}
-
-    /* Feature + Why sections (roomier grids) */
-    h2{font-size:clamp(1.8rem,3vw,2.4rem);margin:0 0 14px}
-    .muted{color:var(--muted)}
-    .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
-    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
-    @media(max-width:980px){.grid-3,.grid-2{grid-template-columns:1fr}}
-    .card{background:linear-gradient(180deg,var(--paper),var(--tint));border:1px solid var(--border);
-      border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
-    .bullet{display:flex;gap:.9rem;align-items:flex-start;margin:12px 0}
-    .dotline{width:12px;height:12px;border-radius:999px;background:linear-gradient(135deg,var(--brand),var(--brand-2));margin-top:.4rem}
-
-    /* Footer */
-    footer{padding:44px 0;color:color-mix(in oklab, var(--muted) 85%, var(--ink))}
-    .foot{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .sep{opacity:.35}
-  </style>
+  <link rel="stylesheet" href="landing.css"/>
 </head>
 <body>
   <!-- NAV -->
@@ -237,7 +87,7 @@
             <li><strong>Portfolio evidence</strong> & weekly reports</li>
             <li><strong>Clear progress</strong> by subject</li>
           </ul>
-          <div class="pills" style="margin-top:1rem">
+          <div class="pills mt-1">
             <!-- Jump down to beta signup for December launch -->
             <a class="btn primary" href="#beta">Join the December beta</a>
             <a class="btn" href="#how">How it works</a>
@@ -247,14 +97,13 @@
 
       <div class="carousel" aria-label="Screenshots">
         <!-- Replace images later with owned shots -->
-        <div class="slide active" style="background-image:url('images/LearningThroughPlay.png')"></div>
-        <div class="slide"        style="background-image:url('images/MessyDayKitchenTableSchool.png')"></div>
-        <div class="slide"        style="background-image:url('images/DiscoveryMoments.png')"></div>
-        <div class="slide"        style="background-image:url('images/SiblingTeaching.png')"></div>
-        <!-- <div class="slide"        style="background-image:url('images/WorksideLearning.png')"></div> Mismatched style -->
-        <div class="slide"        style="background-image:url('images/WorksideLearning2.png')"></div>
-        <div class="slide"        style="background-image:url('images/IndependantButSupported.png')"></div>
-        <div class="slide"        style="background-image:url('images/IndependantButSupported2.png')"></div>
+        <div class="slide d-slide-1 active"></div>
+        <div class="slide d-slide-2"></div>
+        <div class="slide d-slide-3"></div>
+        <div class="slide d-slide-4"></div>
+        <div class="slide d-slide-5"></div>
+        <div class="slide d-slide-6"></div>
+        <div class="slide d-slide-7"></div>
         <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
       </div>
       <br>
@@ -311,7 +160,7 @@
             <input type="email" placeholder="you@example.com" required />
             <button class="btn primary" type="submit">Add me to the beta</button>
           </form>
-          <p class="muted" style="margin-top:8px">Prefer email? <a href="mailto:support@scholarsforge.com">support@scholarsforge.com</a></p>
+          <p class="muted mt-8">Prefer email? <a href="mailto:support@scholarsforge.com">support@scholarsforge.com</a></p>
         </div>
         <div class="card">
           <h3>What we&rsquo;ll ask from you</h3>
@@ -352,7 +201,7 @@
         <div class="card"><h3>👨‍👩‍👧‍👦 Family (unlimited children)</h3><span class="btn disabled" aria-disabled="true">Coming soon</span></div>
         <div class="card"><h3>🏫 Pro (charters and co-ops)</h3><span class="btn disabled" aria-disabled="true">Coming soon</span></div>
       </div>
-      <p class="muted" style="margin-top:12px">No credit card required to start. Cancel anytime.</p>
+      <p class="muted mt-12">No credit card required to start. Cancel anytime.</p>
       <br>
       <br>
     </section>
