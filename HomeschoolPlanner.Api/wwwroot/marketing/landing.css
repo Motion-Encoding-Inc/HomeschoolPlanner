@@ -48,6 +48,7 @@ header{position:sticky;top:0;z-index:10;background:rgba(14,15,18,.6);backdrop-fi
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:.85rem 1.1rem;border-radius:12px;border:1px solid #2a3244;font-weight:800}
 .btn.primary{background:linear-gradient(180deg,#7aa2ff,#547dff);color:var(--ctaText);border-color:#688fff}
 .btn.ghost{background:transparent;color:var(--fg)}
+.btn.disabled{background:#d3d3d3;color:#666;border-color:#bbb;cursor:not-allowed;pointer-events:none}
 /* Hero */
 section{padding:72px 0;border-top:1px solid #1a1f2b}
 .hero{display:grid;gap:28px;grid-template-columns:1.1fr 1fr;align-items:center}

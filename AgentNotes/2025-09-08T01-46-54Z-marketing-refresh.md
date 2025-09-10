@@ -62,3 +62,11 @@ Refine the marketing home page per client: more whitespace, real carousel, light
 * Replaced "hello@scholarsforge.app" with `support@scholarsforge.com` in marketing and docs landing pages.
 * `dotnet build` and `dotnet test` succeeded.
 * Confidence: 0.93
+## Follow-up (2025-09-10 21:48 UTC)
+* Update beta testing pricing section to only show "Family (unlimited children)" and "Pro (charters and co-ops)" tiers.
+* Change start free trial buttons to read "coming soon", greyed out, and disabled.
+## Results (2025-09-10 21:54 UTC)
+* Pricing section now only lists Family (unlimited children) and Pro (charters and co-ops) tiers with greyed "Coming soon" buttons.
+* Added disabled button styling to marketing and docs CSS.
+* Attempted `dotnet build`/`test`, but `dotnet` SDK unavailable; install attempt failed.
+* Confidence: 0.84
