@@ -7,7 +7,7 @@
 </head><body>
 <!-- demo landing page using centralized tokens -->
 <div class="app">
-  <header class="appbar"><div class="bar"><h1>Homeschool Planner — Demo Pages</h1><button id="theme-toggle" class="btn" style="margin-left:auto" aria-label="Toggle theme">☀︎ / ☾</button></div></header>
+<header class="appbar"><div class="bar"><h1>Homeschool Planner — Demo Pages</h1><button id="theme-toggle" class="btn ml-auto" aria-label="Toggle theme">☀︎ / ☾</button></div></header>
   <script>
   (function(){const k='hs_theme', d=document.documentElement, prefers=matchMedia('(prefers-color-scheme: dark)').matches;
     d.setAttribute('data-theme', localStorage.getItem(k)|| (prefers?'dark':'light'));
@@ -25,8 +25,8 @@
       </div>
     </section>
     <section class="card pad">
-      <h2 style="margin:.1rem 0 .5rem;font-size:1rem">How to view locally</h2>
-      <ol style="margin:0;padding-left:1.1rem">
+      <h2 class="howto-title">How to view locally</h2>
+      <ol class="howto-list">
         <li>Run <code>dotnet run --project HomeschoolPlanner.Api</code></li>
         <li>Open <code>/demo</code> on the printed port</li>
       </ol>
