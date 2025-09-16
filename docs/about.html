@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>About Us — Scholar’s Forge Planner</title>
+  <meta name="description" content="Learn about the Scholar’s Forge Planner team."/>
+  <meta name="theme-color" content="#f9f6f3"/>
+  <link rel="icon" type="image/png" href="images/icowbkg.png"/>
+  <link rel="stylesheet" href="landing.css"/>
+  <script>
+/* Scholar/Forge first-visit default + live-follow if no user choice */
+(function () {
+  var KEY = 'sf_theme';              // persisted user choice, if any
+  var root = document.documentElement;
+  var saved = null;
+
+  try { saved = localStorage.getItem(KEY); } catch(_) {}
+
+  // Decide initial mode
+  var mode = saved;
+  if (!mode) {
+    // If the browser reports a preference, map dark→forge, light→scholar
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      mode = 'forge';
+    } else {
+      // Unknown/unsupported ⇒ default to Scholar (light)
+      mode = 'scholar';
+    }
+  }
+
+  root.setAttribute('data-theme', mode);
+
+  // If the user hasn't chosen yet, reflect OS changes live
+  if (!saved && window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function (e) {
+      // Only follow if the user still hasn't picked a theme
+      try { if (!localStorage.getItem(KEY)) {
+        root.setAttribute('data-theme', e.matches ? 'forge' : 'scholar');
+      }} catch(_) {}
+    };
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if (mql.addListener) mql.addListener(onChange); // Safari/legacy
+  }
+})();
+  </script>
+</head>
+<body>
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a class="brand" href="/" aria-label="Scholar’s Forge Planner">
+        <span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span>
+        <span>Scholar’s Forge Planner</span>
+      </a>
+      <div class="links">
+        <a href="https://www.blogger.com" target="_blank" rel="noopener">Blog</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <!-- Segmented mode switch -->
+        <div class="mode-switch" role="tablist" aria-label="Theme mode">
+          <button id="mode-scholar" role="tab" aria-selected="true">Scholar</button>
+          <button id="mode-forge" role="tab" aria-selected="false">Forge</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+
+  <main>
+    <!-- About page mirrors the index “About us” section so visitors can reach it via nav -->
+    <section class="container" id="about" aria-labelledby="about-title">
+      <br>
+      <h1 id="about-title">About Us</h1>
+      <div class="grid-2">
+        <div class="card">
+          <p><strong>Founded by a former homeschooling mom of four</strong>, Scholar&rsquo;s Forge is built with a deep respect for family‑first education. We&rsquo;ve taught, tested, and iterated, so you can stay focused on your kids.</p>
+        </div>
+        <div class="card">
+          <h3>Contact us</h3>
+          <p class="muted">Conference organizers, co-ops, and partners, we&rsquo;d love to connect. Speaking opportunities welcome.</p>
+          <p><a href="mailto:support@scholarsforge.com">support@scholarsforge.com</a></p>
+        </div>
+      </div>
+      <br>
+      <br>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container foot">
+      <div class="brand"><span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span><span>Scholar’s Forge Planner</span></div>
+      <div>
+        <a href="https://www.blogger.com" target="_blank" rel="noopener">Blog</a><span class="sep"> • </span>
+        <a href="/about.html">About Us</a><span class="sep"> • </span>
+        <a href="/contact.html">Contact Us</a>
+      </div>
+      <div>© <span id="year"></span> Scholar’s Forge LLC. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+  <script>
+/* Segmented “Scholar / Forge” toggle → persist user choice */
+(function () {
+  var KEY = 'sf_theme';
+  var root = document.documentElement;
+  var bScholar = document.getElementById('mode-scholar');
+  var bForge   = document.getElementById('mode-forge');
+
+  function setMode(mode, persist) {
+    root.setAttribute('data-theme', mode);
+    if (persist) {
+      try { localStorage.setItem(KEY, mode); } catch(_) {}
+    }
+    if (bScholar && bForge) {
+      bScholar.classList.toggle('active', mode === 'scholar');
+      bForge.classList.toggle('active',   mode === 'forge');
+      bScholar.setAttribute('aria-selected', mode === 'scholar');
+      bForge.setAttribute('aria-selected',   mode === 'forge');
+    }
+  }
+
+  if (bScholar) bScholar.addEventListener('click', function(){ setMode('scholar', true); });
+  if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
+
+  // Ensure the segmented control reflects whatever the head script chose
+  setMode(root.getAttribute('data-theme') || 'scholar', false);
+})();
+  </script>
+</body>
+</html>
+
