@@ -5,9 +5,49 @@
   <title>Day Detail</title>
   <!-- Use the shared planner icon for browser tab -->
   <link rel="icon" type="image/png" href="images/ico.png"/>
+  <link rel="stylesheet" href="landing.css"/>
   <link rel="stylesheet" href="demo.css"/>
+  <script>
+/* Scholar/Forge first-visit default + live-follow if no user choice */
+(function () {
+  var KEY = 'sf_theme';              // persisted user choice, if any
+  var root = document.documentElement;
+  var saved = null;
+
+  try { saved = localStorage.getItem(KEY); } catch(_) {}
+
+  // Decide initial mode
+  var mode = saved;
+  if (!mode) {
+    // If the browser reports a preference, map dark→forge, light→scholar
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      mode = 'forge';
+    } else {
+      // Unknown/unsupported ⇒ default to Scholar (light)
+      mode = 'scholar';
+    }
+  }
+
+  root.setAttribute('data-theme', mode);
+
+  // If the user hasn't chosen yet, reflect OS changes live
+  if (!saved && window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function (e) {
+      // Only follow if the user still hasn't picked a theme
+      try { if (!localStorage.getItem(KEY)) {
+        root.setAttribute('data-theme', e.matches ? 'forge' : 'scholar');
+      }} catch(_) {}
+    };
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if (mql.addListener) mql.addListener(onChange); // Safari/legacy
+  }
+})();
+  </script>
 </head>
 <body>
+  <div id="hdr"></div>  <!-- header goes here -->
+
   <!-- demo day timeline for GitHub Pages -->
   <h1>Day Detail</h1>
   <div class="timeline">
@@ -20,5 +60,96 @@
     <button>Skip</button>
     <button>Extra</button>
   </div>
+
+  <div id="ftr"></div>  <!-- footer goes here -->
+
+  <script>
+const applyPartial = (placeholderId, html, root) => {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html.trim();
+  const element = tpl.content.firstElementChild;
+  if (!element) { return; }
+
+  const toAbsolute = (value) => {
+    if (!value || value.startsWith('#') || value.startsWith('//') || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value) || value.startsWith('/')) {
+      return value;
+    }
+    const clean = value.replace(/^\.\/+/, '');
+    return root ? `${root}/${clean}` : clean;
+  };
+
+  element.querySelectorAll('[href]').forEach((node) => {
+    const original = node.getAttribute('href');
+    const adjusted = toAbsolute(original);
+    if (adjusted !== original) {
+      node.setAttribute('href', adjusted);
+    }
+  });
+
+  element.querySelectorAll('[src]').forEach((node) => {
+    const original = node.getAttribute('src');
+    const adjusted = toAbsolute(original);
+    if (adjusted !== original) {
+      node.setAttribute('src', adjusted);
+    }
+  });
+
+  const placeholder = document.getElementById(placeholderId);
+  if (placeholder) {
+    placeholder.replaceWith(element);
+  }
+};
+
+(async () => {
+  const root = location.pathname.startsWith('/docs') ? '/docs' : '';
+  const h = await fetch(`${root}/partials/header.html`).then(r=>r.text());
+  const f = await fetch(`${root}/partials/footer.html`).then(r=>r.text());
+  applyPartial('hdr', h, root);
+  applyPartial('ftr', f, root);
+  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  if (window.setupModeToggle) window.setupModeToggle();
+})();
+  </script>
+  <script>
+/* Segmented “Scholar / Forge” toggle → persist user choice */
+window.setupModeToggle = function () {
+  var KEY = 'sf_theme';
+  var root = document.documentElement;
+  var bScholar = document.getElementById('mode-scholar');
+  var bForge   = document.getElementById('mode-forge');
+
+  if (!bScholar || !bForge) {
+    return;
+  }
+
+  if (bScholar.dataset.bound === 'true' || bForge.dataset.bound === 'true') {
+    return;
+  }
+
+  bScholar.dataset.bound = 'true';
+  bForge.dataset.bound = 'true';
+
+  function setMode(mode, persist) {
+    root.setAttribute('data-theme', mode);
+    if (persist) {
+      try { localStorage.setItem(KEY, mode); } catch(_) {}
+    }
+    bScholar.classList.toggle('active', mode === 'scholar');
+    bForge.classList.toggle('active',   mode === 'forge');
+    bScholar.setAttribute('aria-selected', mode === 'scholar');
+    bForge.setAttribute('aria-selected',   mode === 'forge');
+  }
+
+  bScholar.addEventListener('click', function(){ setMode('scholar', true); });
+  bForge.addEventListener('click',   function(){ setMode('forge',   true); });
+
+  // Ensure the segmented control reflects whatever the head script chose
+  setMode(root.getAttribute('data-theme') || 'scholar', false);
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.setupModeToggle) window.setupModeToggle();
+});
+  </script>
 </body>
 </html>
