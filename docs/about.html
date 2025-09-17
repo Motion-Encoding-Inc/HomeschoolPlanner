@@ -47,24 +47,7 @@
   </script>
 </head>
 <body>
-  <header>
-    <div class="container nav" role="navigation" aria-label="Primary">
-      <a class="brand" href="index.html" aria-label="Scholar’s Forge Planner">
-        <span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span>
-        <span>Scholar’s Forge Planner</span>
-      </a>
-      <div class="links">
-        <a href="https://scholarsforge.blogspot.com/" target="_blank" rel="noopener">Blog</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact Us</a>
-        <!-- Segmented mode switch -->
-        <div class="mode-switch" role="tablist" aria-label="Theme mode">
-          <button id="mode-scholar" role="tab" aria-selected="true">Scholar</button>
-          <button id="mode-forge" role="tab" aria-selected="false">Forge</button>
-        </div>
-      </div>
-    </div>
-  </header>
+  <div id="hdr"></div>  <!-- header goes here -->
 
 
   <main>
@@ -87,47 +70,96 @@
     </section>
   </main>
 
-  <footer>
-    <div class="container foot">
-      <div class="brand"><span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span><span>Scholar’s Forge Planner</span></div>
-      <div>
-        <a href="https://scholarsforge.blogspot.com/" target="_blank" rel="noopener">Blog</a><span class="sep"> • </span>
-        <a href="about.html">About Us</a><span class="sep"> • </span>
-        <a href="contact.html">Contact Us</a>
-      </div>
-      <div>© <span id="year"></span> Scholar’s Forge LLC. All rights reserved.</div>
-    </div>
-  </footer>
+  <div id="ftr"></div>  <!-- footer goes here -->
 
+  <script>
+const applyPartial = (placeholderId, html, root) => {
+  const tpl = document.createElement('template');
+  tpl.innerHTML = html.trim();
+  const element = tpl.content.firstElementChild;
+  if (!element) { return; }
+
+  const toAbsolute = (value) => {
+    if (!value || value.startsWith('#') || value.startsWith('//') || /^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(value) || value.startsWith('/')) {
+      return value;
+    }
+    const clean = value.replace(/^\.\/+/, '');
+    return root ? `${root}/${clean}` : clean;
+  };
+
+  element.querySelectorAll('[href]').forEach((node) => {
+    const original = node.getAttribute('href');
+    const adjusted = toAbsolute(original);
+    if (adjusted !== original) {
+      node.setAttribute('href', adjusted);
+    }
+  });
+
+  element.querySelectorAll('[src]').forEach((node) => {
+    const original = node.getAttribute('src');
+    const adjusted = toAbsolute(original);
+    if (adjusted !== original) {
+      node.setAttribute('src', adjusted);
+    }
+  });
+
+  const placeholder = document.getElementById(placeholderId);
+  if (placeholder) {
+    placeholder.replaceWith(element);
+  }
+};
+
+(async () => {
+  const root = location.pathname.startsWith('/docs') ? '/docs' : '';
+  const h = await fetch(`${root}/partials/header.html`).then(r=>r.text());
+  const f = await fetch(`${root}/partials/footer.html`).then(r=>r.text());
+  applyPartial('hdr', h, root);
+  applyPartial('ftr', f, root);
+  const y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
+  if (window.setupModeToggle) window.setupModeToggle();
+})();
+  </script>
   <script src="landing.js"></script>
-  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
   <script>
 /* Segmented “Scholar / Forge” toggle → persist user choice */
-(function () {
+window.setupModeToggle = function () {
   var KEY = 'sf_theme';
   var root = document.documentElement;
   var bScholar = document.getElementById('mode-scholar');
   var bForge   = document.getElementById('mode-forge');
+
+  if (!bScholar || !bForge) {
+    return;
+  }
+
+  if (bScholar.dataset.bound === 'true' || bForge.dataset.bound === 'true') {
+    return;
+  }
+
+  bScholar.dataset.bound = 'true';
+  bForge.dataset.bound = 'true';
 
   function setMode(mode, persist) {
     root.setAttribute('data-theme', mode);
     if (persist) {
       try { localStorage.setItem(KEY, mode); } catch(_) {}
     }
-    if (bScholar && bForge) {
-      bScholar.classList.toggle('active', mode === 'scholar');
-      bForge.classList.toggle('active',   mode === 'forge');
-      bScholar.setAttribute('aria-selected', mode === 'scholar');
-      bForge.setAttribute('aria-selected',   mode === 'forge');
-    }
+    bScholar.classList.toggle('active', mode === 'scholar');
+    bForge.classList.toggle('active',   mode === 'forge');
+    bScholar.setAttribute('aria-selected', mode === 'scholar');
+    bForge.setAttribute('aria-selected',   mode === 'forge');
   }
 
-  if (bScholar) bScholar.addEventListener('click', function(){ setMode('scholar', true); });
-  if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
+  bScholar.addEventListener('click', function(){ setMode('scholar', true); });
+  bForge.addEventListener('click',   function(){ setMode('forge',   true); });
 
   // Ensure the segmented control reflects whatever the head script chose
   setMode(root.getAttribute('data-theme') || 'scholar', false);
-})();
+};
+
+document.addEventListener('DOMContentLoaded', function () {
+  if (window.setupModeToggle) window.setupModeToggle();
+});
   </script>
 </body>
 </html>
