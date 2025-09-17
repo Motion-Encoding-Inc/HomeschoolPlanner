@@ -3,11 +3,11 @@
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Contact Us — Scholar’s Forge Planner</title>
-  <meta name="description" content="Get in touch with the Scholar’s Forge Planner team."/>
+  <title>Blog — Scholar’s Forge Planner</title>
+  <meta name="description" content="Read the latest updates from the Scholar’s Forge Planner team."/>
   <meta name="theme-color" content="#f9f6f3"/>
-  <link rel="icon" type="image/png" href="images/icowbkg.png"/>
-  <link rel="stylesheet" href="landing.css"/>
+  <link rel="icon" type="image/png" href="../images/icowbkg.png"/>
+  <link rel="stylesheet" href="../landing.css"/>
   <script>
 /* Scholar/Forge first-visit default + live-follow if no user choice */
 (function () {
@@ -49,15 +49,14 @@
 <body>
   <header>
     <div class="container nav" role="navigation" aria-label="Primary">
-      <!-- Brand link points to index rather than site root -->
-      <a class="brand" href="index.html" aria-label="Scholar’s Forge Planner">
-        <span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span>
+      <a class="brand" href="../index.html" aria-label="Scholar’s Forge Planner">
+        <span class="mark" aria-hidden="true"><img src="../images/ico.png" alt=""/></span>
         <span>Scholar’s Forge Planner</span>
       </a>
       <div class="links">
-        <a href="blog/index.html">Blog</a>
-        <a href="about.html">About Us</a>
-        <a href="contact.html">Contact Us</a>
+        <a href="index.html" aria-current="page">Blog</a>
+        <a href="../about.html">About Us</a>
+        <a href="../contact.html">Contact Us</a>
         <!-- Segmented mode switch -->
         <div class="mode-switch" role="tablist" aria-label="Theme mode">
           <button id="mode-scholar" role="tab" aria-selected="true">Scholar</button>
@@ -67,31 +66,31 @@
     </div>
   </header>
 
-
-  <main>
-    <section class="container" id="contact" aria-labelledby="contact-title">
-      <br>
-      <h1 id="contact-title">Contact Us</h1>
-      <p class="muted">Conference organizers, co-ops, and partners, we’d love to connect. Speaking opportunities welcome.</p>
-      <p><a href="mailto:support@scholarsforge.com">support@scholarsforge.com</a></p>
-      <br>
-      <br>
-    </section>
+  <main class="container" style="padding:32px 0">
+    <div style="position:relative;padding-top:56.25%;border:1px solid var(--border);border-radius:14px;overflow:hidden">
+      <iframe src="https://scholarsforge.blogspot.com/?m=1"
+              title="Scholar’s Forge Blog" loading="lazy"
+              style="position:absolute;inset:0;width:100%;height:100%;border:0">
+      </iframe>
+    </div>
+    <p class="muted" style="margin-top:8px">
+      Having issues? <a href="https://scholarsforge.blogspot.com/" target="_blank" rel="noopener">Open blog in a new tab</a>
+    </p>
   </main>
 
   <footer>
     <div class="container foot">
-      <div class="brand"><span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span><span>Scholar’s Forge Planner</span></div>
+      <div class="brand"><span class="mark" aria-hidden="true"><img src="../images/ico.png" alt=""/></span><span>Scholar’s Forge Planner</span></div>
       <div>
-        <a href="blog/index.html">Blog</a><span class="sep"> • </span>
-        <a href="about.html">About Us</a><span class="sep"> • </span>
-        <a href="contact.html">Contact Us</a>
+        <a href="index.html" aria-current="page">Blog</a><span class="sep"> • </span>
+        <a href="../about.html">About Us</a><span class="sep"> • </span>
+        <a href="../contact.html">Contact Us</a>
       </div>
       <div>© <span id="year"></span> Scholar’s Forge LLC. All rights reserved.</div>
     </div>
   </footer>
 
-  <script src="landing.js"></script>
+  <script src="../landing.js"></script>
   <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
   <script>
 /* Segmented “Scholar / Forge” toggle → persist user choice */
@@ -114,13 +113,16 @@
     }
   }
 
-  if (bScholar) bScholar.addEventListener('click', function(){ setMode('scholar', true); });
-  if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
+  if (bScholar && bForge) {
+    bScholar.addEventListener('click', function () { setMode('scholar', true); });
+    bForge.addEventListener('click',   function () { setMode('forge',   true); });
+  }
 
-  // Ensure the segmented control reflects whatever the head script chose
-  setMode(root.getAttribute('data-theme') || 'scholar', false);
+  try {
+    var saved = localStorage.getItem(KEY);
+    if (saved) setMode(saved, false);
+  } catch(_) {}
 })();
   </script>
 </body>
 </html>
-
