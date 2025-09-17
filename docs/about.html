@@ -100,7 +100,14 @@
   </footer>
 
   <script src="landing.js"></script>
-  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+  <script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+  document.querySelectorAll('a[href*="scholarsforge.blogspot.com"]').forEach(function(link){
+    link.setAttribute('href', 'blog/index.html');
+    link.removeAttribute('target');
+    link.removeAttribute('rel');
+  });
+  </script>
   <script>
 /* Segmented “Scholar / Forge” toggle → persist user choice */
 (function () {
