@@ -19,9 +19,12 @@ builder.Services.AddFluentUIComponents();
 
 let app = builder.Build()
 
+app.UseDefaultFiles()
 app.UseStaticFiles()
+app.MapFallbackToFile("index.html");
 
 app.MapBlazorHub()
-app.MapFunBlazor(ScholarsForge.Index.page)
+app.MapFunBlazor(ScholarsForge.Index.page,"/app")
+
 
 app.Run()
