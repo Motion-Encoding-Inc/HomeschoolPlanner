@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36301.6 d17.14
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ScholarsForge", "ScholarsForge.fsproj", "{96F7BBB9-9243-F7A4-78BD-EE9D9AC9FD52}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{96F7BBB9-9243-F7A4-78BD-EE9D9AC9FD52}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96F7BBB9-9243-F7A4-78BD-EE9D9AC9FD52}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96F7BBB9-9243-F7A4-78BD-EE9D9AC9FD52}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96F7BBB9-9243-F7A4-78BD-EE9D9AC9FD52}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A991814-3EE1-40DE-98D4-3297FD302537}
+	EndGlobalSection
+EndGlobal
