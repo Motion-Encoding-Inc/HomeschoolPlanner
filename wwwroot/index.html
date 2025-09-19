@@ -1,3 +1,256 @@
-<html>
-    <div>ScholarsForge</div>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Scholar’s Forge Planner — Homeschool, Your Way</title>
+  <meta name="description" content="Plan from books, time, or custom activities. Skip → Catch-up or Do Extra with a tap. Track progress and export clean reports—homeschool, your way."/>
+  <meta name="theme-color" content="#f9f6f3"/>
+  <!-- Favicon: reused in header/footer brand mark -->
+  <link rel="icon" type="image/png" href="images/icowbkg.png"/>
+
+  <script>
+/* Scholar/Forge first-visit default + live-follow if no user choice */
+(function () {
+  var KEY = 'sf_theme';              // persisted user choice, if any
+  var root = document.documentElement;
+  var saved = null;
+
+  try { saved = localStorage.getItem(KEY); } catch(_) {}
+
+  // Decide initial mode
+  var mode = saved;
+  if (!mode) {
+    // If the browser reports a preference, map dark→forge, light→scholar
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      mode = 'forge';
+    } else {
+      // Unknown/unsupported ⇒ default to Scholar (light)
+      mode = 'scholar';
+    }
+  }
+
+  root.setAttribute('data-theme', mode);
+
+  // If the user hasn't chosen yet, reflect OS changes live
+  if (!saved && window.matchMedia) {
+    var mql = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function (e) {
+      // Only follow if the user still hasn't picked a theme
+      try { if (!localStorage.getItem(KEY)) {
+        root.setAttribute('data-theme', e.matches ? 'forge' : 'scholar');
+      }} catch(_) {}
+    };
+    if (mql.addEventListener) mql.addEventListener('change', onChange);
+    else if (mql.addListener) mql.addListener(onChange); // Safari/legacy
+  }
+})();
+  </script>
+  <link rel="stylesheet" href="landing.css"/>
+</head>
+<body>
+  <!-- NAV -->
+  <header>
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <!-- Brand link explicitly targets index to avoid missing root config -->
+      <a class="brand" href="index.html" aria-label="Scholar’s Forge Planner">
+        <span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span>
+        <span>Scholar’s Forge Planner</span>
+      </a>
+      <div class="links">
+        <a href="blog/index.html">Blog</a>
+        <a href="about.html">About Us</a>
+        <a href="contact.html">Contact Us</a>
+        <!-- Segmented mode switch -->
+        <div class="mode-switch" role="tablist" aria-label="Theme mode">
+          <button id="mode-scholar" role="tab" aria-selected="true">Scholar</button>
+          <button id="mode-forge" role="tab" aria-selected="false">Forge</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- HERO -->
+  <main>
+    <section class="container hero" aria-labelledby="hero-title">
+      <div>
+        <br>
+        <h1 id="hero-title">Homeschool<br>Your Way</h1>
+        <p class="lead">
+          No one will love your kids like you do—why trust anyone else to raise them? Scholar’s Forge
+          gives you tools to <strong>plan flexibly</strong>, <strong>document confidently</strong>,
+          and help students take ownership of learning. 
+        </p>
+        <div class="hero-card" aria-label="Highlights">
+          <ul class="hero-bullets">
+            <li><strong>Plan</strong> from books, time, or custom activities</li>
+            <li><strong>Skip • Push • Catch-up • Continue</strong> — real-life rescheduling</li>
+            <li><strong>Portfolio evidence</strong> & weekly reports</li>
+            <li><strong>Clear progress</strong> by subject</li>
+          </ul>
+          <div class="pills" style="margin-top:1rem">
+            <!-- Jump down to beta signup for December launch -->
+            <a class="btn primary" href="#beta">Join the December beta</a>
+            <a class="btn" href="#how">How it works</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="carousel" aria-label="Screenshots">
+        <!-- Replace images later with owned shots -->
+        <div class="slide active" style="background-image:url('images/LearningThroughPlay.png')"></div>
+        <div class="slide"        style="background-image:url('images/MessyDayKitchenTableSchool.png')"></div>
+        <div class="slide"        style="background-image:url('images/DiscoveryMoments.png')"></div>
+        <div class="slide"        style="background-image:url('images/SiblingTeaching.png')"></div>
+        <!-- <div class="slide"        style="background-image:url('images/WorksideLearning2.png')"></div> Mismatched style -->
+        <div class="slide"        style="background-image:url('images/WorksideLearning.png')"></div>
+        <div class="slide"        style="background-image:url('images/IndependantButSupported.png')"></div>
+        <div class="slide"        style="background-image:url('images/IndependantButSupported2.png')"></div>
+        <div class="dots"><span class="dot active"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+      </div>
+      <br>
+      <br>
+    </section>
+
+    <!-- WHY IT FITS REAL LIFE -->
+    <section class="container" id="how" aria-labelledby="how-title">
+      <br>
+      <h2 id="how-title">Designed around how families actually school</h2>
+      <p class="muted">Not a bell schedule—our <em>Week Preview</em> and <em>Day Detail</em> make it obvious what’s planned, what’s done, and what’s next. </p>
+      <div class="grid-2">
+        <div class="card">
+          <h3>Plan the way you teach</h3>
+          <p class="muted">Books, time blocks, or custom activities. Add Saxon, schedule free reading 30 minutes, or log that grocery-store math. </p>
+          <div class="bullet"><span class="dotline"></span><span><strong>Flexible pacing:</strong> <em>Skip</em> to push the timeline, <em>Catch-up</em> to keep the deadline, or <em>Do Extra</em> to pull work forward. </span></div>
+          <div class="bullet"><span class="dotline"></span><span><strong>Student agency:</strong> learners can choose order, skip, or double—with parent guardrails. </span></div>
+        </div>
+        <div class="card">
+          <h3>Documentation that makes sense</h3>
+          <div class="bullet"><span class="dotline"></span><span><strong>Portfolio evidence:</strong> photos/files/notes on any completion; export weekly summaries (CSV/PDF). </span></div>
+          <div class="bullet"><span class="dotline"></span><span><strong>Progress at a glance:</strong> bars & pace indicators keep everyone aligned. </span></div>
+          <div class="bullet"><span class="dotline"></span><span><strong>Optional calendar feed:</strong> show plans on calendars you already use. </span></div>
+        </div>
+      </div>
+      <br>
+      <br>
+    </section>
+
+    <!-- FEATURES -->
+    <section class="container" id="features" aria-labelledby="features-title">
+      <br>
+      <h2 id="features-title">Everything you need to start</h2>
+      <div class="grid-3">
+        <div class="card"><strong>⌛Fast planning</strong><p class="muted">Paste chapters or add time blocks in minutes; auto-schedule to your allowed days.</p></div>
+        <div class="card"><strong>🔄Real-world rescheduling</strong><p class="muted">Skip, push, catch-up, or do extra—without breaking your plan. </p></div>
+        <div class="card"><strong>🗒️Portfolio & reports</strong><p class="muted">Evidence gallery and exportable PDFs/CSVs. </p></div>
+        <div class="card"><strong>📊Progress by subject</strong><p class="muted">On-track, ahead, or catching-up at a glance. </p></div>
+        <div class="card"><strong>📅Calendar feed</strong><p class="muted">Read-only iCal for your devices. </p></div>
+        <div class="card"><strong>👫Parent-first privacy</strong><p class="muted">Kids don’t need logins for MVP; you control exports. </p></div>
+      </div>
+      <br>
+      <br>
+    </section>
+
+    <!-- BETA TESTERS -->
+    <section class="container" id="beta" aria-labelledby="beta-title">
+      <br>
+      <div class="grid-2">
+        <div>
+          <h2 id="beta-title">Beta testers wanted for December</h2>
+          <p class="muted">We&rsquo;re targeting December for testing. Join the list to try Scholar&rsquo;s Forge Planner. Share what you love and what you don&rsquo;t, and shape the roadmap.</p>
+          <form class="beta-form" aria-label="Beta sign-up">
+            <input type="email" placeholder="you@example.com" required />
+            <button class="btn primary" type="submit">Add me to the beta</button>
+          </form>
+          <p class="muted mt-8">Prefer email? <a href="mailto:support@scholarsforge.com">support@scholarsforge.com</a></p>
+        </div>
+        <div class="card">
+          <h3>What we&rsquo;ll ask from you</h3>
+          <ul class="muted">
+            <li>Use the planner with real learners for a couple of weeks.</li>
+            <li>Send feedback on planning, rescheduling, and reports.</li>
+            <li>Tell us what to improve or add next.</li>
+          </ul>
+        </div>
+      </div>
+      <br>
+      <br>
+    </section>
+
+    <!-- ABOUT US -->
+    <section class="container" id="about" aria-labelledby="about-title">
+      <br>
+      <h2 id="about-title">About us</h2>
+      <div class="grid-2">
+        <div class="card">
+          <p><strong>Founded by a former homeschooling mom of four</strong>, Scholar&rsquo;s Forge is built with a deep respect for family‑first education. We&rsquo;ve taught, tested, and iterated, so you can stay focused on your kids.</p>
+        </div>
+        <div class="card">
+          <h3>Contact us</h3>
+          <p class="muted">Conference organizers, co-ops, and partners, we&rsquo;d love to connect. Speaking opportunities welcome.</p>
+          <p><a href="mailto:support@scholarsforge.com">support@scholarsforge.com</a></p>
+        </div>
+      </div>
+      <br>
+      <br>
+    </section>
+
+    <!-- PRICING (placeholder) -->
+    <section class="container" id="pricing" aria-labelledby="pricing-title">
+      <br>
+      <h2 id="pricing-title">Simple, transparent pricing</h2>
+      <div class="grid-2">
+        <div class="card"><h3>👨‍👩‍👧‍👦 Family (unlimited children)</h3><span class="btn disabled" aria-disabled="true">Coming soon</span></div>
+        <div class="card"><h3>🏫 Pro (charters and co-ops)</h3><span class="btn disabled" aria-disabled="true">Coming soon</span></div>
+      </div>
+      <p class="muted mt-12">No credit card required to start. Cancel anytime.</p>
+      <br>
+      <br>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container foot">
+      <div class="brand"><span class="mark" aria-hidden="true"><img src="images/ico.png" alt=""/></span><span>Scholar’s Forge Planner</span></div>
+      <div>
+        <a href="blog/index.html">Blog</a><span class="sep"> • </span>
+        <a href="about.html">About Us</a><span class="sep"> • </span>
+        <a href="contact.html">Contact Us</a>
+      </div>
+      <div>© <span id="year"></span> Scholar’s Forge LLC. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <script src="landing.js"></script>
+  <script>document.getElementById('year').textContent=new Date().getFullYear();</script>
+  <script>
+/* Segmented “Scholar / Forge” toggle → persist user choice */
+(function () {
+  var KEY = 'sf_theme';
+  var root = document.documentElement;
+  var bScholar = document.getElementById('mode-scholar');
+  var bForge   = document.getElementById('mode-forge');
+
+  function setMode(mode, persist) {
+    root.setAttribute('data-theme', mode);
+    if (persist) {
+      try { localStorage.setItem(KEY, mode); } catch(_) {}
+    }
+    if (bScholar && bForge) {
+      bScholar.classList.toggle('active', mode === 'scholar');
+      bForge.classList.toggle('active',   mode === 'forge');
+      bScholar.setAttribute('aria-selected', mode === 'scholar');
+      bForge.setAttribute('aria-selected',   mode === 'forge');
+    }
+  }
+
+  if (bScholar) bScholar.addEventListener('click', function(){ setMode('scholar', true); });
+  if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
+
+  // Ensure the segmented control reflects whatever the head script chose
+  setMode(root.getAttribute('data-theme') || 'scholar', false);
+})();
+  </script>
+</body>
 </html>
