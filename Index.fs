@@ -69,7 +69,7 @@ type Index() =
             doctype "html"
             html' {
                 head {
-                    title { "Cannella Workflows" }
+                    title { "Scholar's Forge" }
                     baseUrl "/"
                     meta { charset "utf-8" }
                     meta {
