@@ -1,0 +1,50 @@
+name: "✨ Feature Request"
+description: Suggest a new feature or improvement for Homeschool Planner
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: "Immediate tasks will be handled before all others. Trivial tasks may be left for later."
+      options:
+        - Immediate
+        - Major
+        - Moderate
+        - Minor
+        - Trivial
+    validations:
+      required: true
+
+  - type: dropdown
+    id: feature_type
+    attributes:
+      label: Feature Type
+      description: "Is this primarily a visual/UI feature or a functional feature?"
+      options:
+        - Visual (UI/UX improvement, styling, layout)
+        - Functional (new logic, workflow, or data feature)
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description of the Feature
+      description: "Describe the feature in detail. What should it do? How will it improve the Homeschool Planner?"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: "If you’ve thought about other ways to solve this, describe them here."
+      placeholder: "Alternative approaches or rejected ideas..."
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: "Add any other details, mockups, or screenshots about the request."
