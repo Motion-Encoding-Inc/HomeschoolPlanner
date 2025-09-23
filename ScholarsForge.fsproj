@@ -12,6 +12,7 @@
   <ItemGroup>
     <Compile Include="UI.fs" />
     <Compile Include="StaticPages.fs" />
+    <Compile Include="Graph.fs" />
     <Compile Include="DispatchExample.fs" />
     <Compile Include="AdaptiveExample.fs" />
     <Compile Include="InjectionExample.fs" />
@@ -20,11 +21,12 @@
   </ItemGroup>
 
   <ItemGroup>
-	<PackageReference Include="FSharp.Data.Adaptive" Version="*" />	  
+	<PackageReference Include="Microsoft.Identity.Client" Version="4.77.0"/>
+	<PackageReference Include="FSharp.Data.Adaptive" Version="1.2.25" />	  
     <PackageReference Include="Fun.Blazor.Server" Version="3.2.8" />
-    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="*" />
-	<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="*" />
-    <PackageReference Include="Fun.Blazor.Microsoft.FluentUI" Version="4.11.3" />
+    <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.12.1" />
+	<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.12.1" />
+    <PackageReference Include="Fun.Blazor.Microsoft.FluentUI" Version="4.12.1" />
   </ItemGroup>
 
 </Project>
