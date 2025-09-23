@@ -181,7 +181,9 @@ module StaticAssets =
             }
         }
 
-    let staticDocument (docTitle:string) description activeHref (bodyContent:NodeRenderFragment) =
+    let staticDocument (docTitle:string) description activeHref (bodyContent:NodeRenderFragment) (?bodyAttrs: IAttrRenderFragment list) (?includeFooter: bool) =
+        let bodyAttrs = defaultArg bodyAttrs []
+        let includeFooter = defaultArg includeFooter true
         fragment {
             doctype "html"
             html' {
@@ -198,9 +200,12 @@ module StaticAssets =
                     script { themeBootstrapScript }
                 }
                 body {
+                    for attr in bodyAttrs do
+                        attr
                     header activeHref
                     bodyContent
-                    footer
+                    if includeFooter then
+                        footer
                     script { src "landing.js" }
                     script { themePersistScript }
                 }
@@ -208,7 +213,15 @@ module StaticAssets =
         }
 
 module LandingPage =
-    let carouselSlides =
+    type LandingSlide =
+        { Key: string
+          AriaLabel: string
+          Classes: string list
+          Background: string option
+          Anchor: string option
+          Content: NodeRenderFragment }
+
+    let heroCarouselSlides =
         [ "images/LearningThroughPlay.png"
           "images/MessyDayKitchenTableSchool.png"
           "images/DiscoveryMoments.png"
@@ -217,12 +230,11 @@ module LandingPage =
           "images/IndependantButSupported.png"
           "images/IndependantButSupported2.png" ]
 
-    let heroSection =
-        section {
+    let heroContent =
+        div {
             class' "container hero"
             "aria-labelledby", "hero-title"
             div {
-                br {}
                 h1 { id "hero-title"; "Homeschool"; br {}; "Your Way" }
                 p {
                     class' "lead"
@@ -271,29 +283,26 @@ module LandingPage =
                 }
             }
             div {
-                class' "carousel"
+                class' "hero-carousel"
                 "aria-label", "Screenshots"
-                for index, path in carouselSlides |> List.indexed do
+                for index, path in heroCarouselSlides |> List.indexed do
                     div {
-                        class' (if index = 0 then "slide active" else "slide")
+                        class' (if index = 0 then "hero-frame active" else "hero-frame")
                         style' ($"background-image:url('{path}')")
                     }
                 div {
-                    class' "dots"
-                    for index in 0 .. carouselSlides.Length - 1 do
-                        span { class' (if index = 0 then "dot active" else "dot") }
+                    class' "hero-dots"
+                    for index in 0 .. heroCarouselSlides.Length - 1 do
+                        span { class' (if index = 0 then "hero-dot active" else "hero-dot") }
                 }
             }
-            br {}
-            br {}
         }
 
-    let realLifeSection =
-        section {
-            class' "container"
+    let realLifeContent =
+        div {
             id "how"
+            class' "container section"
             "aria-labelledby", "how-title"
-            br {}
             h2 { id "how-title"; "Designed around how families actually school" }
             p {
                 class' "muted"
@@ -356,16 +365,13 @@ module LandingPage =
                     }
                 }
             }
-            br {}
-            br {}
         }
 
-    let featuresSection =
-        section {
-            class' "container"
+    let featuresContent =
+        div {
             id "features"
+            class' "container section"
             "aria-labelledby", "features-title"
-            br {}
             h2 { id "features-title"; "Everything you need to start" }
             div {
                 class' "grid-3"
@@ -382,16 +388,13 @@ module LandingPage =
                         p { class' "muted"; copy }
                     }
             }
-            br {}
-            br {}
         }
 
-    let betaSection =
-        section {
-            class' "container"
+    let betaContent =
+        div {
             id "beta"
+            class' "container section"
             "aria-labelledby", "beta-title"
-            br {}
             div {
                 class' "grid-2"
                 div {
@@ -418,16 +421,13 @@ module LandingPage =
                     }
                 }
             }
-            br {}
-            br {}
         }
 
-    let aboutSection =
-        section {
-            class' "container"
+    let aboutContent =
+        div {
             id "about"
+            class' "container section"
             "aria-labelledby", "about-title"
-            br {}
             h2 { id "about-title"; "About us" }
             div {
                 class' "grid-2"
@@ -450,16 +450,13 @@ module LandingPage =
                     }
                 }
             }
-            br {}
-            br {}
         }
 
-    let pricingSection =
-        section {
-            class' "container"
+    let pricingContent =
+        div {
             id "pricing"
+            class' "container section"
             "aria-labelledby", "pricing-title"
-            br {}
             h2 { id "pricing-title"; "Simple, transparent pricing" }
             div {
                 class' "grid-2"
@@ -475,18 +472,92 @@ module LandingPage =
                 }
             }
             p { class' "muted mt-12"; "No credit card required to start. Cancel anytime." }
-            br {}
-            br {}
+        }
+
+    let slides : LandingSlide list =
+        [ { Key = "hero"
+            AriaLabel = "Homeschool, Your Way"
+            Classes = [ "hero-slide" ]
+            Background = None
+            Anchor = None
+            Content = heroContent }
+          { Key = "how"
+            AriaLabel = "Designed around how families actually school"
+            Classes = []
+            Background = Some "images/DiscoveryMoments.png"
+            Anchor = Some "how"
+            Content = realLifeContent }
+          { Key = "features"
+            AriaLabel = "Everything you need to start"
+            Classes = []
+            Background = Some "images/SiblingTeaching.png"
+            Anchor = Some "features"
+            Content = featuresContent }
+          { Key = "beta"
+            AriaLabel = "Beta testers wanted for December"
+            Classes = []
+            Background = Some "images/WorksideLearning.png"
+            Anchor = Some "beta"
+            Content = betaContent }
+          { Key = "about"
+            AriaLabel = "About Scholar’s Forge"
+            Classes = []
+            Background = Some "images/IndependantButSupported.png"
+            Anchor = Some "about"
+            Content = aboutContent }
+          { Key = "pricing"
+            AriaLabel = "Simple, transparent pricing"
+            Classes = []
+            Background = Some "images/IndependantButSupported2.png"
+            Anchor = Some "pricing"
+            Content = pricingContent } ]
+
+    let slideNode (slide: LandingSlide) =
+        section {
+            let classes = String.concat " " ("v-slide" :: slide.Classes)
+            class' classes
+            id ($"slide-{slide.Key}")
+            "role", "listitem"
+            "aria-label", slide.AriaLabel
+            match slide.Background with
+            | Some bg -> "data-bg", bg
+            | None -> ()
+            match slide.Anchor with
+            | Some anchor -> "data-anchor", anchor
+            | None -> ()
+            slide.Content
         }
 
     let view =
-        main {
-            heroSection
-            realLifeSection
-            featuresSection
-            betaSection
-            aboutSection
-            pricingSection
+        fragment {
+            main {
+                class' "v-stage"
+                id "landing-stage"
+                "aria-live", "polite"
+                div {
+                    class' "v-track"
+                    id "landing-track"
+                    "role", "list"
+                    "aria-label", "Vertical carousel of featured sections"
+                    for slide in slides do
+                        slideNode slide
+                }
+                div {
+                    class' "v-dots"
+                    "aria-hidden", "false"
+                    "aria-label", "Slide navigation"
+                    for index, slide in slides |> List.indexed do
+                        button {
+                            class' "v-dot"
+                            type' "button"
+                            "data-index", string index
+                            "aria-label", $"Go to {slide.AriaLabel}"
+                            if index = 0 then
+                                "aria-current", "true"
+                        }
+                }
+            }
+            StaticAssets.footer
         }
 
     type Component() =
@@ -500,7 +571,8 @@ module LandingPage =
             "Plan from books, time, or custom activities. Skip → Catch-up or Do Extra with a tap. Track progress and export clean reports—homeschool, your way."
             (Some "/")
             view
-
+            (?bodyAttrs = Some [ class' "landing-body" ])
+            (?includeFooter = Some false)
 module AboutPage =
     let view =
         main {
