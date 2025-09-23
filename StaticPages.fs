@@ -36,6 +36,7 @@ module StaticAssets =
     }
   }
 
+  // Apply the chosen or default mode to <html data-theme="">
   root.setAttribute('data-theme', mode);
 
   // If the user hasn't chosen yet, reflect OS changes live
@@ -79,7 +80,8 @@ module StaticAssets =
   if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
 
   // Ensure the segmented control reflects whatever the head script chose
-  setMode(root.getbute('data-theme') || 'scholar', false);
+  // BUGFIX: getbute → getAttribute, and fall back to 'scholar' if absent.
+  setMode(root.getAttribute('data-theme') || 'scholar', false);
 })();
 """
 
@@ -180,10 +182,15 @@ module StaticAssets =
                 }
             }
         }
+        // Core: strict, no options
+    let staticDocumentCore
+        (docTitle: string)
+        (description: string)
+        (activeHref: string option)      // header expects option already
+        (bodyContent: NodeRenderFragment)
+        (bodyClass: string)              // "" = no class
+        (includeFooter: bool) =
 
-    let staticDocument (docTitle:string) description activeHref (bodyContent:NodeRenderFragment) (?bodyClass: string) (?includeFooter: bool) =
-        let bodyClass = defaultArg bodyClass ""
-        let includeFooter = defaultArg includeFooter true
         fragment {
             doctype "html"
             html' {
@@ -195,22 +202,45 @@ module StaticAssets =
                     if not (String.IsNullOrWhiteSpace description) then
                         meta { name "description"; content description }
                     meta { name "theme-color"; content "#f9f6f3" }
-                    link { rel "icon"; type' "image/png"; href "images/icowbkg.png" }
-                    link { rel "stylesheet"; href "landing.css" }
+                    // root-relative to avoid route 404s
+                    link { rel "icon"; type' "image/png"; href "/images/icowbkg.png" }
+                    link { rel "stylesheet"; href "/landing.css" }
                     script { themeBootstrapScript }
                 }
-                body {
-                    if not (String.IsNullOrWhiteSpace bodyClass) then
+
+                // prebuilt inner body to avoid control-flow inside CEs with custom ops
+                let innerBody =
+                    fragment {
+                        header activeHref
+                        bodyContent
+                        if includeFooter then footer
+                        script { src "/landing.js" }
+                        script { themePersistScript }
+                    }
+
+                if String.IsNullOrWhiteSpace bodyClass then
+                    body { innerBody }
+                else
+                    body {
                         class' bodyClass
-                    header activeHref
-                    bodyContent
-                    if includeFooter then
-                        footer
-                    script { src "landing.js" }
-                    script { themePersistScript }
-                }
+                        innerBody
+                    }
             }
         }
+
+    // wrapper: takes explicit options (NOT ?-args), normalizes, calls core
+    let staticDocument
+        (docTitle: string)
+        (description: string)
+        (activeHref: string option)
+        (bodyContent: NodeRenderFragment)
+        (bodyClassOpt: string option)
+        (includeFooterOpt: bool option) =
+
+        let bodyClass     = bodyClassOpt     |> Option.defaultValue ""
+        let includeFooter = includeFooterOpt |> Option.defaultValue true
+
+        staticDocumentCore docTitle description activeHref bodyContent bodyClass includeFooter
 
 module LandingPage =
     type LandingSlide =
@@ -513,20 +543,32 @@ module LandingPage =
             Content = pricingContent } ]
 
     let slideNode (slide: LandingSlide) =
+        // Avoid name collision with the custom op `classes`
+        let cls     = String.concat " " ("v-slide" :: slide.Classes)
+        let idValue = $"slide-{slide.Key}"
+
         section {
-            let classes = String.concat " " ("v-slide" :: slide.Classes)
-            class' classes
-            id ($"slide-{slide.Key}")
+            class' cls
+            id idValue
             "role", "listitem"
             "aria-label", slide.AriaLabel
-            match slide.Background with
-            | Some bg -> "data-bg", bg
-            | None -> ()
-            match slide.Anchor with
-            | Some anchor -> "data-anchor", anchor
-            | None -> ()
+
+            // Put conditional attributes into an attribute builder
+            domAttr {
+                match slide.Background with
+                | Some bg -> "data-bg", bg
+                | None -> ()
+
+                match slide.Anchor with
+                | Some anchor -> "data-anchor", anchor
+                | None -> ()
+            }
+
+            // Children/content go after attributes
             slide.Content
         }
+
+
 
     let view =
         fragment {
@@ -534,6 +576,7 @@ module LandingPage =
                 class' "v-stage"
                 id "landing-stage"
                 "aria-live", "polite"
+
                 div {
                     class' "v-track"
                     id "landing-track"
@@ -542,21 +585,23 @@ module LandingPage =
                     for slide in slides do
                         slideNode slide
                 }
+
                 div {
                     class' "v-dots"
-                    "aria-hidden", "false"
                     "aria-label", "Slide navigation"
                     for index, slide in slides |> List.indexed do
-                        button {
-                            class' "v-dot"
-                            type' "button"
-                            "data-index", string index
-                            "aria-label", $"Go to {slide.AriaLabel}"
-                            if index = 0 then
-                                "aria-current", "true"
+                        a {
+                            class' (if index=0 then "v-dot active" else "v-dot")
+                            href ($"#slide-{slide.Key}")       // snap target
+                            domAttr {
+                                "role","button"
+                                "data-index", string index
+                                "aria-label", $"Go to {slide.AriaLabel}"
+                                if index = 0 then "aria-current","true"
+                            }
                         }
+                    }
                 }
-            }
             StaticAssets.footer
         }
 
@@ -569,10 +614,10 @@ module LandingPage =
         StaticAssets.staticDocument
             "Scholar’s Forge Planner — Homeschool, Your Way"
             "Plan from books, time, or custom activities. Skip → Catch-up or Do Extra with a tap. Track progress and export clean reports—homeschool, your way."
-            (Some "/")
-            view
-            (?bodyClass = Some "landing-body")
-            (?includeFooter = Some false)
+            (Some "/")            // activeHref : string option
+            view                  // bodyContent : NodeRenderFragment
+            (Some "landing-body") // bodyClassOpt : string option
+            (Some false)          // includeFooterOpt : bool option
 module AboutPage =
     let view =
         main {
@@ -612,11 +657,13 @@ module AboutPage =
             view
 
     let page ctx =
-        StaticAssets.staticDocument
+        StaticAssets.staticDocumentCore
             "About Us — Scholar’s Forge Planner"
             "Learn about the Scholar’s Forge Planner team."
             (Some "/about")
             view
+            ""      // no body class
+            true    // include footer
 
 module ContactPage =
     let view =
@@ -643,8 +690,10 @@ module ContactPage =
             view
 
     let page ctx =
-        StaticAssets.staticDocument
+        StaticAssets.staticDocumentCore
             "Contact Us — Scholar’s Forge Planner"
             "Reach out to the Scholar’s Forge Planner team."
             (Some "/contact")
             view
+            ""
+            true
