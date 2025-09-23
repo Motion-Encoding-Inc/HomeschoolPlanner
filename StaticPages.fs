@@ -2,6 +2,7 @@ namespace ScholarsForge
 
 open System
 open Fun.Blazor
+open ScholarsForge.Components
 
 [<RequireQualifiedAccess>]
 type StaticNav =
@@ -216,6 +217,9 @@ module LandingPage =
           "images/WorksideLearning.png"
           "images/IndependantButSupported.png"
           "images/IndependantButSupported2.png" ]
+
+    let immersiveShowcase =
+        ScrollBackgroundCarousel.render carouselSlides
 
     let heroSection =
         section {
@@ -480,13 +484,16 @@ module LandingPage =
         }
 
     let view =
-        main {
-            heroSection
-            realLifeSection
-            featuresSection
-            betaSection
-            aboutSection
-            pricingSection
+        fragment {
+            immersiveShowcase
+            main {
+                heroSection
+                realLifeSection
+                featuresSection
+                betaSection
+                aboutSection
+                pricingSection
+            }
         }
 
     type Component() =
