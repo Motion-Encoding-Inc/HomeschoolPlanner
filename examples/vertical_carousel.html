@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <title>Vertical Carousel SPA</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg-dark: rgba(0,0,0,.45);
+      --fg: #f5f7fa;
+      --accent: #b3e5ff;
+      --transition-ms: 700ms;
+      --easing: cubic-bezier(.22,.61,.36,1);
+      --maxw: 70ch;
+    }
+
+    /* Page locked; we handle navigation ourselves */
+    html, body {
+      height: 100%;
+      margin: 0;
+      overflow: hidden; /* hides scrollbar */
+      background: #000;
+      color: var(--fg);
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
+    }
+
+    /* Carousel stage */
+    .stage {
+      position: relative;
+      height: 100%;
+      width: 100%;
+      overflow: hidden; /* mask slide movement */
+      will-change: transform;
+    }
+
+    /* Track holds the slides and moves vertically */
+    .track {
+      height: 100%;
+      width: 100%;
+      display: grid;
+      grid-auto-rows: 100vh; /* each slide full height */
+      transform: translate3d(0, 0, 0);
+      transition: transform var(--transition-ms) var(--easing);
+    }
+
+    /* A single slide */
+    .slide {
+      position: relative;
+      display: grid;
+      place-items: center;
+      isolation: isolate; /* layer text above bg */
+    }
+
+    /* Background image for each slide */
+    .slide::before {
+      background-image: var(--bg);
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      z-index: -2;
+      transform: scale(1.03); /* tiny zoom for parallax feel */
+      transition: transform var(--transition-ms) var(--easing), filter var(--transition-ms) var(--easing);
+      filter: saturate(1.05) contrast(1.1) brightness(.9);
+    }
+
+    /* Gentle vignette + readability overlay */
+    .slide::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(120% 120% at 50% 10%, transparent 0 55%, rgba(0,0,0,.35) 70%, rgba(0,0,0,.65) 100%);
+      z-index: -1;
+    }
+
+    /* Content block */
+    .content {
+      max-width: var(--maxw);
+      padding: 8vmin 6vmin;
+      background: linear-gradient( to bottom right, rgba(0,0,0,.55), rgba(0,0,0,.25) );
+      backdrop-filter: blur(2px);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+
+    h1 {
+      margin: 0 0 .4rem 0;
+      line-height: 1.05;
+      font-weight: 750;
+      letter-spacing: .2px;
+      font-size: clamp(2rem, 5vw, 3rem);
+    }
+    p {
+      margin: .75rem 0 0 0;
+      font-size: clamp(1rem, 1.6vw, 1.125rem);
+      line-height: 1.55;
+      color: #e9edf2;
+    }
+    .eyebrow {
+      display: inline-block;
+      font-size: .9rem;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: .35rem;
+      opacity: .95;
+    }
+
+    /* Slide-specific background images via data attr */
+    /*.slide[data-bg]::before { background-image: attr(data-bg url); }*/
+
+    /* Nav dots (optional, non-intrusive) */
+    .dots {
+      position: fixed;
+      right: 20px;
+      top: 50%;
+      translate: 0 -50%;
+      display: grid;
+      gap: 10px;
+      z-index: 5;
+      user-select: none;
+    }
+    .dot {
+      width: 10px; height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.35);
+      border: 1px solid rgba(255,255,255,.6);
+      cursor: pointer;
+      transition: transform .2s, background .2s;
+    }
+    .dot[aria-current="true"] {
+      background: #fff;
+      transform: scale(1.2);
+    }
+
+    /* Reduced motion support */
+    @media (prefers-reduced-motion: reduce) {
+      .track, .slide::before { transition: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" aria-live="polite">
+    <div class="track" id="track" role="list" aria-label="Vertical carousel of featured sections">
+      <!-- Slide 1 -->
+      <section class="slide" role="listitem"
+        data-bg="url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?q=80&w=1600')"
+        aria-label="Ocean Dawn">
+        <div class="content">
+          <div class="eyebrow">Chapter One</div>
+          <h1>Ocean Dawn</h1>
+          <p>Wake into glassy light and long horizons. This section introduces the theme and sets the tone for what follows.</p>
+        </div>
+      </section>
+
+      <!-- Slide 2 -->
+      <section class="slide" role="listitem"
+        data-bg="url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=1600')"
+        aria-label="Forest Trail">
+        <div class="content">
+          <div class="eyebrow">Chapter Two</div>
+          <h1>Forest Trail</h1>
+          <p>Shift into the quiet: cool air, pine, and shadow. Here we focus on clarity and intent with a concise description.</p>
+        </div>
+      </section>
+
+      <!-- Slide 3 -->
+      <section class="slide" role="listitem"
+        data-bg="url('https://images.unsplash.com/photo-1501785888041-af3ef285b470?q=80&w=1600')"
+        aria-label="Mountain Light">
+        <div class="content">
+          <div class="eyebrow">Chapter Three</div>
+          <h1>Mountain Light</h1>
+          <p>Stand above the valley and see the whole. A final highlight and a simple call to action can live here if needed.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Dots -->
+    <div class="dots" aria-hidden="false" aria-label="Slide navigation">
+      <button class="dot" data-index="0" aria-label="Go to slide 1" aria-current="true"></button>
+      <button class="dot" data-index="1" aria-label="Go to slide 2"></button>
+      <button class="dot" data-index="2" aria-label="Go to slide 3"></button>
+    </div>
+  </main>
+
+  <script>
+    (function () {
+      const track = document.getElementById('track');
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const dots = Array.from(document.querySelectorAll('.dot'));
+      const maxIndex = slides.length - 1;
+
+    slides.forEach(s => {
+    const url = s.getAttribute('data-bg'); // can be a plain URL or url('...')
+    const value = /^url\(/i.test(url) ? url : `url('${url}')`;
+    s.style.setProperty('--bg', value);
+    });
+
+      let index = 0;
+      let locked = false;        // debounce navigation
+      const lockMs = 650;
+
+      function clamp(n, min, max) { return Math.max(min, Math.min(max, n)); }
+
+      function goTo(i, opts = { announce: true }) {
+        const next = clamp(i, 0, maxIndex);
+        if (next === index) return;
+
+        index = next;
+
+        // Move the track
+        const offset = -index * window.innerHeight;
+        track.style.transform = `translate3d(0, ${offset}px, 0)`;
+
+        // Update dots
+        dots.forEach(d => d.setAttribute('aria-current', d.dataset.index == index ? 'true' : 'false'));
+
+        // Subtle foreground/background motion
+        slides.forEach((s, idx) => {
+          s.style.setProperty('--zoom', idx === index ? '1.03' : '1.0');
+          s.style.opacity = idx === index ? '1' : '0.98';
+        });
+
+        // Announce to screen readers (kept short)
+        if (opts.announce) {
+          const label = slides[index].getAttribute('aria-label') || `Slide ${index + 1}`;
+          track.setAttribute('aria-label', `Showing: ${label}`);
+        }
+      }
+
+      function lockNav() {
+        locked = true;
+        setTimeout(() => { locked = false; }, lockMs);
+      }
+
+      // Wheel / touchpad
+      window.addEventListener('wheel', (e) => {
+        // Prevent page scrolling; we handle it
+        e.preventDefault();
+        if (locked) return;
+        const delta = e.deltaY || e.wheelDelta || (-e.detail);
+        if (delta > 10) { goTo(index + 1); lockNav(); }
+        else if (delta < -10) { goTo(index - 1); lockNav(); }
+      }, { passive: false });
+
+      // Keyboard
+      window.addEventListener('keydown', (e) => {
+        if (locked) return;
+        if (e.key === 'ArrowDown' || e.key === 'PageDown') { e.preventDefault(); goTo(index + 1); lockNav(); }
+        if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); goTo(index - 1); lockNav(); }
+        if (e.key === 'Home') { e.preventDefault(); goTo(0); lockNav(); }
+        if (e.key === 'End') { e.preventDefault(); goTo(maxIndex); lockNav(); }
+      });
+
+      // Touch (basic swipe)
+      let touchStartY = null;
+      let touchStartX = null;
+      const SWIPE_THRESHOLD = 40;
+
+      window.addEventListener('touchstart', (e) => {
+        const t = e.changedTouches[0];
+        touchStartY = t.clientY;
+        touchStartX = t.clientX;
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        if (locked || touchStartY === null) return;
+        const t = e.changedTouches[0];
+        const dy = t.clientY - touchStartY;
+        const dx = t.clientX - touchStartX;
+
+        // Vertical swipe dominates
+        if (Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > SWIPE_THRESHOLD) {
+          if (dy < 0) goTo(index + 1);
+          else goTo(index - 1);
+          lockNav();
+        }
+
+        touchStartY = touchStartX = null;
+      }, { passive: true });
+
+      // Dots click
+      dots.forEach(btn => {
+        btn.addEventListener('click', () => goTo(parseInt(btn.dataset.index, 10)));
+      });
+
+      // Resize: keep current slide aligned to viewport height
+      window.addEventListener('resize', () => {
+        track.style.transition = 'none';
+        const offset = -index * window.innerHeight;
+        track.style.transform = `translate3d(0, ${offset}px, 0)`;
+        requestAnimationFrame(() => {
+          // Re-enable transition after one frame
+          track.style.transition = '';
+        });
+      });
+
+      // Initial label for SR
+      track.setAttribute('aria-label', 'Showing: ' + (slides[0].getAttribute('aria-label') || 'Slide 1'));
+    })();
+  </script>
+</body>
+</html>
