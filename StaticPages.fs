@@ -181,8 +181,8 @@ module StaticAssets =
             }
         }
 
-    let staticDocument (docTitle:string) description activeHref (bodyContent:NodeRenderFragment) (?bodyAttrs: IAttrRenderFragment list) (?includeFooter: bool) =
-        let bodyAttrs = defaultArg bodyAttrs []
+    let staticDocument (docTitle:string) description activeHref (bodyContent:NodeRenderFragment) (?bodyClass: string) (?includeFooter: bool) =
+        let bodyClass = defaultArg bodyClass ""
         let includeFooter = defaultArg includeFooter true
         fragment {
             doctype "html"
@@ -200,8 +200,8 @@ module StaticAssets =
                     script { themeBootstrapScript }
                 }
                 body {
-                    for attr in bodyAttrs do
-                        attr
+                    if not (String.IsNullOrWhiteSpace bodyClass) then
+                        class' bodyClass
                     header activeHref
                     bodyContent
                     if includeFooter then
@@ -571,7 +571,7 @@ module LandingPage =
             "Plan from books, time, or custom activities. Skip → Catch-up or Do Extra with a tap. Track progress and export clean reports—homeschool, your way."
             (Some "/")
             view
-            (?bodyAttrs = Some [ class' "landing-body" ])
+            (?bodyClass = Some "landing-body")
             (?includeFooter = Some false)
 module AboutPage =
     let view =
