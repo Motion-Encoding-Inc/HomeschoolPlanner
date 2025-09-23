@@ -13,7 +13,7 @@ type StaticNav =
           Href = href
           External = defaultArg external false }
 
-module private StaticAssets =
+module StaticAssets =
     let themeBootstrapScript =
         """
 /* Scholar/Forge first-visit default + live-follow if no user choice */
@@ -79,127 +79,136 @@ module private StaticAssets =
   if (bForge)   bForge.addEventListener('click',   function(){ setMode('forge',   true); });
 
   // Ensure the segmented control reflects whatever the head script chose
-  setMode(root.getAttribute('data-theme') || 'scholar', false);
+  setMode(root.getbute('data-theme') || 'scholar', false);
 })();
 """
 
-let private navLinks =
-    [ StaticNav.Create("Blog", "https://scholarsforge.blogspot.com/", true)
-      StaticNav.Create("About Us", "/about")
-      StaticNav.Create("Contact Us", "/contact") ]
+    let navLinks =
+        [ 
+            StaticNav.Create("Blog", "https://scholarsforge.blogspot.com/", true)
+            StaticNav.Create("About Us", "/about")
+            StaticNav.Create("Contact Us", "/contact") 
+        ]
 
-let private navLink (activeHref: string option) link =
-    let isActive =
-        activeHref
-        |> Option.map (fun h -> String.Equals(h, link.Href, StringComparison.OrdinalIgnoreCase))
-        |> Option.defaultValue false
+    let navLink (activeHref: string option) (link:StaticNav) =
+        let normalizeHref (href: string) =
+            if String.IsNullOrWhiteSpace href then "/"
+            elif href.StartsWith "/" then href
+            else "/" + href.Trim()
 
-    a {
-        href link.Href
-        if link.External then
-            target "_blank"
-            rel "noopener"
-        match isActive with
-        | true -> attr.``aria-current`` "page"
-        | false -> ()
-        link.Label
-    }
+        let isActive =
+            activeHref
+            |> Option.map (fun h -> String.Equals(normalizeHref h, normalizeHref link.Href, StringComparison.OrdinalIgnoreCase))
+            |> Option.defaultValue false
 
-let private header activeHref =
-    header {
-        div {
-            class' "container nav"
-            attr.``role`` "navigation"
-            attr.``aria-label`` "Primary"
-            a {
-                class' "brand"
-                href "/"
-                attr.``aria-label`` "Scholar’s Forge Planner"
-                span {
-                    class' "mark"
-                    attr.``aria-hidden`` "true"
-                    img { src "images/ico.png"; alt "" }
-                }
-                span { "Scholar’s Forge Planner" }
+        a {
+            href link.Href
+            domAttr {
+                if link.External then
+                    "target", "_blank"
+                if link.External then
+                    "rel", "noopener"
+                if isActive then
+                    "aria-current", "page"
             }
+            link.Label
+        }
+
+    let header activeHref =
+        header {
             div {
-                class' "links"
-                for link in navLinks do
-                    navLink activeHref link
+                class' "container nav"
+                "role", "navigation"
+                "aria-label", "Primary"
+                a {
+                    class' "brand"
+                    href "/"
+                    "aria-label", "Scholar’s Forge Planner"
+                    span {
+                        class' "mark"
+                        "aria-hidden", "true"
+                        img { src "images/ico.png"; alt "" }
+                    }
+                    span { "Scholar’s Forge Planner" }
+                }
                 div {
-                    class' "mode-switch"
-                    attr.``role`` "tablist"
-                    attr.``aria-label`` "Theme mode"
-                    button {
-                        id "mode-scholar"
-                        attr.``role`` "tab"
-                        attr.``aria-selected`` "true"
-                        "Scholar"
-                    }
-                    button {
-                        id "mode-forge"
-                        attr.``role`` "tab"
-                        attr.``aria-selected`` "false"
-                        "Forge"
+                    class' "links"
+                    for link in navLinks do
+                        navLink activeHref link
+                    div {
+                        class' "mode-switch"
+                        "role", "tablist"
+                        "aria-label", "Theme mode"
+                        button {
+                            id "mode-scholar"
+                            "role", "tab"
+                            "aria-selected", "true"
+                            "Scholar"
+                        }
+                        button {
+                            id "mode-forge"
+                            "role", "tab"
+                            "aria-selected", "false"
+                            "Forge"
+                        }
                     }
                 }
             }
         }
-    }
 
-let private footer =
-    footer {
-        div {
-            class' "container foot"
+    let footer =
+        footer {
             div {
-                class' "brand"
-                span {
-                    class' "mark"
-                    attr.``aria-hidden`` "true"
-                    img { src "images/ico.png"; alt "" }
+                class' "container foot"
+                div {
+                    class' "brand"
+                    span {
+                        class' "mark"
+                        "aria-hidden", "true"
+                        img { src "images/ico.png"; alt "" }
+                    }
+                    span { "Scholar’s Forge Planner" }
                 }
-                span { "Scholar’s Forge Planner" }
-            }
-            div {
-                for index, link in navLinks |> List.indexed do
-                    if index > 0 then
-                        span { class' "sep"; " • " }
-                    navLink None link
-            }
-            div {
-                $"© {DateTime.UtcNow.Year} Scholar’s Forge LLC. All rights reserved."
+                div {
+                    for index, link in navLinks |> List.indexed do
+                        if index > 0 then
+                            span { class' "sep"; " • " }
+                        navLink None link
+                }
+                div {
+                    $"© {DateTime.UtcNow.Year} Scholar’s Forge LLC. All rights reserved."
+                }
             }
         }
-    }
 
-let private staticDocument title description activeHref bodyContent =
-    fragment {
-        doctype "html"
-        html' {
-            lang "en"
-            head {
-                title { title }
-                meta { charset "utf-8" }
-                meta { name "viewport"; content "width=device-width, initial-scale=1" }
-                if not (String.IsNullOrWhiteSpace description) then
-                    meta { name "description"; content description }
-                meta { name "theme-color"; content "#f9f6f3" }
-                link { rel "icon"; type' "image/png"; href "images/icowbkg.png" }
-                link { rel "stylesheet"; href "landing.css" }
-                script { StaticAssets.themeBootstrapScript }
-            }
-            body {
-                header activeHref
-                bodyContent
-                footer
-                script { src "landing.js" }
-                script { StaticAssets.themePersistScript }
+    let staticDocument (docTitle:string) description activeHref (bodyContent:NodeRenderFragment) =
+        fragment {
+            doctype "html"
+            html' {
+                lang "en"
+                head {
+                    title { docTitle }
+                    meta { charset "utf-8" }
+                    meta { name "viewport"; content "width=device-width, initial-scale=1" }
+                    if not (String.IsNullOrWhiteSpace description) then
+                        meta { name "description"; content description }
+                    meta { name "theme-color"; content "#f9f6f3" }
+                    link { rel "icon"; type' "image/png"; href "images/icowbkg.png" }
+                    link { rel "stylesheet"; href "landing.css" }
+                    script { themeBootstrapScript }
+                }
+                body {
+                    header activeHref
+                    bodyContent
+                    footer
+                    script { src "landing.js" }
+                    script { themePersistScript }
+                }
             }
         }
-    }
 
 module LandingPage =
-    let private carouselSlides =
+    let carouselSlides =
         [ "images/LearningThroughPlay.png"
           "images/MessyDayKitchenTableSchool.png"
           "images/DiscoveryMoments.png"
@@ -208,10 +217,10 @@ module LandingPage =
           "images/IndependantButSupported.png"
           "images/IndependantButSupported2.png" ]
 
-    let private heroSection =
+    let heroSection =
         section {
             class' "container hero"
-            attr.``aria-labelledby`` "hero-title"
+            "aria-labelledby", "hero-title"
             div {
                 br {}
                 h1 { id "hero-title"; "Homeschool"; br {}; "Your Way" }
@@ -225,7 +234,7 @@ module LandingPage =
                 }
                 div {
                     class' "hero-card"
-                    attr.``aria-label`` "Highlights"
+                    "aria-label", "Highlights"
                     ul {
                         class' "hero-bullets"
                         li {
@@ -263,7 +272,7 @@ module LandingPage =
             }
             div {
                 class' "carousel"
-                attr.``aria-label`` "Screenshots"
+                "aria-label", "Screenshots"
                 for index, path in carouselSlides |> List.indexed do
                     div {
                         class' (if index = 0 then "slide active" else "slide")
@@ -279,11 +288,11 @@ module LandingPage =
             br {}
         }
 
-    let private realLifeSection =
+    let realLifeSection =
         section {
             class' "container"
             id "how"
-            attr.``aria-labelledby`` "how-title"
+            "aria-labelledby", "how-title"
             br {}
             h2 { id "how-title"; "Designed around how families actually school" }
             p {
@@ -351,11 +360,11 @@ module LandingPage =
             br {}
         }
 
-    let private featuresSection =
+    let featuresSection =
         section {
             class' "container"
             id "features"
-            attr.``aria-labelledby`` "features-title"
+            "aria-labelledby", "features-title"
             br {}
             h2 { id "features-title"; "Everything you need to start" }
             div {
@@ -377,11 +386,11 @@ module LandingPage =
             br {}
         }
 
-    let private betaSection =
+    let betaSection =
         section {
             class' "container"
             id "beta"
-            attr.``aria-labelledby`` "beta-title"
+            "aria-labelledby", "beta-title"
             br {}
             div {
                 class' "grid-2"
@@ -393,8 +402,8 @@ module LandingPage =
                     }
                     form {
                         class' "beta-form"
-                        attr.``aria-label`` "Beta sign-up"
-                        input { type' "email"; placeholder "you@example.com"; attr.``required`` "" }
+                        "aria-label", "Beta sign-up"
+                        input { type' "email"; placeholder "you@example.com"; "required", "" }
                         button { class' "btn primary"; type' "submit"; "Add me to the beta" }
                     }
                 }
@@ -413,11 +422,11 @@ module LandingPage =
             br {}
         }
 
-    let private aboutSection =
+    let aboutSection =
         section {
             class' "container"
             id "about"
-            attr.``aria-labelledby`` "about-title"
+            "aria-labelledby", "about-title"
             br {}
             h2 { id "about-title"; "About us" }
             div {
@@ -445,11 +454,11 @@ module LandingPage =
             br {}
         }
 
-    let private pricingSection =
+    let pricingSection =
         section {
             class' "container"
             id "pricing"
-            attr.``aria-labelledby`` "pricing-title"
+            "aria-labelledby", "pricing-title"
             br {}
             h2 { id "pricing-title"; "Simple, transparent pricing" }
             div {
@@ -457,12 +466,12 @@ module LandingPage =
                 div {
                     class' "card"
                     h3 { "👨‍👩‍👧‍👦 Family (unlimited children)" }
-                    span { class' "btn disabled"; attr.``aria-disabled`` "true"; "Coming soon" }
+                    span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
                 }
                 div {
                     class' "card"
                     h3 { "🏫 Pro (charters and co-ops)" }
-                    span { class' "btn disabled"; attr.``aria-disabled`` "true"; "Coming soon" }
+                    span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
                 }
             }
             p { class' "muted mt-12"; "No credit card required to start. Cancel anytime." }
@@ -486,19 +495,19 @@ module LandingPage =
             view
 
     let page ctx =
-        staticDocument
+        StaticAssets.staticDocument
             "Scholar’s Forge Planner — Homeschool, Your Way"
             "Plan from books, time, or custom activities. Skip → Catch-up or Do Extra with a tap. Track progress and export clean reports—homeschool, your way."
             (Some "/")
             view
 
 module AboutPage =
-    let private view =
+    let view =
         main {
             section {
                 class' "container"
                 id "about"
-                attr.``aria-labelledby`` "about-title"
+                "aria-labelledby", "about-title"
                 br {}
                 h1 { id "about-title"; "About Us" }
                 div {
@@ -531,19 +540,19 @@ module AboutPage =
             view
 
     let page ctx =
-        staticDocument
+        StaticAssets.staticDocument
             "About Us — Scholar’s Forge Planner"
             "Learn about the Scholar’s Forge Planner team."
             (Some "/about")
             view
 
 module ContactPage =
-    let private view =
+    let view =
         main {
             section {
                 class' "container"
                 id "contact"
-                attr.``aria-labelledby`` "contact-title"
+                "aria-labelledby", "contact-title"
                 br {}
                 h1 { id "contact-title"; "Contact Us" }
                 p {
@@ -562,7 +571,7 @@ module ContactPage =
             view
 
     let page ctx =
-        staticDocument
+        StaticAssets.staticDocument
             "Contact Us — Scholar’s Forge Planner"
             "Reach out to the Scholar’s Forge Planner team."
             (Some "/contact")
