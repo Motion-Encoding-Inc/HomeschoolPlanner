@@ -348,3 +348,17 @@ h2{font-size:clamp(1.8rem,3vw,2.4rem);margin:0 0 14px}
 footer{padding:44px 0;color:color-mix(in oklab, var(--muted) 85%, var(--ink))}
 .foot{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:space-between}
 .sep{opacity:.35}
+
+/* Make the stage itself a snapping scroll container */
+.v-stage {
+    height: 100vh;
+    overflow-y: auto; /* allow internal scrolling */
+    scroll-snap-type: y mandatory; /* snap between slides */
+    scroll-behavior: smooth; /* smooth movement */
+    -webkit-overflow-scrolling: touch;
+}
+
+.v-slide {
+    min-height: 100%;
+    scroll-snap-align: start;
+}
