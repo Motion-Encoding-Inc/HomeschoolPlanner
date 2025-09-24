@@ -118,6 +118,7 @@ module StaticAssets =
 
     let header activeHref =
         header {
+            class' "site-header" 
             div {
                 class' "container nav"
                 "role", "navigation"
@@ -160,6 +161,7 @@ module StaticAssets =
 
     let footer =
         footer {
+            class' "site-footer" 
             div {
                 class' "container foot"
                 div {
@@ -211,9 +213,25 @@ module StaticAssets =
                 // prebuilt inner body to avoid control-flow inside CEs with custom ops
                 let innerBody =
                     fragment {
-                        header activeHref
-                        bodyContent
-                        if includeFooter then footer
+                        // App shell grid: header / window / footer
+                        div {
+                            class' "shell"
+
+                            // Top bar (nav)
+                            header activeHref
+
+                            // Middle viewport where pages render
+                            div {
+                                class' "window"
+                                bodyContent   // <-- Landing main.v-stage OR About/Contact main
+                            }
+
+                            // Bottom bar
+                            if includeFooter then
+                                footer
+                        }
+
+                        // Scripts at end of body
                         script { src "/landing.js" }
                         script { themePersistScript }
                     }
@@ -514,13 +532,13 @@ module LandingPage =
           { Key = "how"
             AriaLabel = "Designed around how families actually school"
             Classes = []
-            Background = Some "images/DiscoveryMoments.png"
+            Background = Some "images/StudyingTogether_L.png"
             Anchor = Some "how"
             Content = realLifeContent }
           { Key = "features"
             AriaLabel = "Everything you need to start"
             Classes = []
-            Background = Some "images/SiblingTeaching.png"
+            Background = None
             Anchor = Some "features"
             Content = featuresContent }
           { Key = "beta"
@@ -529,16 +547,10 @@ module LandingPage =
             Background = Some "images/WorksideLearning.png"
             Anchor = Some "beta"
             Content = betaContent }
-          { Key = "about"
-            AriaLabel = "About Scholar’s Forge"
-            Classes = []
-            Background = Some "images/IndependantButSupported.png"
-            Anchor = Some "about"
-            Content = aboutContent }
           { Key = "pricing"
             AriaLabel = "Simple, transparent pricing"
             Classes = []
-            Background = Some "images/IndependantButSupported2.png"
+            Background = None
             Anchor = Some "pricing"
             Content = pricingContent } ]
 
@@ -602,7 +614,6 @@ module LandingPage =
                         }
                     }
                 }
-            StaticAssets.footer
         }
 
     type Component() =
