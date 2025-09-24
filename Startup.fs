@@ -28,7 +28,7 @@ app.UseStaticFiles()
 
 app.MapPost(
     "/contact/send",
-    fun (ctx: HttpContext) ->
+    Func<HttpContext, Task>(fun ctx ->
         task {
             let! form = ctx.Request.ReadFormAsync()
 
@@ -100,7 +100,9 @@ app.MapPost(
                     do! ctx.Response.WriteAsync("We were unable to send your message. Please try again later.")
 
             return ()
-        })
+        }
+        :> Task)
+    )
 
 app.MapFunBlazor(ScholarsForge.LandingPage.page,"/")
 app.MapFunBlazor(ScholarsForge.AboutPage.page,"/about")
