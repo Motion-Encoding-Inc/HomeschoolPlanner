@@ -683,15 +683,140 @@ module ContactPage =
                 class' "container"
                 id "contact"
                 "aria-labelledby", "contact-title"
-                br {}
-                h1 { id "contact-title"; "Contact Us" }
-                p {
-                    class' "muted"
-                    "Conference organizers, co-ops, and partners, we’d love to connect. Speaking opportunities welcome."
+                div {
+                    class' "card contact-card"
+                    h1 { id "contact-title"; "Contact Us" }
+                    p {
+                        class' "muted"
+                        "Conference organizers, co-ops, and partners, we’d love to connect. Speaking opportunities welcome."
+                    }
+                    form {
+                        class' "contact-form"
+                        method "post"
+                        action "/contact/send"
+                        div {
+                            class' "contact-form-main"
+                            div {
+                                class' "contact-column"
+                                div {
+                                    class' "contact-field"
+                                    label {
+                                        "for", "first-name"
+                                        "First name"
+                                    }
+                                    input {
+                                        id "first-name"
+                                        "name", "firstName"
+                                        type' "text"
+                                        "autocomplete", "given-name"
+                                        "required", ""
+                                    }
+                                }
+                                div {
+                                    class' "contact-field"
+                                    label {
+                                        "for", "telephone"
+                                        "Telephone"
+                                    }
+                                    input {
+                                        id "telephone"
+                                        "name", "telephone"
+                                        type' "tel"
+                                        "autocomplete", "tel"
+                                        "required", ""
+                                    }
+                                }
+                                div {
+                                    class' "contact-field"
+                                    label {
+                                        "for", "title"
+                                        span { "Title" }
+                                        span { class' "optional"; "Optional" }
+                                    }
+                                    input {
+                                        id "title"
+                                        "name", "title"
+                                        type' "text"
+                                        "autocomplete", "organization-title"
+                                    }
+                                }
+                            }
+                            div {
+                                class' "contact-column"
+                                div {
+                                    class' "contact-field"
+                                    label {
+                                        "for", "last-name"
+                                        "Last name"
+                                    }
+                                    input {
+                                        id "last-name"
+                                        "name", "lastName"
+                                        type' "text"
+                                        "autocomplete", "family-name"
+                                        "required", ""
+                                    }
+                                }
+                                div {
+                                    class' "contact-field"
+                                    label {
+                                        "for", "email"
+                                        "Email"
+                                    }
+                                    input {
+                                        id "email"
+                                        "name", "email"
+                                        type' "email"
+                                        "autocomplete", "email"
+                                        "required", ""
+                                    }
+                                }
+                                div {
+                                    class' "contact-field"
+                                    label {
+                                        "for", "company"
+                                        span { "Company" }
+                                        span { class' "optional"; "Optional" }
+                                    }
+                                    input {
+                                        id "company"
+                                        "name", "company"
+                                        type' "text"
+                                        "autocomplete", "organization"
+                                    }
+                                }
+                            }
+                        }
+                        div {
+                            class' "contact-form-message"
+                            div {
+                                class' "contact-field"
+                                label {
+                                    "for", "message"
+                                    "Message"
+                                }
+                                textarea {
+                                    id "message"
+                                    "name", "message"
+                                    "rows", "6"
+                                    "required", ""
+                                }
+                            }
+                        }
+                        div {
+                            class' "contact-recaptcha"
+                            id "contact-recaptcha"
+                        }
+                        div {
+                            class' "contact-submit"
+                            button {
+                                class' "btn primary"
+                                type' "submit"
+                                "Send"
+                            }
+                        }
+                    }
                 }
-                p { a { href "mailto:support@scholarsforge.com"; "support@scholarsforge.com" } }
-                br {}
-                br {}
             }
         }
 
