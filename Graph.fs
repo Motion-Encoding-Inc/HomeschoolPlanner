@@ -18,9 +18,51 @@ module Graph =
     type Message = { subject: string; body: ItemBody; toRecipients: Recipient[]; replyTo: Recipient[] }
     type SendMailRequest = { message: Message; saveToSentItems: bool }
 
-    let private tenantId = System.Environment.GetEnvironmentVariable("GRAPH_TENANTID")
-    let private clientId = System.Environment.GetEnvironmentVariable("GRAPH_CLIENTID")
-    let private clientSecret = System.Environment.GetEnvironmentVariable("GRAPH_CLIENTSECRET")
+    let private tryGetConfigurationValue names =
+        names
+        |> List.tryPick (fun name ->
+            let value = Environment.GetEnvironmentVariable name
+            if String.IsNullOrWhiteSpace value then
+                None
+            else
+                Some value)
+
+    let private graphConfiguration =
+        lazy
+            let tenantId =
+                tryGetConfigurationValue
+                    [ "GRAPH_TENANTID"
+                      "GRAPH_TENANT_ID"
+                      "Graph__TenantId"
+                      "Graph:TenantId" ]
+
+            let clientId =
+                tryGetConfigurationValue
+                    [ "GRAPH_CLIENTID"
+                      "GRAPH_CLIENT_ID"
+                      "Graph__ClientId"
+                      "Graph:ClientId" ]
+
+            let clientSecret =
+                tryGetConfigurationValue
+                    [ "GRAPH_CLIENTSECRET"
+                      "GRAPH_CLIENT_SECRET"
+                      "Graph__ClientSecret"
+                      "Graph:ClientSecret" ]
+
+            match tenantId, clientId, clientSecret with
+            | Some tenantId, Some clientId, Some clientSecret -> Some(tenantId, clientId, clientSecret)
+            | _ -> None
+
+    let isConfigured () =
+        graphConfiguration.Value |> Option.isSome
+
+    let private requireGraphConfiguration () =
+        match graphConfiguration.Value with
+        | Some config -> config
+        | None ->
+            invalidOp
+                "Graph mail configuration is missing. Please configure environment variables for the tenant id, client id, and client secret."
 
 
     /// Minimal app-credentials Graph sender.
@@ -31,13 +73,15 @@ module Graph =
     /// replyTo cat be a empty list or a list of recipients that should be in the To field of the reply email, this is how you can
     /// fake out the from address to be different than the sender address
     let sendEmail
-        (sender: string)        // e.g. "noreply@yourtenant.com"
+        (sender: string) // e.g. "noreply@yourtenant.com"
         (toRecipients: string list)
         (subject: string)
         (body: string)
         (isHtml: bool)
         (replyTo: string list)
         : Async<unit> =
+        let tenantId, clientId, clientSecret = requireGraphConfiguration ()
+
         async {
             // 1) acquire app token
             let authority = $"https://login.microsoftonline.com/{tenantId}"
@@ -62,7 +106,7 @@ module Graph =
                 |> List.map (fun addr -> { emailAddress = { address = addr } })
                 |> List.toArray
 
-            let message : Message =
+            let message: Message =
                 {
                     subject = subject
                     body = { contentType = (if isHtml then "HTML" else "Text"); content = body }
@@ -70,7 +114,7 @@ module Graph =
                     replyTo = replyToRecipients
                 }
 
-            let payload : SendMailRequest = { message = message; saveToSentItems = true }
+            let payload: SendMailRequest = { message = message; saveToSentItems = true }
 
             let jsonOptions =
                 JsonSerializerOptions(PropertyNamingPolicy = null, DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull)
