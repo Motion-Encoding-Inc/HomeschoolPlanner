@@ -6,45 +6,45 @@
     --contact-hero-overlay: none;
 }
 
-:root[data-theme="scholar"] {
-    --bg: #f9f6f3;
-    --paper: #ffffff;
-    --tint: #f6f0ff; /* soft lavender */
-    --ink: #273040;
-    --muted: #6a7586;
-    --brand: #3a80ff; /* sky blue */
-    --brand-2: #b68cff; /* soft purple */
-    --accent: #5ab99b; /* success */
-    --ember: #f5c078; /* warm highlight */
-    --border: #e7e1dc;
-    --shadow: 0 14px 40px rgba(22,16,9,.08);
-    --radius: 20px;
-    --gutter: 28px;
-    --maxw: 1200px;
-    --ctaText: #fff;
-    --contact-hero-image: url('https://storage.googleapis.com/homeschoolplanner/ContactBackground_L.png');
-    --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
-}
+    :root[data-theme="scholar"] {
+        --bg: #f9f6f3;
+        --paper: #ffffff;
+        --tint: #f6f0ff; /* soft lavender */
+        --ink: #273040;
+        --muted: #6a7586;
+        --brand: #3a80ff; /* sky blue */
+        --brand-2: #b68cff; /* soft purple */
+        --accent: #5ab99b; /* success */
+        --ember: #f5c078; /* warm highlight */
+        --border: #e7e1dc;
+        --shadow: 0 14px 40px rgba(22,16,9,.08);
+        --radius: 20px;
+        --gutter: 28px;
+        --maxw: 1200px;
+        --ctaText: #fff;
+        --contact-hero-image: url('images/ContactBackground_L.png');
+        --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
+    }
 
-:root[data-theme="forge"] {
-    --bg: #0e0f12;
-    --paper: #14161b;
-    --tint: #1b1e25;
-    --ink: #eef2f8;
-    --muted: #b9c0d4;
-    --brand: #ff6b6b; /* ember red */
-    --brand-2: #ff9f45; /* orange */
-    --accent: #81c784; /* success */
-    --ember: #ffd08c;
-    --border: #222736;
-    --shadow: 0 18px 46px rgba(0,0,0,.35);
-    --radius: 20px;
-    --gutter: 28px;
-    --maxw: 1200px;
-    --ctaText: #000;
-    --contact-hero-image: url('https://storage.googleapis.com/homeschoolplanner/ContactBackground_D.png');
-    --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
-}
+    :root[data-theme="forge"] {
+        --bg: #0e0f12;
+        --paper: #14161b;
+        --tint: #1b1e25;
+        --ink: #eef2f8;
+        --muted: #b9c0d4;
+        --brand: #ff6b6b; /* ember red */
+        --brand-2: #ff9f45; /* orange */
+        --accent: #81c784; /* success */
+        --ember: #ffd08c;
+        --border: #222736;
+        --shadow: 0 18px 46px rgba(0,0,0,.35);
+        --radius: 20px;
+        --gutter: 28px;
+        --maxw: 1200px;
+        --ctaText: #000;
+        --contact-hero-image: url('images/ContactBackground_D.png');
+        --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
+    }
 
 /* =========================
    BASE
