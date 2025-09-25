@@ -96,6 +96,10 @@ a {
     display: grid;
     grid-template-rows: var(--headH) 1fr var(--footH);
 }
+/* The middle row must define the viewport for the carousel */
+.shell {
+    grid-template-rows: var(--headH) 1fr var(--footH);
+}
 
 .site-header {
     grid-row: 1;
@@ -111,20 +115,20 @@ a {
 
 /* Window + carousel layers */
 .window {
-    grid-row: 2;
     position: relative;
-    overflow: auto;
+    overflow: hidden; /* lock scroll for the landing */
+    height: 100%;
+    min-height: 0; /* prevent grid min-content creep */
 }
 
 body.landing-body .window {
     overflow: hidden;
 }
 
-.window > .v-stage {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    z-index: 0;
+.window > .v-stage,
+.v-track,
+.v-slide {
+    height: 100%;
 }
 
 
@@ -141,6 +145,7 @@ body.landing-body .window {
     position: relative;
     height: 100%;
     isolation: isolate;
+    overflow: hidden; /* <— prevents the next slide from peeking */
 }
 
 /* Dots above slides but below header */
@@ -382,41 +387,35 @@ footer {
     z-index: 0;
 }
 
-/* one slide = one viewport of the window */
-.v-slide {
-    position: relative;
-    height: 100%;
-    isolation: isolate;
+
+/* background & vignette layers */
+.v-slide::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    background-image: var(--slide-bg, none);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transform: scale(1.04);
+    filter: saturate(1.05) contrast(1.08) brightness(.92);
+    transition: transform 600ms cubic-bezier(.2,.65,.2,1), filter 600ms cubic-bezier(.2,.65,.2,1);
 }
 
-    /* background & vignette layers */
-    .v-slide::before {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -2;
-        background-image: var(--slide-bg, none);
-        background-size: cover;
-        background-repeat: no-repeat;
-        background-position: center;
-        transform: scale(1.04);
-        filter: saturate(1.05) contrast(1.08) brightness(.92);
-        transition: transform 600ms cubic-bezier(.2,.65,.2,1), filter 600ms cubic-bezier(.2,.65,.2,1);
-    }
+.v-slide::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.55));
+}
 
-    .v-slide::after {
-        content: "";
-        position: absolute;
-        inset: 0;
-        z-index: -1;
-        pointer-events: none;
-        background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.55));
-    }
-
-    /* crisp edge between slides without showing next image */
-    .v-slide + .v-slide {
-        box-shadow: 0 -1px 0 rgba(255,255,255,.06) inset
-    }
+/* crisp edge between slides without showing next image */
+.v-slide + .v-slide {
+    box-shadow: 0 -1px 0 rgba(255,255,255,.06) inset
+}
 
 /* dots */
 .v-dots {
