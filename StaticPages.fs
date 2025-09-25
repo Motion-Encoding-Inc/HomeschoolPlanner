@@ -683,6 +683,23 @@ module ContactPage =
                 class' "contact-hero"
                 id "contact"
                 "aria-labelledby", "contact-title"
+                // Page-scoped styles for this component
+                style {
+                    """
+                    .contact-hero{
+                        position: relative;
+                        min-height: 60vh; /* adjust as you like */
+                        background-image: var(--contact-hero-overlay), var(--contact-hero-image);
+                        background-size: cover;
+                        background-position: center;
+                        background-repeat: no-repeat;
+                    }
+                    .contact-hero .contact-hero-content{
+                        position: relative;
+                        z-index: 1; /* keeps card above the background */
+                    }
+                    """
+                }
                 div {
                     class' "container contact-hero-content"
                     div {
