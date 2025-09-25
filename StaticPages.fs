@@ -583,7 +583,8 @@ module LandingPage =
 
 
     let view =
-        fragment {
+        div {
+            class' "window"       // middle grid row
             main {
                 class' "v-stage"
                 id "landing-stage"
@@ -612,8 +613,8 @@ module LandingPage =
                                 if index = 0 then "aria-current","true"
                             }
                         }
-                    }
                 }
+            }
         }
 
     type Component() =
@@ -628,7 +629,7 @@ module LandingPage =
             (Some "/")            // activeHref : string option
             view                  // bodyContent : NodeRenderFragment
             (Some "landing-body") // bodyClassOpt : string option
-            (Some false)          // includeFooterOpt : bool option
+            (Some true)          // includeFooterOpt : bool option
 module AboutPage =
     let view =
         main {
