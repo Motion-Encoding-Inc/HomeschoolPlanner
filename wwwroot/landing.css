@@ -22,7 +22,7 @@
     --gutter: 28px;
     --maxw: 1200px;
     --ctaText: #fff;
-    --contact-hero-image: url('images/ContactBackground_L.png');
+    --contact-hero-image: url('https://storage.googleapis.com/homeschoolplanner/ContactBackground_L.png');
     --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
 }
 
@@ -42,7 +42,7 @@
     --gutter: 28px;
     --maxw: 1200px;
     --ctaText: #000;
-    --contact-hero-image: url('images/ContactBackground_D.png');
+    --contact-hero-image: url('https://storage.googleapis.com/homeschoolplanner/ContactBackground_D.png');
     --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
 }
 
