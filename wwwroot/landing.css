@@ -25,6 +25,7 @@
         --contact-hero-image: url('images/ContactBackground_L.png');
         --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
         --landing-how-bg: url('/images/StudyingTogether_L.png');
+        --landing-hard-bg: url('/images/Tired_L.png');
         --landing-beta-bg: url('/images/BetaTestBackground_L.png'); /* or your light variant */
     }
 
@@ -47,9 +48,22 @@
         --contact-hero-image: url('images/ContactBackground_D.png');
         --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
         --landing-how-bg: url('/images/StudyingTogether_D.png');
+        --landing-hard-bg: url('/images/Tired_D.png');
         --landing-beta-bg: url('/images/BetaTestBackground_D.png'); /* dark variant */
     }
 
+    /* Side-fade presets */
+    :root[data-theme="scholar"] {
+        /* fade TO WHITE at the side that holds the content, transparent toward center */
+        --vignette-left: linear-gradient(90deg, rgba(249,246,243,.95) 0%, rgba(249,246,243,.88) 26%, rgba(249,246,243,0) 60%);
+        --vignette-right: linear-gradient(270deg, rgba(249,246,243,.95) 0%, rgba(249,246,243,.88) 26%, rgba(249,246,243,0) 60%);
+    }
+
+    :root[data-theme="forge"] {
+        /* fade TO BLACK at the side that holds the content, transparent toward center */
+        --vignette-left: linear-gradient(90deg, rgba(8,7,12,.86) 0%, rgba(8,7,12,.76) 30%, rgba(8,7,12,0) 64%);
+        --vignette-right: linear-gradient(270deg, rgba(8,7,12,.86) 0%, rgba(8,7,12,.76) 30%, rgba(8,7,12,0) 64%);
+    }
 /* =========================
    BASE
    ========================= */
@@ -413,8 +427,10 @@ footer {
     inset: 0;
     z-index: -1;
     pointer-events: none;
-    background: radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.55));
+    /* default keeps your old look unless overridden per slide */
+    background: var(--slide-vignette, radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.55)) );
 }
+
 
 /* crisp edge between slides without showing next image */
 .v-slide + .v-slide {
@@ -779,14 +795,35 @@ footer {
     }
 }
 
-#slide-how {
-    --slide-bg: var(--landing-how-bg);
+/* 1) No vignette where there’s no image */
+#slide-hero,
+#slide-features{
+    --slide-vignette: none;
 }
 
 #slide-beta {
     --slide-bg: var(--landing-beta-bg);
 }
+/* 2) “What Makes Homeschooling Hard?” ⇒ content on LEFT ⇒ fade on LEFT */
+#slide-hard {
+    --slide-vignette: var(--vignette-left);
+    --slide-bg: var(--landing-hard-bg);
+}
 
+/* 3) “Why Scholar’s Forge is different” ⇒ content on RIGHT ⇒ fade on RIGHT */
+#slide-how {
+    --slide-vignette: var(--vignette-right);
+    --slide-bg: var(--landing-how-bg);
+}
+
+/* 4) Pricing has no background image (keep it clean) */
+#slide-pricing {
+    --slide-vignette: none;
+}
+/* If no background is set for a slide, disable vignette by default */
+.v-slide:not([style*="--slide-bg"]) {
+    --slide-vignette: none;
+}
 /* Generic slide positioning helpers */
 .v-center {
     height: 100%;
@@ -972,3 +1009,19 @@ footer {
     }
     /* natural stack on mobile */
 }
+
+.v-left-50 {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* content | spacer */
+    align-items: center;
+    gap: var(--gutter);
+    padding: 0 var(--gutter);
+}
+
+.grid-1 {
+    display: grid;
+    gap: 20px;
+    justify-items: start; /* left align cards */
+}
+
