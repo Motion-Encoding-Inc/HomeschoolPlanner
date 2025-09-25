@@ -24,6 +24,8 @@
         --ctaText: #fff;
         --contact-hero-image: url('images/ContactBackground_L.png');
         --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
+        --landing-how-bg: url('/images/StudyingTogether_L.png');
+        --landing-beta-bg: url('/images/BetaTestBackground_L.png'); /* or your light variant */
     }
 
     :root[data-theme="forge"] {
@@ -44,6 +46,8 @@
         --ctaText: #000;
         --contact-hero-image: url('images/ContactBackground_D.png');
         --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
+        --landing-how-bg: url('/images/StudyingTogether_D.png');
+        --landing-beta-bg: url('/images/BetaTestBackground_D.png'); /* dark variant */
     }
 
 /* =========================
@@ -773,4 +777,12 @@ footer {
     .v-track {
         transition: none
     }
+}
+
+#slide-how {
+    --slide-bg: var(--landing-how-bg);
+}
+
+#slide-beta {
+    --slide-bg: var(--landing-beta-bg);
 }
