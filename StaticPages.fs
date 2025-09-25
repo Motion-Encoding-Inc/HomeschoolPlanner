@@ -652,7 +652,7 @@ module AboutPage =
                         h3 { "Contact us" }
                         p {
                             class' "muted"
-                            "Conference organizers, co-ops, and partners, we’d love to connect. Speaking opportunities welcome."
+                            "Let’s connect! Families, co-ops, teachers, or anyone interested — reach out with your questions or ideas."
                         }
                         p { a { href "mailto:support@scholarsforge.com"; "support@scholarsforge.com" } }
                     }
@@ -688,7 +688,7 @@ module ContactPage =
                     h1 { id "contact-title"; "Contact Us" }
                     p {
                         class' "muted"
-                        "Conference organizers, co-ops, and partners, we’d love to connect. Speaking opportunities welcome."
+                        "Let’s connect! Families, co-ops, teachers, or anyone interested — reach out with your questions or ideas."
                     }
                     form {
                         class' "contact-form"
@@ -803,10 +803,10 @@ module ContactPage =
                                 }
                             }
                         }
-                        div {
-                            class' "contact-recaptcha"
-                            id "contact-recaptcha"
-                        }
+                        //div {
+                        //    class' "contact-recaptcha"
+                        //    id "contact-recaptcha"
+                        //}
                         div {
                             class' "contact-submit"
                             button {
