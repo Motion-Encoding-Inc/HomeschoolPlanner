@@ -786,3 +786,177 @@ footer {
 #slide-beta {
     --slide-bg: var(--landing-beta-bg);
 }
+
+/* Generic slide positioning helpers */
+.v-center {
+    height: 100%;
+    display: grid;
+    place-items: center;
+    padding: 0 var(--gutter);
+}
+
+.v-top-right {
+    height: 100%;
+    display: grid;
+    align-content: start;
+    justify-items: end;
+    padding: clamp(16px, 4vw, 48px);
+}
+
+/* Two-column: left spacer, right content */
+.v-right-50 {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--gutter);
+    padding: 0 var(--gutter);
+}
+
+/* Pills: horizontal by default, vertical variant */
+.pills {
+    display: flex;
+    gap: .8rem;
+    flex-wrap: wrap;
+}
+
+    .pills.vertical {
+        flex-direction: column;
+        align-items: stretch;
+        gap: .6rem;
+    }
+
+/* Cards constrained & centered when needed */
+.centered-stack {
+    width: min(100%, 960px);
+    display: grid;
+    gap: 18px;
+    text-align: center;
+}
+
+    .centered-stack .grid-3 {
+        grid-template-columns: 1fr;
+    }
+
+    .centered-stack .card {
+        text-align: left;
+    }
+
+/* Slide-specific tweaks */
+#slide-features .grid-3 {
+    justify-items: center;
+}
+
+#slide-pricing .grid-2 {
+    justify-items: center;
+}
+
+/* Quarter grid that fills the slide viewport */
+.v-quarters {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* 2 columns */
+    grid-template-rows: 1fr 1fr; /* 2 rows    */
+    gap: var(--gutter);
+    padding: clamp(12px, 4vw, 36px); /* keeps clear of header edge */
+}
+
+/* Place an element in a specific quarter */
+.qr-top-left {
+    grid-area: 1 / 1;
+    align-self: start;
+    justify-self: start;
+}
+
+.qr-top-right {
+    grid-area: 1 / 2;
+    align-self: start;
+    justify-self: end;
+}
+
+.qr-bot-left {
+    grid-area: 2 / 1;
+    align-self: end;
+    justify-self: start;
+}
+
+.qr-bot-right {
+    grid-area: 2 / 2;
+    align-self: end;
+    justify-self: end;
+}
+
+/* Beta card sizing */
+.beta-card {
+    width: min(100%, 560px);
+}
+
+/* Mobile fallback: single column, center at top */
+@media (max-width: 720px) {
+    .v-quarters {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr; /* content then free space */
+        padding: 16px;
+    }
+
+    .qr-top-right,
+    .qr-top-left,
+    .qr-bot-left,
+    .qr-bot-right {
+        grid-area: auto / auto;
+        justify-self: center;
+        align-self: start;
+    }
+
+    .beta-card {
+        width: min(100%, 520px);
+    }
+}
+
+/* Features layout: title + 3-up + 2-up, all centered */
+.features-wrap {
+    width: min(100%, 1100px);
+    display: grid;
+    gap: 24px;
+    text-align: center; /* centers the title text */
+    margin: 0 auto;
+}
+
+.features-row-3,
+.features-row-2 {
+    display: grid;
+    gap: 20px;
+    justify-content: center; /* center the whole grid block */
+}
+
+.features-row-3 {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+}
+
+.features-row-2 {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
+/* Make the entire slide vertically centered */
+#slide-features .v-center {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+/* Responsive collapse */
+@media (max-width: 980px) {
+    .features-row-3 {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+    }
+
+    .features-row-2 {
+        grid-template-columns: minmax(240px, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .features-row-3,
+    .features-row-2 {
+        grid-template-columns: 1fr;
+    }
+}

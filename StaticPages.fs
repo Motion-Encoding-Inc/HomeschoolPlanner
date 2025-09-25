@@ -280,135 +280,130 @@ module LandingPage =
 
     let heroContent =
         div {
-            class' "container hero"
-            "aria-labelledby", "hero-title"
+            class' "v-center"              // <— centers inside the slide viewport
             div {
-                h1 { id "hero-title"; "Homeschool"; br {}; "Your Way" }
-                p {
-                    class' "lead"
-                    "No one will love your kids like you do—why trust anyone else to raise them? Scholar’s Forge gives you tools to "
-                    strong { "plan flexibly" }
-                    ", "
-                    strong { "document confidently" }
-                    ", and help students take ownership of learning."
-                }
+                class' "container hero"
+                "aria-labelledby", "hero-title"
                 div {
-                    class' "hero-card"
-                    "aria-label", "Highlights"
-                    ul {
-                        class' "hero-bullets"
-                        li {
-                            strong { "Plan" }
-                            " from books, time, or custom activities"
-                        }
-                        li {
-                            strong { "Skip • Push • Catch-up • Continue" }
-                            " — real-life rescheduling"
-                        }
-                        li {
-                            strong { "Portfolio evidence" }
-                            " & weekly reports"
-                        }
-                        li {
-                            strong { "Clear progress" }
-                            " by subject"
-                        }
+                    h1 { id "hero-title"; "Homeschool"; br {}; "Your Way" }
+                    p {
+                        class' "lead"
+                        "No one will love your kids like you do—why trust anyone else to raise them? Scholar’s Forge gives you tools to "
+                        strong { "plan flexibly" }
+                        ", "
+                        strong { "document confidently" }
+                        ", and help students take ownership of learning."
                     }
                     div {
-                        class' "pills"
-                        style' "margin-top:1rem"
-                        a {
-                            class' "btn primary"
-                            href "#beta"
-                            "Join the December beta"
+                        class' "hero-card"
+                        "aria-label", "Highlights"
+                        ul {
+                            class' "hero-bullets"
+                            li {
+                                strong { "Plan" }
+                                " from books, time, or custom activities"
+                            }
+                            li {
+                                strong { "Skip • Push • Catch-up • Continue" }
+                                " — real-life rescheduling"
+                            }
+                            li {
+                                strong { "Portfolio evidence" }
+                                " & weekly reports"
+                            }
+                            li {
+                                strong { "Clear progress" }
+                                " by subject"
+                            }
                         }
-                        a {
-                            class' "btn"
-                            href "#how"
-                            "How it works"
+                        div {
+                            class' "pills"
+                            style' "margin-top:1rem"
+                            a {
+                                class' "btn primary"
+                                href "#beta"
+                                "Join the December beta"
+                            }
+                            a {
+                                class' "btn"
+                                href "#how"
+                                "How it works"
+                            }
                         }
                     }
                 }
-            }
-            div {
-                class' "hero-carousel"
-                "aria-label", "Screenshots"
-                for index, path in heroCarouselSlides |> List.indexed do
-                    div {
-                        class' (if index = 0 then "hero-frame active" else "hero-frame")
-                        style' ($"background-image:url('{path}')")
-                    }
                 div {
-                    class' "hero-dots"
-                    for index in 0 .. heroCarouselSlides.Length - 1 do
-                        span { class' (if index = 0 then "hero-dot active" else "hero-dot") }
+                    class' "hero-carousel"
+                    "aria-label", "Screenshots"
+                    for index, path in heroCarouselSlides |> List.indexed do
+                        div {
+                            class' (if index = 0 then "hero-frame active" else "hero-frame")
+                            style' ($"background-image:url('{path}')")
+                        }
+                    div {
+                        class' "hero-dots"
+                        for index in 0 .. heroCarouselSlides.Length - 1 do
+                            span { class' (if index = 0 then "hero-dot active" else "hero-dot") }
+                    }
                 }
             }
         }
 
     let realLifeContent =
         div {
-            id "how"
-            class' "container section"
-            "aria-labelledby", "how-title"
-            h2 { id "how-title"; "Designed around how families actually school" }
-            p {
-                class' "muted"
-                "Not a bell schedule—our "
-                em { "Week Preview" }
-                " and "
-                em { "Day Detail" }
-                " make it obvious what’s planned, what’s done, and what’s next. "
-            }
+            class' "v-right-50"   // grid: [ spacer | content ]
+            // left spacer cell (empty)
+            div { () }
+            // right content cell
             div {
-                class' "grid-2"
-                div {
-                    class' "card"
-                    h3 { "Plan the way you teach" }
-                    p {
-                        class' "muted"
-                        "Books, time blocks, or custom activities. Add Saxon, schedule free reading 30 minutes, or log that grocery-store math. "
-                    }
-                    div {
-                        class' "bullet"
-                        span { class' "dotline" }
-                        span {
-                            strong { "Flexible pacing:" }
-                            " "
-                            em { "Skip" }
-                            " to push the timeline, "
-                            em { "Catch-up" }
-                            " to keep the deadline, or "
-                            em { "Do Extra" }
-                            " to pull work forward. "
-                        }
-                    }
-                    div {
-                        class' "bullet"
-                        span { class' "dotline" }
-                        span {
-                            strong { "Student agency:" }
-                            " learners can choose order, skip, or double—with parent guardrails. "
-                        }
-                    }
+                class' "container section"
+                "aria-labelledby", "how-title"
+                h2 { id "how-title"; "Designed around how families actually school" }
+                p {
+                    class' "muted"
+                    "Not a bell schedule. Week Preview & Day Detail make it obvious what’s planned, what’s done, and what’s next."
                 }
                 div {
-                    class' "card"
-                    h3 { "Documentation that makes sense" }
+                    class' "grid-2"
                     div {
-                        class' "bullet"
-                        span { class' "dotline" }
-                        span {
-                            strong { "Portfolio evidence:" }
-                            " photos/files/notes on any completion; export weekly summaries (CSV/PDF). "
+                        class' "card"
+                        h3 { "Plan the way you teach" }
+                        p { class' "muted"; "Books, time blocks, or custom activities." }
+                        div {
+                            class' "bullet"
+                            span { class' "dotline" }
+                            span {
+                                strong { "Flexible pacing:" }
+                                " Skip to push, Catch-up to keep, or Do Extra to pull forward."
+                            }
+                        }
+                        div {
+                            class' "bullet"
+                            span { class' "dotline" }
+                            span {
+                                strong { "Student agency:" }
+                                " choose order, skip, or double—with parent guardrails."
+                            }
+                        }
+                        // vertical pills here
+                        div {
+                            class' "pills vertical mt-1"
+                            a { class' "btn primary"; href "#beta"; "Join the December beta" }
+                            a { class' "btn"; href "#features"; "See features" }
                         }
                     }
                     div {
-                        class' "bullet"
-                        span { class' "dotline" }
-                        span {
-                            strong { "Progress at a glance:" }
-                            " bars & pace indicators keep everyone aligned. "
+                        class' "card"
+                        h3 { "Documentation that makes sense" }
+                        div {
+                            class' "bullet"
+                            span { class' "dotline" }
+                            span { strong { "Portfolio evidence:" }; " photos, files, notes; export weekly summaries." }
+                        }
+                        div {
+                            class' "bullet"
+                            span { class' "dotline" }
+                            span { strong { "Progress at a glance:" }; " bars & pace keep everyone aligned." }
                         }
                     }
                 }
@@ -417,109 +412,92 @@ module LandingPage =
 
     let featuresContent =
         div {
-            id "features"
-            class' "container section"
-            "aria-labelledby", "features-title"
-            h2 { id "features-title"; "Everything you need to start" }
+            class' "v-center"        // vertically center the whole stack within the slide
             div {
-                class' "grid-3"
-                let cards =
-                    [ "⌛Fast planning", "Paste chapters or add time blocks in minutes; auto-schedule to your allowed days."
-                      "🔄Real-world rescheduling", "Skip, push, catch-up, or do extra—without breaking your plan. "
-                      "🗒️Portfolio & reports", "Evidence gallery and exportable PDFs/CSVs. "
-                      "📊Progress by subject", "On-track, ahead, or catching-up at a glance. "
-                      "👫Parent-first privacy", "Kids don’t need logins for MVP; you control exports. " ]
-                for title, copy in cards do
-                    div {
-                        class' "card"
-                        strong { title }
-                        p { class' "muted"; copy }
-                    }
+                class' "features-wrap"
+                "aria-labelledby", "features-title"
+
+                // Row 1: title (centered by .features-wrap)
+                h2 { id "features-title"; "Everything you need to start" }
+
+                // keep the data as tuples
+                let allCards : (string * string) list =
+                    [ "⌛ Fast planning",           "Paste chapters or add time blocks in minutes; auto-schedule to allowed days."
+                      "🔄 Real-world rescheduling", "Skip, push, catch-up, or do extra—without breaking your plan."
+                      "🗒️ Portfolio & reports",     "Evidence gallery and exportable PDFs/CSVs."
+                      "📊 Progress by subject",     "On-track, ahead, or catching-up at a glance."
+                      "👫 Parent-first privacy",    "Kids don’t need logins for MVP; you control exports." ]
+
+                let top3, last2 = List.splitAt 3 allCards
+
+                // row of 3
+                div {
+                  class' "features-row-3"
+                  for (title, copy) in top3 do
+                    div { class' "card"; strong { title }; p { class' "muted"; copy } }
+                }
+
+                // row of 2
+                div {
+                  class' "features-row-2"
+                  for (title, copy) in last2 do
+                    div { class' "card"; strong { title }; p { class' "muted"; copy } }
+                }
             }
         }
 
+
     let betaContent =
         div {
-            id "beta"
-            class' "container section"
-            "aria-labelledby", "beta-title"
+            class' "v-quarters"                   // 2×2 quarters that fill the slide
+            // Card parked in the top-right quarter
             div {
-                class' "grid-2"
+                class' "qr-top-right"
                 div {
+                    class' "card beta-card"
                     h2 { id "beta-title"; "Beta testers wanted for December" }
                     p {
                         class' "muted"
-                        "We’re targeting December for testing. Join the list to try Scholar’s Forge Planner. Share what you love and what you don’t, and shape the roadmap."
+                        "Try Scholar’s Forge Planner, then tell us what to polish and what to add."
+                    }
+                    ul {
+                        class' "muted"
+                        li { "Use it with real learners for a couple of weeks" }
+                        li { "Send feedback on planning, rescheduling, and reports" }
                     }
                     form {
-                        class' "beta-form"
+                        class' "beta-form mt-8"
                         "aria-label", "Beta sign-up"
                         input { type' "email"; placeholder "you@example.com"; "required", "" }
                         button { class' "btn primary"; type' "submit"; "Add me to the beta" }
                     }
                 }
-                div {
-                    class' "card"
-                    h3 { "What we’ll ask from you" }
-                    ul {
-                        class' "muted"
-                        li { "Use the planner with real learners for a couple of weeks." }
-                        li { "Send feedback on planning, rescheduling, and reports." }
-                        li { "Tell us what to improve or add next." }
-                    }
-                }
             }
         }
 
-    let aboutContent =
-        div {
-            id "about"
-            class' "container section"
-            "aria-labelledby", "about-title"
-            h2 { id "about-title"; "About us" }
-            div {
-                class' "grid-2"
-                div {
-                    class' "card"
-                    p {
-                        strong { "Founded by a former homeschooling mom of four" }
-                        ", Scholar’s Forge is built with a deep respect for family-first education. We’ve taught, tested, and iterated, so you can stay focused on your kids."
-                    }
-                }
-                div {
-                    class' "card"
-                    h3 { "Contact us" }
-                    p {
-                        class' "muted"
-                        "Conference organizers, co-ops, and partners, we’d love to connect. Speaking opportunities welcome."
-                    }
-                    p {
-                        a { href "mailto:support@scholarsforge.com"; "support@scholarsforge.com" }
-                    }
-                }
-            }
-        }
 
     let pricingContent =
         div {
-            id "pricing"
-            class' "container section"
-            "aria-labelledby", "pricing-title"
-            h2 { id "pricing-title"; "Simple, transparent pricing" }
+            class' "v-center"
             div {
-                class' "grid-2"
+                class' "container centered-stack"
+                "aria-labelledby", "pricing-title"
+                h2 { id "pricing-title"; "Simple, transparent pricing" }
                 div {
-                    class' "card"
-                    h3 { "👨‍👩‍👧‍👦 Family (unlimited children)" }
-                    span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
+                    class' "grid-2"
+                    div {
+                        class' "card"
+                        h3 { "👨‍👩‍👧‍👦 Family (unlimited children)" }
+                        span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
+                    }
+                    div {
+                        class' "card"
+                        h3 { "🏫 Pro (charters and co-ops)" }
+                        span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
+                    }
                 }
-                div {
-                    class' "card"
-                    h3 { "🏫 Pro (charters and co-ops)" }
-                    span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
-                }
+                p { class' "muted mt-12"; "No credit card required to start. Cancel anytime." }
             }
-            p { class' "muted mt-12"; "No credit card required to start. Cancel anytime." }
         }
 
     let slides : LandingSlide list =
