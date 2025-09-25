@@ -349,6 +349,7 @@ module LandingPage =
             }
         }
 
+
     let realLifeContent =
         div {
             class' "v-right-50"   // grid: [ spacer | content ]
@@ -358,52 +359,77 @@ module LandingPage =
             div {
                 class' "container section"
                 "aria-labelledby", "how-title"
-                h2 { id "how-title"; "Designed around how families actually school" }
+
+                // New heading + tagline
+                h2 { id "how-title"; "Why Scholar’s Forge is different" }
                 p {
                     class' "muted"
-                    "Not a bell schedule. Week Preview & Day Detail make it obvious what’s planned, what’s done, and what’s next."
+                    em { "Designed around how families actually school—" }
+                    "not how institutions schedule."
                 }
+
+                // Two feature cards, plus a third card that spans both columns
                 div {
                     class' "grid-2"
+
+                    // Column 1
                     div {
                         class' "card"
                         h3 { "Plan the way you teach" }
-                        p { class' "muted"; "Books, time blocks, or custom activities." }
+                        div {
+                            class' "bullet"
+                            span { class' "dotline" }
+                            span { strong { "Books, time, or custom activities:" }; " Add a book, a timed habit, or a one-off activity." }
+                        }
                         div {
                             class' "bullet"
                             span { class' "dotline" }
                             span {
                                 strong { "Flexible pacing:" }
-                                " Skip to push, Catch-up to keep, or Do Extra to pull forward."
+                                " Life happens—"
+                                em { "Skip" }
+                                " to push the timeline, "
+                                em { "Catch-up" }
+                                " to keep the deadline, or "
+                                em { "Do Extra" }
+                                " today to get ahead."
                             }
                         }
                         div {
                             class' "bullet"
                             span { class' "dotline" }
-                            span {
-                                strong { "Student agency:" }
-                                " choose order, skip, or double—with parent guardrails."
-                            }
-                        }
-                        // vertical pills here
-                        div {
-                            class' "pills vertical mt-1"
-                            a { class' "btn primary"; href "#beta"; "Join the December beta" }
-                            a { class' "btn"; href "#features"; "See features" }
+                            span { strong { "Student agency:" }; " let learners choose the order, skip, double, or push—with guardrails you set—to build responsibility." }
                         }
                     }
+
+                    // Column 2
                     div {
                         class' "card"
                         h3 { "Documentation that makes sense" }
                         div {
                             class' "bullet"
                             span { class' "dotline" }
-                            span { strong { "Portfolio evidence:" }; " photos, files, notes; export weekly summaries." }
+                            span { strong { "Portfolio evidence:" }; " Attach photos, files, links, and notes to any completion; export polished weekly summaries." }
                         }
                         div {
                             class' "bullet"
                             span { class' "dotline" }
-                            span { strong { "Progress at a glance:" }; " bars & pace keep everyone aligned." }
+                            span { strong { "Progress at a glance:" }; " Subject progress bars and pacing indicators keep everyone aligned." }
+                        }
+                        div {
+                            class' "bullet"
+                            span { class' "dotline" }
+                            span { strong { "AI-assisted logging:" }; " Tell the app what you did; it turns that into clean records and reports - Without the busywork." }
+                        }
+                    }
+
+                    // Spanning card (third “pill”) — sits under both columns
+                    div {
+                        class' "card span-2"
+                        h3 { "Freedom to school your way" }
+                        p {
+                            class' "muted"
+                            "Classical, Montessori, or Desk-and-Bell—no judgment. Focus on Latin, violin, or drill math facts; Scholar’s Forge adapts to your priorities."
                         }
                     }
                 }
