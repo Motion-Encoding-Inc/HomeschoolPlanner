@@ -349,7 +349,51 @@ module LandingPage =
             }
         }
 
-
+    let hardContent =
+        div {
+            class' "v-left-50"   // grid: [ content | spacer ]
+            // left content cell
+            div {
+                class' "container section"
+                "aria-labelledby", "hard-title"
+                h2 { id "hard-title"; "What Makes Homeschooling Hard?" }
+                p {
+                    class' "muted"
+                    "Spoiler: it isn’t your ability to teach. It’s the tools that don’t fit real life."
+                }
+                div {
+                    class' "grid-1"   // stack pills vertically
+                    div {
+                        class' "card"
+                        h3 { "Documentation fears" }
+                        p {
+                            class' "muted"
+                            "Worry you’ll do it wrong. Requirements can be confusing. "
+                            "We help you record what happened in plain language and turn it into reports that make sense."
+                        }
+                    }
+                    div {
+                        class' "card"
+                        h3 { "Not a public-school bell schedule" }
+                        p {
+                            class' "muted"
+                            "Most planners assume math 9–10, English 10–11, lunch 11:30. "
+                            "Homeschooling flows around real life: errands, co-ops, sick days, and field trips."
+                        }
+                    }
+                    div {
+                        class' "card"
+                        h3 { "Confidence and clarity" }
+                        p {
+                            class' "muted"
+                            "You don’t need more spreadsheets. You need a simple way to see what’s planned, what’s done, and what to do next."
+                        }
+                    }
+                }
+            }
+            // right spacer cell
+            div { () }
+        }
     let realLifeContent =
         div {
             class' "v-right-50"   // grid: [ spacer | content ]
@@ -533,6 +577,12 @@ module LandingPage =
             Background = None
             Anchor = None
             Content = heroContent }
+          { Key = "hard"
+            AriaLabel = "What Makes Homeschooling Hard?"
+            Classes = []
+            Background = None   // later you can set Some "…" when you have themed images
+            Anchor = Some "hard"
+            Content = hardContent }
           { Key = "how"
             AriaLabel = "Designed around how families actually school"
             Classes = []
