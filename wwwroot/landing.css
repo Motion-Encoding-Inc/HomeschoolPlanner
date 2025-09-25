@@ -1,6 +1,11 @@
 /* =========================
    THEME TOKENS
    ========================= */
+:root {
+    --contact-hero-image: none;
+    --contact-hero-overlay: none;
+}
+
 :root[data-theme="scholar"] {
     --bg: #f9f6f3;
     --paper: #ffffff;
@@ -17,6 +22,8 @@
     --gutter: 28px;
     --maxw: 1200px;
     --ctaText: #fff;
+    --contact-hero-image: url('images/ContactBackground_L.png');
+    --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
 }
 
 :root[data-theme="forge"] {
@@ -35,6 +42,8 @@
     --gutter: 28px;
     --maxw: 1200px;
     --ctaText: #000;
+    --contact-hero-image: url('images/ContactBackground_D.png');
+    --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
 }
 
 /* =========================
@@ -610,9 +619,38 @@ footer {
     padding: clamp(56px, 8vw, 108px) 0 clamp(72px, 9vw, 120px);
 }
 
+.contact-hero {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    background: color-mix(in oklab, var(--paper) 82%, var(--tint));
+}
+
+.contact-hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: var(--contact-hero-overlay), var(--contact-hero-image);
+    background-size: cover, cover;
+    background-position: center, center;
+    background-repeat: no-repeat;
+    transform: scale(1.02);
+    filter: saturate(1.02);
+}
+
+.contact-hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: center;
+}
+
 .contact-card {
     display: grid;
     gap: 1.8rem;
+    width: min(100%, 880px);
 }
 
 .contact-form {
