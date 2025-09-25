@@ -950,6 +950,42 @@ footer {
     }
 }
 
+/* Shrink the contact card on desktop */
+@media (min-width: 1024px) {
+    .contact-card {
+        width: min(100%, 660px); /* was 880px */
+        padding: 20px; /* was 24px */
+        gap: 1.2rem; /* was 1.8rem */
+    }
+
+    .contact-form {
+        gap: 1.2rem;
+    }
+    /* was 1.8rem */
+    .contact-form-main {
+        gap: 1rem;
+    }
+    /* was 1.5–2rem */
+    .contact-field {
+        gap: 0.35rem;
+    }
+        /* was 0.4rem */
+
+        .contact-field input,
+        .contact-field textarea {
+            padding: 0.7rem 0.9rem; /* was 0.85rem 1rem */
+        }
+
+        .contact-field textarea {
+            min-height: 130px; /* was 160px */
+        }
+
+    .contact-submit .btn {
+        min-width: 140px; /* was 160px */
+        padding: 0.85rem 1.1rem; /* slightly tighter */
+    }
+}
+
 /* Features layout: title + 3-up + 2-up, all centered */
 .features-wrap {
     width: min(100%, 1100px);
