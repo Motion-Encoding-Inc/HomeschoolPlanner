@@ -576,30 +576,35 @@ module LandingPage =
 
     let betaContent =
         div {
-            class' "v-quarters"                   // 2×2 quarters that fill the slide
-            // Card parked in the top-right quarter
+            class' "v-stack"     // 1) slide grid: content grows, footer pinned
             div {
-                class' "qr-top-right"
+                class' "v-quarters"                   // 2×2 quarters that fill the slide
+                // Card parked in the top-right quarter
                 div {
-                    class' "card beta-card"
-                    h2 { id "beta-title"; "Beta testers wanted for December" }
-                    p {
-                        class' "muted"
-                        "Try Scholar’s Forge Planner, then tell us what to polish and what to add."
-                    }
-                    ul {
-                        class' "muted"
-                        li { "Use it with real learners for a couple of weeks" }
-                        li { "Send feedback on planning, rescheduling, and reports" }
-                    }
-                    form {
-                        class' "beta-form mt-8"
-                        "aria-label", "Beta sign-up"
-                        input { type' "email"; placeholder "you@example.com"; "required", "" }
-                        button { class' "btn primary"; type' "submit"; "Add me to the beta" }
+                    class' "qr-top-right"
+                    div {
+                        class' "card beta-card"
+                        h2 { id "beta-title"; "Beta testers wanted for December" }
+                        p {
+                            class' "muted"
+                            "Try Scholar’s Forge Planner, then tell us what to polish and what to add."
+                        }
+                        ul {
+                            class' "muted"
+                            li { "Use it with real learners for a couple of weeks" }
+                            li { "Send feedback on planning, rescheduling, and reports" }
+                        }
+                        form {
+                            class' "beta-form mt-8"
+                            "aria-label", "Beta sign-up"
+                            input { type' "email"; placeholder "you@example.com"; "required", "" }
+                            button { class' "btn primary"; type' "submit"; "Add me to the beta" }
+                        }
                     }
                 }
             }
+            // Row 2 — footer (full bleed because of .inline CSS above)
+            StaticAssets.footerView true
         }
 
 
@@ -664,12 +669,13 @@ module LandingPage =
             Background = None
             Anchor = Some "beta"
             Content = betaContent }
-          { Key = "pricing"
-            AriaLabel = "Simple, transparent pricing"
-            Classes = []
-            Background = None
-            Anchor = Some "pricing"
-            Content = pricingContent } ]
+          //{ Key = "pricing"
+          //  AriaLabel = "Simple, transparent pricing"
+          //  Classes = []
+          //  Background = None
+          //  Anchor = Some "pricing"
+          //  Content = pricingContent } 
+        ]
 
     let slideNode (slide: LandingSlide) =
         // Avoid name collision with the custom op `classes`

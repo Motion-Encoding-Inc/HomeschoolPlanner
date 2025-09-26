@@ -18,52 +18,9 @@ module Graph =
     type Message = { subject: string; body: ItemBody; toRecipients: Recipient[]; replyTo: Recipient[] }
     type SendMailRequest = { message: Message; saveToSentItems: bool }
 
-    let private tryGetConfigurationValue names =
-        names
-        |> List.tryPick (fun name ->
-            let value = Environment.GetEnvironmentVariable name
-            if String.IsNullOrWhiteSpace value then
-                None
-            else
-                Some value)
-
-    let private graphConfiguration =
-        lazy
-            let tenantId =
-                tryGetConfigurationValue
-                    [ "GRAPH_TENANTID"
-                      "GRAPH_TENANT_ID"
-                      "Graph__TenantId"
-                      "Graph:TenantId" ]
-
-            let clientId =
-                tryGetConfigurationValue
-                    [ "GRAPH_CLIENTID"
-                      "GRAPH_CLIENT_ID"
-                      "Graph__ClientId"
-                      "Graph:ClientId" ]
-
-            let clientSecret =
-                tryGetConfigurationValue
-                    [ "GRAPH_CLIENTSECRET"
-                      "GRAPH_CLIENT_SECRET"
-                      "Graph__ClientSecret"
-                      "Graph:ClientSecret" ]
-
-            match tenantId, clientId, clientSecret with
-            | Some tenantId, Some clientId, Some clientSecret -> Some(tenantId, clientId, clientSecret)
-            | _ -> None
-
-    let isConfigured () =
-        graphConfiguration.Value |> Option.isSome
-
-    let private requireGraphConfiguration () =
-        match graphConfiguration.Value with
-        | Some config -> config
-        | None ->
-            invalidOp
-                "Graph mail configuration is missing. Please configure environment variables for the tenant id, client id, and client secret."
-
+    let private tenantId = System.Environment.GetEnvironmentVariable("GRAPH_TENANTID")
+    let private clientId = System.Environment.GetEnvironmentVariable("GRAPH_CLIENTID")
+    let private clientSecret = System.Environment.GetEnvironmentVariable("GRAPH_CLIENTSECRET")
 
     /// Minimal app-credentials Graph sender.
     /// Requirements:
@@ -80,7 +37,6 @@ module Graph =
         (isHtml: bool)
         (replyTo: string list)
         : Async<unit> =
-        let tenantId, clientId, clientSecret = requireGraphConfiguration ()
 
         async {
             // 1) acquire app token
@@ -138,4 +94,3 @@ module Graph =
     // example usage - replace with your own addresses
     //sendEmailAppAsync "support@scholarsforge.com" ["patrick@scholarsforge.com";"cheryl@scholarsforge.com";"allen@scholarsforge.com"] "Test from F# script 2" "<b>hello</b> from F# script 2 reply to psimpson@cannellamedia.com" true (ValueSome ["psimpson@cannellamedia.com"])
     //|> Async.RunSynchronously
-

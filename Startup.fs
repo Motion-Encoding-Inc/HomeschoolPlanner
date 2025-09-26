@@ -82,27 +82,21 @@ app.MapPost(
 {optionalRows}
 <p><strong>Message:</strong><br/>{encodeMultiline message}</p>
 """
+                try
+                    do!
+                        Graph.sendEmail
+                            "support@scholarsforge.com"
+                            [ "support@scholarsforge.com" ]
+                            subject
+                            body
+                            true
+                            [ email ]
+                        |> Async.StartAsTask
 
-                if Graph.isConfigured () then
-                    try
-                        do!
-                            Graph.sendEmail
-                                "support@scholarsforge.com"
-                                [ "support@scholarsforge.com" ]
-                                subject
-                                body
-                                true
-                                [ email ]
-                            |> Async.StartAsTask
-
-                        ctx.Response.Redirect("/")
-                    with _ ->
-                        ctx.Response.StatusCode <- StatusCodes.Status500InternalServerError
-                        do! ctx.Response.WriteAsync("We were unable to send your message. Please try again later.")
-                else
-                    ctx.Response.StatusCode <- StatusCodes.Status503ServiceUnavailable
-                    do! ctx.Response.WriteAsync("Our email service is not configured. Please try again later.")
-
+                    ctx.Response.Redirect("/")
+                with _ ->
+                    ctx.Response.StatusCode <- StatusCodes.Status500InternalServerError
+                    do! ctx.Response.WriteAsync("We were unable to send your message. Please try again later.")
             return ()
         }
         :> Task)
