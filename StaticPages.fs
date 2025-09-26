@@ -159,28 +159,93 @@ module StaticAssets =
             }
         }
 
-    let footer =
+    // was: let footerView (inline: bool) =
+    let footerView (isInline: bool) =
         footer {
-            class' "site-footer" 
+            // was: if inline then ...
+            class' (if isInline then "site-footer inline" else "site-footer")
+
+            // TOP: brand + 3 columns
             div {
-                class' "container foot"
+                class' "container footer-top"
+                // Left half: brand
                 div {
-                    class' "brand"
-                    span {
-                        class' "mark"
-                        "aria-hidden", "true"
-                        img { src "images/ico.png"; alt "" }
+                    class' "footer-brand"
+                    a {
+                        class' "brand"
+                        href "/"
+                        span {
+                            class' "mark"
+                            "aria-hidden", "true"
+                            img { src "images/ico.png"; alt "" }
+                        }
+                        span { "Scholar’s Forge Planner" }
                     }
-                    span { "Scholar’s Forge Planner" }
+                    p { class' "muted"; "Plan flexibly. Document confidently." }
                 }
+
+                // Right half: 3 columns
                 div {
-                    for index, link in navLinks |> List.indexed do
-                        if index > 0 then
-                            span { class' "sep"; " • " }
-                        navLink None link
+                    class' "footer-cols"
+                    // COMPANY
+                    div {
+                        h4 { class' "foot-h"; "Company" }
+                        ul {
+                            class' "foot-list"
+                            //li { a { href "/#features"; "How it works" } }
+                            li { a { href "/#pricing"; "Pricing" } }
+                            li { a { href "/about"; "About Us" } }
+                            li { a { href "/contact"; "Contact" } }
+                        }
+                    }
+                    // RESOURCES
+                    div {
+                        h4 { class' "foot-h"; "Resources" }
+                        ul {
+                            class' "foot-list"
+                            //li { a { href "https://scholarsforge.blogspot.com/"; "Blog" ; domAttr { "target","_blank"; "rel","noopener" } } }
+                            // Add a few pinned posts when ready
+                            // li { a { href "/blog/post-1"; "Getting started checklist" } }
+                            // li { a { href "/blog/post-2"; "Portfolio tips" } }
+                            //li { a { href "https://scholarsforge.blogspot.com/"; "See all resources ›" ; domAttr { "target","_blank"; "rel","noopener" } } }
+                        }
+                    }
+                    // ABOUT / LEGAL
+                    div {
+                        h4 { class' "foot-h"; "About" }
+                        ul {
+                            class' "foot-list"
+                            li { a { href "/terms"; "Terms & Conditions" } }
+                            li { a { href "/privacy"; "Privacy Policy" } }
+                        }
+                    }
                 }
+            }
+
+            // BOTTOM: copyright bar
+            div {
+                class' "footer-bottom"
                 div {
-                    $"© {DateTime.UtcNow.Year} Scholar’s Forge LLC. All rights reserved."
+                    class' "container"
+                    // left logo + name (small), middle copyright, right optional links
+                    div {
+                        class' "foot-bottom-row"
+                        div {
+                            class' "foot-mini-brand"
+                            //span {
+                            //    class' "mark small"
+                            //    "aria-hidden", "true"
+                            //    img { src "images/ico.png"; alt "" }
+                            //}
+                            //span { "Scholar’s Forge Planner" }
+                        }
+                        div {
+                            class' "foot-copy"
+                            $"© {DateTime.UtcNow.Year} Scholar’s Forge LLC. All rights reserved."
+                        }
+                        // right placeholder (socials etc) – optional
+                        div { () }
+                    }
                 }
             }
         }
@@ -213,25 +278,17 @@ module StaticAssets =
                 // prebuilt inner body to avoid control-flow inside CEs with custom ops
                 let innerBody =
                     fragment {
-                        // App shell grid: header / window / footer
+                        // Full-viewport shell: header + window only
                         div {
                             class' "shell"
-
-                            // Top bar (nav)
                             header activeHref
-
-                            // Middle viewport where pages render
-                            div {
-                                class' "window"
-                                bodyContent   // <-- Landing main.v-stage OR About/Contact main
-                            }
-
-                            // Bottom bar
-                            if includeFooter then
-                                footer
+                            div { class' "window"; bodyContent }
                         }
 
-                        // Scripts at end of body
+                        // If you still want a document-level footer, call the function:
+                        if includeFooter then
+                            footerView false   // false ⇒ normal footer styling (not the inline variant)
+
                         script { src "/landing.js" }
                         script { themePersistScript }
                     }
@@ -548,26 +605,32 @@ module LandingPage =
 
     let pricingContent =
         div {
-            class' "v-center"
+            class' "v-stack"     // 1) slide grid: content grows, footer pinned
+            // Row 1 — your pricing content (centered)
             div {
-                class' "container centered-stack"
-                "aria-labelledby", "pricing-title"
-                h2 { id "pricing-title"; "Simple, transparent pricing" }
+                class' "v-center"
                 div {
-                    class' "grid-2"
+                    class' "container centered-stack"
+                    "aria-labelledby", "pricing-title"
+                    h2 { id "pricing-title"; "Simple, transparent pricing" }
                     div {
-                        class' "card"
-                        h3 { "👨‍👩‍👧‍👦 Family (unlimited children)" }
-                        span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
+                        class' "grid-2"
+                        div {
+                            class' "card"
+                            h3 { "👨‍👩‍👧‍👦 Family (unlimited children)" }
+                            span { class' "btn disabled"; "aria-disabled","true"; "Coming soon" }
+                        }
+                        div {
+                            class' "card"
+                            h3 { "🏫 Pro (charters and co-ops)" }
+                            span { class' "btn disabled"; "aria-disabled","true"; "Coming soon" }
+                        }
                     }
-                    div {
-                        class' "card"
-                        h3 { "🏫 Pro (charters and co-ops)" }
-                        span { class' "btn disabled"; "aria-disabled", "true"; "Coming soon" }
-                    }
+                    p { class' "muted mt-12"; "No credit card required to start. Cancel anytime." }
                 }
-                p { class' "muted mt-12"; "No credit card required to start. Cancel anytime." }
             }
+            // Row 2 — footer (full bleed because of .inline CSS above)
+            StaticAssets.footerView true
         }
 
     let slides : LandingSlide list =
@@ -637,37 +700,34 @@ module LandingPage =
 
 
     let view =
-        div {
-            class' "window"       // middle grid row
-            main {
-                class' "v-stage"
-                id "landing-stage"
-                "aria-live", "polite"
+        main {
+            class' "v-stage"
+            id "landing-stage"
+            "aria-live", "polite"
 
-                div {
-                    class' "v-track"
-                    id "landing-track"
-                    "role", "list"
-                    "aria-label", "Vertical carousel of featured sections"
-                    for slide in slides do
-                        slideNode slide
-                }
+            div {
+                class' "v-track"
+                id "landing-track"
+                "role", "list"
+                "aria-label", "Vertical carousel of featured sections"
+                for slide in slides do
+                    slideNode slide
+            }
 
-                div {
-                    class' "v-dots"
-                    "aria-label", "Slide navigation"
-                    for index, slide in slides |> List.indexed do
-                        a {
-                            class' (if index=0 then "v-dot active" else "v-dot")
-                            href ($"#slide-{slide.Key}")       // snap target
-                            domAttr {
-                                "role","button"
-                                "data-index", string index
-                                "aria-label", $"Go to {slide.AriaLabel}"
-                                if index = 0 then "aria-current","true"
-                            }
+            div {
+                class' "v-dots"
+                "aria-label", "Slide navigation"
+                for index, slide in slides |> List.indexed do
+                    a {
+                        class' (if index=0 then "v-dot active" else "v-dot")
+                        href ($"#slide-{slide.Key}")       // snap target
+                        domAttr {
+                            "role","button"
+                            "data-index", string index
+                            "aria-label", $"Go to {slide.AriaLabel}"
+                            if index = 0 then "aria-current","true"
                         }
-                }
+                    }
             }
         }
 
@@ -687,11 +747,12 @@ module LandingPage =
 module AboutPage =
     let view =
         main {
+            class' "v-stack"                 // fills the .window (see CSS)
+            // Row 1 — page content
             section {
                 class' "container"
                 id "about"
                 "aria-labelledby", "about-title"
-                br {}
                 h1 { id "about-title"; "About Us" }
                 div {
                     class' "grid-2"
@@ -702,19 +763,10 @@ module AboutPage =
                             ", Scholar’s Forge is built with a deep respect for family-first education. We’ve taught, tested, and iterated, so you can stay focused on your kids."
                         }
                     }
-                    div {
-                        class' "card"
-                        h3 { "Contact us" }
-                        p {
-                            class' "muted"
-                            "Let’s connect! Families, co-ops, teachers, or anyone interested — reach out with your questions or ideas."
-                        }
-                        p { a { href "mailto:support@scholarsforge.com"; "support@scholarsforge.com" } }
-                    }
                 }
-                br {}
-                br {}
             }
+            // Row 2: footer
+            StaticAssets.footerView true
         }
 
     type Component() =
@@ -728,12 +780,14 @@ module AboutPage =
             "Learn about the Scholar’s Forge Planner team."
             (Some "/about")
             view
-            ""      // no body class
-            true    // include footer
+            ""      // no extra body class
+            false   // ⚠️ do not add a document-level footer
 
 module ContactPage =
     let view =
         main {
+            class' "v-stack"
+            // Row 1 — hero + form (the CSS above removes the large min-height here)
             section {
                 class' "contact-hero"
                 id "contact"
@@ -743,7 +797,7 @@ module ContactPage =
                     """
                     .contact-hero{
                         position: relative;
-                        min-height: 60vh; /* adjust as you like */
+                        
                         background-image: var(--contact-hero-overlay), var(--contact-hero-image);
                         background-size: cover;
                         background-position: center;
@@ -893,6 +947,8 @@ module ContactPage =
                     }
                 }
             }
+            // Row 2: footer
+            StaticAssets.footerView true
         }
 
     type Component() =
@@ -907,4 +963,4 @@ module ContactPage =
             (Some "/contact")
             view
             ""
-            true
+            false

@@ -1,9 +1,17 @@
-/* =========================
+/* ===========================================================
    THEME TOKENS
-   ========================= */
+   -----------------------------------------------------------
+   All color, spacing, and image variables live here.
+   - Per-theme background images for slides
+   - Per-theme side vignettes used by slides (white in Scholar, black in Forge)
+   =========================================================== */
+
 :root {
     --contact-hero-image: none;
     --contact-hero-overlay: none;
+    --radius: 20px;
+    --gutter: 28px;
+    --maxw: 1200px;
 }
 
     :root[data-theme="scholar"] {
@@ -18,15 +26,15 @@
         --ember: #f5c078; /* warm highlight */
         --border: #e7e1dc;
         --shadow: 0 14px 40px rgba(22,16,9,.08);
-        --radius: 20px;
-        --gutter: 28px;
-        --maxw: 1200px;
         --ctaText: #fff;
         --contact-hero-image: url('images/ContactBackground_L.png');
         --contact-hero-overlay: linear-gradient(180deg, rgba(249,246,243,.92) 0%, rgba(249,246,243,.82) 35%, rgba(249,246,243,.9) 100%);
         --landing-how-bg: url('/images/StudyingTogether_L.png');
         --landing-hard-bg: url('/images/Tired_L.png');
-        --landing-beta-bg: url('/images/BetaTestBackground_L.png'); /* or your light variant */
+        --landing-beta-bg: url('/images/BetaTestBackground_L.png');
+        /* Side-fade presets: fade TOWARD content side (to white) */
+        --vignette-left: linear-gradient(90deg, rgba(249,246,243,.95) 0%, rgba(249,246,243,.88) 26%, rgba(249,246,243,0) 60%);
+        --vignette-right: linear-gradient(270deg, rgba(249,246,243,.95) 0%, rgba(249,246,243,.88) 26%, rgba(249,246,243,0) 60%);
     }
 
     :root[data-theme="forge"] {
@@ -41,44 +49,38 @@
         --ember: #ffd08c;
         --border: #222736;
         --shadow: 0 18px 46px rgba(0,0,0,.35);
-        --radius: 20px;
-        --gutter: 28px;
-        --maxw: 1200px;
         --ctaText: #000;
         --contact-hero-image: url('images/ContactBackground_D.png');
         --contact-hero-overlay: linear-gradient(180deg, rgba(8,7,12,.82) 0%, rgba(8,7,12,.76) 42%, rgba(12,10,16,.72) 100%);
         --landing-how-bg: url('/images/StudyingTogether_D.png');
         --landing-hard-bg: url('/images/Tired_D.png');
-        --landing-beta-bg: url('/images/BetaTestBackground_D.png'); /* dark variant */
-    }
-
-    /* Side-fade presets */
-    :root[data-theme="scholar"] {
-        /* fade TO WHITE at the side that holds the content, transparent toward center */
-        --vignette-left: linear-gradient(90deg, rgba(249,246,243,.95) 0%, rgba(249,246,243,.88) 26%, rgba(249,246,243,0) 60%);
-        --vignette-right: linear-gradient(270deg, rgba(249,246,243,.95) 0%, rgba(249,246,243,.88) 26%, rgba(249,246,243,0) 60%);
-    }
-
-    :root[data-theme="forge"] {
-        /* fade TO BLACK at the side that holds the content, transparent toward center */
+        --landing-beta-bg: url('/images/BetaTestBackground_D.png');
+        /* Side-fade presets: fade TOWARD content side (to black) */
         --vignette-left: linear-gradient(90deg, rgba(8,7,12,.86) 0%, rgba(8,7,12,.76) 30%, rgba(8,7,12,0) 64%);
         --vignette-right: linear-gradient(270deg, rgba(8,7,12,.86) 0%, rgba(8,7,12,.76) 30%, rgba(8,7,12,0) 64%);
     }
-/* =========================
+
+/* ===========================================================
    BASE
-   ========================= */
+   =========================================================== */
+
 * {
-    box-sizing: border-box
+    box-sizing: border-box;
 }
 
 html, body {
     height: 100%;
     margin: 0;
-    overflow: hidden;
+    overflow: hidden; /* landing uses internal scroll logic */
 }
+/* Landing page: keep the stage fixed; footer is outside shell */
+body.landing-body { overflow: hidden; }           /* lock document while on landing */
+body.landing-body .window { overflow: hidden; }   /* you already have this */
+
+/* stage owns scrolling */
 
 body {
-    background: radial-gradient(1100px 600px at 6% -10%, #ffe9db, transparent 55%), linear-gradient(180deg,var(--bg),var(--bg) 85%);
+    background: radial-gradient(1100px 600px at 6% -10%, #ffe9db, transparent 55%), linear-gradient(180deg, var(--bg), var(--bg) 85%);
     color: var(--ink);
     font: 17px/1.7 ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
     letter-spacing: .1px;
@@ -86,110 +88,66 @@ body {
 
 a {
     color: var(--brand);
-    text-decoration: none
+    text-decoration: none;
 }
 
     a:hover {
-        opacity: .92
+        opacity: .92;
     }
 
 .container {
     max-width: var(--maxw);
     margin: 0 auto;
-    padding: 0 var(--gutter)
+    padding: 0 var(--gutter);
 }
 
-/* =========================
-   APP SHELL: header / window / footer
-   ========================= */
+/* ===========================================================
+   APP SHELL (header / window / footer)
+   - Footer row uses 'auto' so the new multi-row footer can grow
+   =========================================================== */
+
 :root {
     --headH: clamp(60px, 10vh, 92px);
-    --footH: clamp(48px, 8vh, 80px);
 }
 
-/* Shell rows */
 .shell {
     position: relative;
     height: 100vh;
     display: grid;
-    grid-template-rows: var(--headH) 1fr var(--footH);
-}
-/* The middle row must define the viewport for the carousel */
-.shell {
-    grid-template-rows: var(--headH) 1fr var(--footH);
+    grid-template-rows: var(--headH) 1fr; /* header + full-height window */
 }
 
 .site-header {
     grid-row: 1;
-    position: relative; /* new */
-    z-index: 1000; /* stays on top */
+    position: relative;
+    z-index: 1000;
 }
 
 .site-footer {
     grid-row: 3;
-    position: relative; /* new */
-    z-index: 900;
 }
+/* not in grid anymore */
 
-/* Window + carousel layers */
 .window {
     position: relative;
-    overflow: hidden; /* lock scroll for the landing */
+    overflow: hidden; /* lock scroll inside landing track */
     height: 100%;
-    min-height: 0; /* prevent grid min-content creep */
+    min-height: 0;
 }
 
 body.landing-body .window {
     overflow: hidden;
 }
 
-.window > .v-stage,
-.v-track,
-.v-slide {
-    height: 100%;
-}
+/* ===========================================================
+   NAVIGATION (header contents)
+   =========================================================== */
 
-
-/* ensure below header */
-.v-track {
-    position: absolute;
-    inset: 0;
-    transition: transform 600ms cubic-bezier(.2,.65,.2,1);
-    will-change: transform;
-    z-index: 0;
-}
-
-.v-slide {
-    position: relative;
-    height: 100%;
-    isolation: isolate;
-    overflow: hidden; /* <— prevents the next slide from peeking */
-}
-
-/* Dots above slides but below header */
-.v-dots {
-    position: fixed;
-    right: clamp(12px,3vw,28px);
-    top: 50%;
-    transform: translateY(-50%);
-    display: grid;
-    gap: 10px;
-    z-index: 950;
-}
-
-/* Landing page: lock the window; JS drives transforms */
-/*body.landing-body .window {
-    overflow: hidden;
-}*/
-
-/* =========================
-   NAV / HEADER CONTENT
-   ========================= */
 .nav {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    padding: 18px 0
+    padding: 18px 0;
 }
 
 .brand {
@@ -197,15 +155,15 @@ body.landing-body .window {
     align-items: center;
     gap: .8rem;
     font-weight: 900;
-    letter-spacing: .3px
+    letter-spacing: .3px;
 }
 
 .mark {
     width: 40px;
     height: 40px;
     border-radius: 12px;
-    background: linear-gradient(135deg,var(--brand),var(--brand-2));
-    box-shadow: var(--shadow)
+    background: linear-gradient(135deg, var(--brand), var(--brand-2));
+    box-shadow: var(--shadow);
 }
 
     .mark img {
@@ -214,13 +172,13 @@ body.landing-body .window {
         object-fit: contain;
         padding: 4px;
         border-radius: inherit;
-        display: block
+        display: block;
     }
 
 .links {
     display: flex;
     align-items: center;
-    gap: 1.2rem
+    gap: 1.2rem;
 }
 
 /* Mode switch */
@@ -231,7 +189,7 @@ body.landing-body .window {
     background: color-mix(in oklab, var(--paper) 80%, var(--tint));
     border-radius: 14px;
     padding: 3px;
-    box-shadow: var(--shadow)
+    box-shadow: var(--shadow);
 }
 
     .mode-switch button {
@@ -245,7 +203,7 @@ body.landing-body .window {
         text-align: center;
         color: var(--ink);
     }
-        /* active states: Scholar blue / Forge ember */
+
         :root[data-theme="scholar"] #mode-scholar,
         .mode-switch button.active[data-mode="scholar"] {
             background: linear-gradient(180deg,#3a80ff,#6b8bff);
@@ -260,9 +218,10 @@ body.landing-body .window {
             -webkit-text-stroke: .4px rgba(0,0,0,.35);
         }
 
-/* =========================
-   BUTTONS / CARDS / TYPOGRAPHY
-   ========================= */
+/* ===========================================================
+   COMPONENTS (buttons, cards, type, small grids)
+   =========================================================== */
+
 .btn {
     display: inline-flex;
     align-items: center;
@@ -270,17 +229,17 @@ body.landing-body .window {
     padding: 1rem 1.2rem;
     border-radius: 14px;
     border: 1px solid var(--border);
-    font-weight: 800
+    font-weight: 800;
 }
 
     .btn.primary {
-        background: linear-gradient(180deg,var(--brand),var(--brand-2));
+        background: linear-gradient(180deg, var(--brand), var(--brand-2));
         border: 1px solid color-mix(in oklab, var(--brand) 65%, var(--brand-2));
         color: var(--ctaText);
     }
 
     .btn.ghost {
-        background: transparent
+        background: transparent;
     }
 
     .btn.disabled {
@@ -292,11 +251,11 @@ body.landing-body .window {
         padding: .9rem 1.1rem;
         font-weight: 800;
         cursor: not-allowed;
-        pointer-events: none
+        pointer-events: none;
     }
 
 .hero-card, .card {
-    background: linear-gradient(180deg,var(--paper),var(--tint));
+    background: linear-gradient(180deg, var(--paper), var(--tint));
     border: 1px solid var(--border);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
@@ -306,27 +265,26 @@ body.landing-body .window {
 h1 {
     font-size: clamp(2.4rem,4.6vw,3.6rem);
     line-height: 1.08;
-    margin: 0 0 22px
+    margin: 0 0 22px;
 }
 
 h2 {
     font-size: clamp(1.8rem,3vw,2.4rem);
-    margin: 0 0 14px
+    margin: 0 0 14px;
 }
 
 .lead {
     color: var(--muted);
     font-size: 1.2rem;
-    max-width: 64ch
+    max-width: 64ch;
 }
 
-/* Lists / grids */
 .hero-bullets {
     margin: 0;
     padding: 0;
     list-style: none;
     display: grid;
-    gap: 12px
+    gap: 12px;
 }
 
     .hero-bullets li {
@@ -334,7 +292,7 @@ h2 {
         gap: .75rem;
         align-items: flex-start;
         color: var(--muted);
-        font-weight: 600
+        font-weight: 600;
     }
 
         .hero-bullets li::before {
@@ -343,7 +301,7 @@ h2 {
             height: 10px;
             margin-top: .5rem;
             border-radius: 50%;
-            background: linear-gradient(135deg,var(--brand),var(--brand-2));
+            background: linear-gradient(135deg, var(--brand), var(--brand-2));
             flex: 0 0 10px;
             box-shadow: 0 0 0 3px color-mix(in oklab, var(--paper) 80%, var(--tint));
         }
@@ -351,52 +309,25 @@ h2 {
 .grid-3 {
     display: grid;
     grid-template-columns: repeat(3,1fr);
-    gap: 28px
+    gap: 28px;
 }
 
 .grid-2 {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 32px
+    gap: 32px;
 }
 
-@media(max-width:980px) {
-    .grid-3, .grid-2 {
-        grid-template-columns: 1fr
-    }
-}
+/* ===========================================================
+   CAROUSEL CORE  (inside .window)
+   =========================================================== */
 
-/* =========================
-   FOOTER
-   ========================= */
-footer {
-    padding: 44px 0;
-    color: color-mix(in oklab, var(--muted) 85%, var(--ink))
-}
-
-.foot {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between
-}
-
-.sep {
-    opacity: .35
-}
-
-/* =========================
-   LANDING: CAROUSEL (transform model inside .window)
-   ========================= */
-/* stage fills the window; no internal scrollbar */
-.window > .v-stage {
+.window > .v-stack {
     position: absolute;
-    inset: 0;
-    overflow: hidden;
+    inset: 0; /* top/right/bottom/left: 0 */
+    overflow: hidden; /* no scrollbar on page */
 }
 
-/* track moves vertically by translateY */
 .v-track {
     position: absolute;
     inset: 0;
@@ -405,39 +336,41 @@ footer {
     z-index: 0;
 }
 
-
-/* background & vignette layers */
-.v-slide::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -2;
-    background-image: var(--slide-bg, none);
-    background-size: cover;
-    background-repeat: no-repeat;
-    background-position: center;
-    transform: scale(1.04);
-    filter: saturate(1.05) contrast(1.08) brightness(.92);
-    transition: transform 600ms cubic-bezier(.2,.65,.2,1), filter 600ms cubic-bezier(.2,.65,.2,1);
+.v-slide {
+    position: relative;
+    height: 100%;
+    isolation: isolate;
+    overflow: hidden;
 }
 
-.v-slide::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: -1;
-    pointer-events: none;
-    /* default keeps your old look unless overridden per slide */
-    background: var(--slide-vignette, radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.55)) );
-}
+    .v-slide::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -2;
+        background-image: var(--slide-bg, none);
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        transform: scale(1.04);
+        filter: saturate(1.05) contrast(1.08) brightness(.92);
+        transition: transform 600ms cubic-bezier(.2,.65,.2,1), filter 600ms cubic-bezier(.2,.65,.2,1);
+    }
 
+    /* Vignette is fully configurable via --slide-vignette (per-slide) */
+    .v-slide::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background: var(--slide-vignette, radial-gradient(120% 100% at 50% 40%, rgba(0,0,0,.22), rgba(0,0,0,0) 60%), linear-gradient(to bottom, rgba(0,0,0,0) 70%, rgba(0,0,0,.55)) );
+    }
 
-/* crisp edge between slides without showing next image */
-.v-slide + .v-slide {
-    box-shadow: 0 -1px 0 rgba(255,255,255,.06) inset
-}
+    .v-slide + .v-slide {
+        box-shadow: 0 -1px 0 rgba(255,255,255,.06) inset;
+    }
 
-/* dots */
 .v-dots {
     position: fixed;
     right: clamp(12px,3vw,28px);
@@ -460,50 +393,56 @@ footer {
 
     .v-dot[aria-current="true"] {
         background: #fff;
-        transform: scale(1.2)
+        transform: scale(1.2);
     }
 
-/* =========================
-   HERO (on landing’s first slide)
-   ========================= */
+@media (prefers-reduced-motion: reduce) {
+    .v-track {
+        transition: none;
+    }
+}
+
+/* ===========================================================
+   HERO (first slide)
+   =========================================================== */
+
 .hero {
     display: grid;
     gap: 36px;
     grid-template-columns: 1.1fr 1fr;
-    align-items: center
+    align-items: center;
 }
 
 @media(max-width:980px) {
     .hero {
-        grid-template-columns: 1fr
+        grid-template-columns: 1fr;
     }
 }
 
-/* Mini hero carousel (within content card) */
 .hero-carousel {
     position: relative;
     border-radius: var(--radius);
     border: 1px solid var(--border);
     overflow: hidden;
     background: var(--tint);
-    box-shadow: var(--shadow)
+    box-shadow: var(--shadow);
 }
 
 .hero-frame {
     display: none;
     min-height: 420px;
-    background: #0f121a center/cover no-repeat
+    background: #0f121a center/cover no-repeat;
 }
 
     .hero-frame.active {
-        display: block
+        display: block;
     }
 
 .hero-dots {
     display: flex;
     gap: .6rem;
     justify-content: center;
-    padding: .8rem
+    padding: .8rem;
 }
 
 .hero-dot {
@@ -511,129 +450,17 @@ footer {
     height: 10px;
     border-radius: 50%;
     background: color-mix(in oklab, var(--border) 65%, var(--paper));
-    border: 1px solid var(--border)
+    border: 1px solid var(--border);
 }
 
     .hero-dot.active {
-        background: var(--brand)
+        background: var(--brand);
     }
 
-/* =========================
-   RESPONSIVE TWEAKS
-   ========================= */
-@media (max-width:600px) {
-    .container {
-        padding: 0 18px
-    }
+/* ===========================================================
+   CONTACT PAGE SECTION
+   =========================================================== */
 
-    .hero {
-        grid-template-columns: 1fr;
-        gap: 24px
-    }
-
-    h1 {
-        font-size: clamp(1.8rem, 8vw, 2.4rem);
-        margin-bottom: 18px
-    }
-
-    .lead {
-        font-size: 1rem;
-        margin-bottom: 14px
-    }
-
-    .hero-bullets {
-        grid-template-columns: 1fr;
-        gap: 10px
-    }
-
-    .hero-card {
-        padding: 18px
-    }
-
-    .btn-row, .pills {
-        gap: .6rem
-    }
-
-    .btn-row {
-        flex-direction: column;
-        align-items: stretch
-    }
-
-        .btn-row .btn {
-            width: 100%
-        }
-
-    .hero-carousel {
-        border-radius: 16px
-    }
-
-    .hero-frame {
-        min-height: auto;
-        aspect-ratio: 16/9;
-        background-size: cover;
-        background-position: center
-    }
-
-    .grid-2 {
-        grid-template-columns: 1fr;
-        gap: 18px
-    }
-
-    .grid-3 {
-        grid-template-columns: 1fr;
-        gap: 18px
-    }
-
-    .card {
-        padding: 18px
-    }
-}
-
-@media (max-width:360px) {
-    h1 {
-        font-size: clamp(1.6rem, 8.8vw, 2.2rem)
-    }
-
-    .lead {
-        font-size: .95rem
-    }
-
-    .btn {
-        padding: .9rem 1rem;
-        border-radius: 12px
-    }
-}
-
-/* =========================
-   UTILITIES
-   ========================= */
-.mt-1 {
-    margin-top: 1rem
-}
-
-.mt-8 {
-    margin-top: 8px
-}
-
-.mt-12 {
-    margin-top: 12px
-}
-
-.mb-075 {
-    margin-bottom: .75rem
-}
-
-.w-full {
-    width: 100%
-}
-
-.ml-auto {
-    margin-left: auto
-}
-
-/* =========================
-   CONTACT
-   ========================= */
 #contact {
     padding: clamp(56px, 8vw, 108px) 0 clamp(72px, 9vw, 120px);
 }
@@ -645,19 +472,19 @@ footer {
     background: color-mix(in oklab, var(--paper) 82%, var(--tint));
 }
 
-.contact-hero::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: var(--contact-hero-overlay), var(--contact-hero-image);
-    background-size: cover, cover;
-    background-position: center, center;
-    background-repeat: no-repeat;
-    transform: scale(1.02);
-    filter: saturate(1.02);
-}
+    .contact-hero::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        z-index: 0;
+        pointer-events: none;
+        background-image: var(--contact-hero-overlay), var(--contact-hero-image);
+        background-size: cover, cover;
+        background-position: center, center;
+        background-repeat: no-repeat;
+        transform: scale(1.02);
+        filter: saturate(1.02);
+    }
 
 .contact-hero-content {
     position: relative;
@@ -666,21 +493,15 @@ footer {
     justify-content: center;
 }
 
+/* Cap the card height relative to the viewport and footer,
+   and allow the form content inside to scroll if needed. */
 .contact-card {
-    display: grid;
-    gap: 1.8rem;
-    width: min(100%, 880px);
+    max-width: 880px;
+    max-height: 74vh; /* fits above the footer on most laptops */
+    overflow: auto; /* internal scroll if inputs exceed the cap */
 }
 
-.contact-form {
-    display: grid;
-    gap: 1.8rem;
-}
 
-.contact-form-main {
-    display: grid;
-    gap: 1.5rem;
-}
 
 @media (min-width: 720px) {
     .contact-form-main {
@@ -689,142 +510,76 @@ footer {
     }
 }
 
-.contact-column {
-    display: grid;
-    gap: 1.2rem;
+@media (max-height: 820px) {
+    .contact-card {
+        max-height: unset;
+    }
+
+    .contact-field input, .contact-field textarea {
+        padding: .6rem .85rem;
+    }
+
+    .contact-field textarea {
+        min-height: 80px;
+    }
+
+    .contact-form {
+        gap: 1.1rem;
+    }
+
+    .contact-form-main {
+        gap: .9rem;
+    }
+
+    .contact-field {
+        gap: .35rem;
+    }
+
+    .contact-field textarea {
+        min-height: 96px;
+    }
+    /* down from 130–160px */
 }
 
-.contact-field {
-    display: grid;
-    gap: 0.4rem;
-}
 
-.contact-field label {
-    font-weight: 600;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.5rem;
-}
+/* Desktop shrink (to reveal more artwork) */
+@media (min-width: 1024px) {
+    .contact-card {
+        width: min(100%, 660px);
+        padding: 20px;
+        gap: 1.2rem;
+    }
 
-.contact-field .optional {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--muted);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-}
+    .contact-form {
+        gap: 1.2rem;
+    }
 
-.contact-field input,
-.contact-field textarea {
-    width: 100%;
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 0.85rem 1rem;
-    background: color-mix(in oklab, var(--paper) 92%, var(--tint));
-    color: var(--ink);
-    font: inherit;
-    transition: border-color 160ms ease, box-shadow 160ms ease;
-}
+    .contact-form-main {
+        gap: 1rem;
+    }
 
-.contact-field input:focus,
-.contact-field textarea:focus {
-    border-color: color-mix(in oklab, var(--brand) 70%, var(--brand-2));
-    box-shadow: 0 0 0 3px color-mix(in oklab, var(--brand) 18%, transparent);
-    outline: none;
-}
+    .contact-field {
+        gap: 0.35rem;
+    }
 
-.contact-field textarea {
-    resize: vertical;
-    min-height: 160px;
-}
+    .contact-field input, .contact-field textarea {
+        padding: 0.7rem 0.9rem;
+    }
 
-.contact-form-message {
-    display: grid;
-}
+    .contact-field textarea {
+        min-height: 130px;
+    }
 
-.contact-recaptcha {
-    min-height: 120px;
-    border: 1px dashed var(--border);
-    border-radius: 12px;
-    background: color-mix(in oklab, var(--paper) 88%, var(--tint));
-}
-
-.contact-submit {
-    display: flex;
-    justify-content: flex-end;
-}
-
-.contact-submit .btn {
-    min-width: 160px;
-}
-
-/* =========================
-   OPTIONAL: slide background helpers (if you use them)
-   ========================= */
-.d-slide-1 {
-    background-image: url('images/LearningThroughPlay.png')
-}
-
-.d-slide-2 {
-    background-image: url('images/MessyDayKitchenTableSchool.png')
-}
-
-.d-slide-3 {
-    background-image: url('images/DiscoveryMoments.png')
-}
-
-.d-slide-4 {
-    background-image: url('images/SiblingTeaching.png')
-}
-
-.d-slide-5 {
-    background-image: url('images/WorksideLearning.png')
-}
-
-.d-slide-6 {
-    background-image: url('images/IndependantButSupported.png')
-}
-
-.d-slide-7 {
-    background-image: url('images/IndependantButSupported2.png')
-}
-
-@media (prefers-reduced-motion: reduce) {
-    .v-track {
-        transition: none
+    .contact-submit .btn {
+        min-width: 140px;
+        padding: 0.85rem 1.1rem;
     }
 }
 
-/* 1) No vignette where there’s no image */
-#slide-hero,
-#slide-features{
-    --slide-vignette: none;
-}
+/* ===========================================================
+   SLIDE HELPERS & FEATURE LAYOUTS
+   =========================================================== */
 
-#slide-beta {
-    --slide-bg: var(--landing-beta-bg);
-}
-/* 2) “What Makes Homeschooling Hard?” ⇒ content on LEFT ⇒ fade on LEFT */
-#slide-hard {
-    --slide-vignette: var(--vignette-left);
-    --slide-bg: var(--landing-hard-bg);
-}
-
-/* 3) “Why Scholar’s Forge is different” ⇒ content on RIGHT ⇒ fade on RIGHT */
-#slide-how {
-    --slide-vignette: var(--vignette-right);
-    --slide-bg: var(--landing-how-bg);
-}
-
-/* 4) Pricing has no background image (keep it clean) */
-#slide-pricing {
-    --slide-vignette: none;
-}
-/* If no background is set for a slide, disable vignette by default */
-.v-slide:not([style*="--slide-bg"]) {
-    --slide-vignette: none;
-}
-/* Generic slide positioning helpers */
 .v-center {
     height: 100%;
     display: grid;
@@ -840,7 +595,6 @@ footer {
     padding: clamp(16px, 4vw, 48px);
 }
 
-/* Two-column: left spacer, right content */
 .v-right-50 {
     height: 100%;
     display: grid;
@@ -850,7 +604,15 @@ footer {
     padding: 0 var(--gutter);
 }
 
-/* Pills: horizontal by default, vertical variant */
+.v-left-50 {
+    height: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    gap: var(--gutter);
+    padding: 0 var(--gutter);
+}
+
 .pills {
     display: flex;
     gap: .8rem;
@@ -863,7 +625,6 @@ footer {
         gap: .6rem;
     }
 
-/* Cards constrained & centered when needed */
 .centered-stack {
     width: min(100%, 960px);
     display: grid;
@@ -879,26 +640,71 @@ footer {
         text-align: left;
     }
 
-/* Slide-specific tweaks */
-#slide-features .grid-3 {
-    justify-items: center;
+/* Features (3-up then 2-up) */
+.features-wrap {
+    width: min(100%, 1100px);
+    display: grid;
+    gap: 24px;
+    text-align: center;
+    margin: 0 auto;
 }
 
-#slide-pricing .grid-2 {
-    justify-items: center;
+.features-row-3, .features-row-2 {
+    display: grid;
+    gap: 20px;
+    justify-content: center;
 }
 
-/* Quarter grid that fills the slide viewport */
+.features-row-3 {
+    grid-template-columns: repeat(3, minmax(260px, 1fr));
+}
+
+.features-row-2 {
+    grid-template-columns: repeat(2, minmax(260px, 1fr));
+}
+
+#slide-features .v-center {
+    padding-top: 0;
+    padding-bottom: 0;
+}
+
+@media (max-width: 980px) {
+    .features-row-3 {
+        grid-template-columns: repeat(2, minmax(240px, 1fr));
+    }
+
+    .features-row-2 {
+        grid-template-columns: minmax(240px, 1fr);
+    }
+}
+
+@media (max-width: 600px) {
+    .features-row-3, .features-row-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Span helper for 2-col grids */
+.grid-2 > .span-2 {
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 980px) {
+    .grid-2 > .span-2 {
+        grid-column: auto;
+    }
+}
+
+/* Quarter layout (for Beta) */
 .v-quarters {
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* 2 columns */
-    grid-template-rows: 1fr 1fr; /* 2 rows    */
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
     gap: var(--gutter);
-    padding: clamp(12px, 4vw, 36px); /* keeps clear of header edge */
+    padding: clamp(12px, 4vw, 36px);
 }
 
-/* Place an element in a specific quarter */
 .qr-top-left {
     grid-area: 1 / 1;
     align-self: start;
@@ -923,23 +729,18 @@ footer {
     justify-self: end;
 }
 
-/* Beta card sizing */
 .beta-card {
     width: min(100%, 560px);
 }
 
-/* Mobile fallback: single column, center at top */
 @media (max-width: 720px) {
     .v-quarters {
         grid-template-columns: 1fr;
-        grid-template-rows: auto 1fr; /* content then free space */
+        grid-template-rows: auto 1fr;
         padding: 16px;
     }
 
-    .qr-top-right,
-    .qr-top-left,
-    .qr-bot-left,
-    .qr-bot-right {
+    .qr-top-right, .qr-top-left, .qr-bot-left, .qr-bot-right {
         grid-area: auto / auto;
         justify-self: center;
         align-self: start;
@@ -950,114 +751,323 @@ footer {
     }
 }
 
-/* Shrink the contact card on desktop */
-@media (min-width: 1024px) {
-    .contact-card {
-        width: min(100%, 660px); /* was 880px */
-        padding: 20px; /* was 24px */
-        gap: 1.2rem; /* was 1.8rem */
+/* ===========================================================
+   SLIDE-SPECIFIC BACKGROUNDS & VIGNETTES
+   =========================================================== */
+
+/* No vignette where there’s no image */
+#slide-hero, #slide-features {
+    --slide-vignette: none;
+}
+
+/* Beta: has BG but no vignette */
+#slide-beta {
+    --slide-bg: var(--landing-beta-bg);
+    --slide-vignette: none;
+}
+
+/* Hard: content on left ⇒ fade on left */
+#slide-hard {
+    --slide-bg: var(--landing-hard-bg);
+    --slide-vignette: var(--vignette-left);
+}
+
+/* How/Different: content on right ⇒ fade on right */
+#slide-how {
+    --slide-bg: var(--landing-how-bg);
+    --slide-vignette: var(--vignette-right);
+}
+
+/* Pricing: no vignette */
+#slide-pricing {
+    --slide-vignette: none;
+}
+
+/* Defensive: if no BG provided, disable vignette by default */
+.v-slide:not([style*="--slide-bg"]) {
+    --slide-vignette: none;
+}
+
+/* ===========================================================
+   UTILITIES
+   =========================================================== */
+
+.mt-1 {
+    margin-top: 1rem;
+}
+
+.mt-8 {
+    margin-top: 8px;
+}
+
+.mt-12 {
+    margin-top: 12px;
+}
+
+.mb-075 {
+    margin-bottom: .75rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+.ml-auto {
+    margin-left: auto;
+}
+
+/* ===========================================================
+   FOOTER LAYOUT (new, grid-based, auto-sized row)
+   =========================================================== */
+
+.site-footer {
+    background: color-mix(in oklab, var(--paper) 86%, var(--tint));
+    border-top: 1px solid var(--border);
+    color: var(--ink);
+}
+
+/* Top: brand (1fr) + three columns (1fr) */
+.footer-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 4vw, 48px);
+    padding: clamp(32px, 5vw, 64px) 0;
+    align-items: start;
+}
+
+.footer-brand .brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .8rem;
+    font-weight: 900;
+    letter-spacing: .3px;
+    margin-bottom: .4rem;
+}
+
+.footer-brand .mark {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+}
+
+    .footer-brand .mark img {
+        padding: 4px;
+        border-radius: inherit;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
 
-    .contact-form {
-        gap: 1.2rem;
-    }
-    /* was 1.8rem */
-    .contact-form-main {
-        gap: 1rem;
-    }
-    /* was 1.5–2rem */
-    .contact-field {
-        gap: 0.35rem;
-    }
-        /* was 0.4rem */
+.footer-cols {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: clamp(18px, 2.6vw, 32px);
+}
 
-        .contact-field input,
-        .contact-field textarea {
-            padding: 0.7rem 0.9rem; /* was 0.85rem 1rem */
+.foot-h {
+    margin: 0 0 10px;
+    font-size: .95rem;
+    letter-spacing: .6px;
+    text-transform: uppercase;
+    color: color-mix(in oklab, var(--muted) 40%, var(--ink));
+}
+
+.foot-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: .55rem;
+}
+
+    .foot-list a {
+        color: var(--ink);
+    }
+
+        .foot-list a:hover {
+            opacity: .9;
         }
 
-        .contact-field textarea {
-            min-height: 130px; /* was 160px */
-        }
+/* Bottom copyright bar */
+.footer-bottom {
+    border-top: 1px solid var(--border);
+    background: color-mix(in oklab, var(--paper) 92%, var(--tint));
+    padding: 12px 0;
+}
 
-    .contact-submit .btn {
-        min-width: 140px; /* was 160px */
-        padding: 0.85rem 1.1rem; /* slightly tighter */
+.foot-bottom-row {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+    gap: 12px;
+}
+
+.foot-mini-brand {
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    color: color-mix(in oklab, var(--muted) 65%, var(--ink));
+    font-weight: 800;
+}
+
+.mark.small {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+}
+
+    .mark.small img {
+        padding: 3px;
+        border-radius: inherit;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
     }
+
+.foot-copy {
+    text-align: center;
+    color: color-mix(in oklab, var(--muted) 85%, var(--ink));
+    font-size: .95rem;
 }
 
-/* Features layout: title + 3-up + 2-up, all centered */
-.features-wrap {
-    width: min(100%, 1100px);
-    display: grid;
-    gap: 24px;
-    text-align: center; /* centers the title text */
-    margin: 0 auto;
+/* Footer theming tweaks */
+:root[data-theme="forge"] .site-footer {
+    background: color-mix(in oklab, var(--paper) 75%, var(--tint));
 }
 
-.features-row-3,
-.features-row-2 {
-    display: grid;
-    gap: 20px;
-    justify-content: center; /* center the whole grid block */
+:root[data-theme="forge"] .footer-bottom {
+    background: color-mix(in oklab, var(--paper) 82%, var(--tint));
 }
 
-.features-row-3 {
-    grid-template-columns: repeat(3, minmax(260px, 1fr));
-}
-
-.features-row-2 {
-    grid-template-columns: repeat(2, minmax(260px, 1fr));
-}
-
-/* Make the entire slide vertically centered */
-#slide-features .v-center {
-    padding-top: 0;
-    padding-bottom: 0;
-}
-
-/* Responsive collapse */
+/* Footer responsive */
 @media (max-width: 980px) {
-    .features-row-3 {
-        grid-template-columns: repeat(2, minmax(240px, 1fr));
-    }
-
-    .features-row-2 {
-        grid-template-columns: minmax(240px, 1fr);
-    }
-}
-
-@media (max-width: 600px) {
-    .features-row-3,
-    .features-row-2 {
+    .footer-top {
         grid-template-columns: 1fr;
     }
-}
 
-/* Let a child span both columns in a .grid-2 layout */
-.grid-2 > .span-2 {
-    grid-column: 1 / -1;
-}
-
-@media (max-width: 980px) {
-    .grid-2 > .span-2 {
-        grid-column: auto;
+    .footer-cols {
+        grid-template-columns: repeat(2, minmax(0,1fr));
     }
-    /* natural stack on mobile */
 }
 
-.v-left-50 {
+@media (max-width: 640px) {
+    .footer-cols {
+        grid-template-columns: 1fr;
+    }
+
+    .foot-bottom-row {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 6px;
+    }
+
+    .foot-mini-brand {
+        justify-content: center;
+    }
+}
+
+/* ===========================================================
+   RESPONSIVE TWEAKS (shared)
+   =========================================================== */
+
+@media (max-width:600px) {
+    .container {
+        padding: 0 18px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    h1 {
+        font-size: clamp(1.8rem, 8vw, 2.4rem);
+        margin-bottom: 18px;
+    }
+
+    .lead {
+        font-size: 1rem;
+        margin-bottom: 14px;
+    }
+
+    .hero-bullets {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .hero-card, .card {
+        padding: 18px;
+    }
+
+    .btn-row, .pills {
+        gap: .6rem;
+    }
+
+    .btn-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+        .btn-row .btn {
+            width: 100%;
+        }
+
+    .hero-carousel {
+        border-radius: 16px;
+    }
+
+    .hero-frame {
+        min-height: auto;
+        aspect-ratio: 16/9;
+        background-size: cover;
+        background-position: center;
+    }
+
+    .grid-2, .grid-3 {
+        grid-template-columns: 1fr;
+        gap: 18px;
+    }
+}
+
+@media (max-width:360px) {
+    h1 {
+        font-size: clamp(1.6rem, 8.8vw, 2.2rem);
+    }
+
+    .lead {
+        font-size: .95rem;
+    }
+
+    .btn {
+        padding: .9rem 1rem;
+        border-radius: 12px;
+    }
+}
+
+/* Stack a slide/page into [ content grows | footer pinned bottom ] */
+.v-stack {
     height: 100%;
     display: grid;
-    grid-template-columns: 1fr 1fr; /* content | spacer */
-    align-items: center;
-    gap: var(--gutter);
-    padding: 0 var(--gutter);
+    grid-template-rows: 1fr auto;
 }
 
-.grid-1 {
-    display: grid;
-    gap: 20px;
-    justify-items: start; /* left align cards */
+/* Footer when used inside the window (i.e., not below the shell) */
+.site-footer.inline {
+    /* Background spans edge-to-edge even if nested in a centered container */
+    width: 100vw;
+    margin-left: calc(50% - 50vw);
+    margin-right: calc(50% - 50vw);
 }
 
+/* 4) Home (last slide): keep content centered in the first row of v-stack */
+.v-stack > .v-center {
+    height: 100%;
+}
+
+/* Contact row lives as row 1 inside .v-stack.
+   Allow it to shrink and scroll instead of clipping under the footer. */
+.v-stack > #contact.contact-hero {
+    min-height: 0; /* critical: grid child may be shorter than content */
+    overflow: auto; /* row scrolls, page stays locked */
+    padding: clamp(24px, 6vh, 56px) 0;
+}
