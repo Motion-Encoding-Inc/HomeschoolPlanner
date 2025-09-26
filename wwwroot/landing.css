@@ -327,6 +327,11 @@ h2 {
     inset: 0; /* top/right/bottom/left: 0 */
     overflow: hidden; /* no scrollbar on page */
 }
+.window > .v-stage {
+    position: absolute;
+    inset: 0; /* top/right/bottom/left = 0 */
+    overflow: hidden; /* clip the track inside the window */
+}
 
 .v-track {
     position: absolute;
@@ -491,6 +496,7 @@ h2 {
     z-index: 1;
     display: flex;
     justify-content: center;
+    padding: 0 var(--gutter);
 }
 
 /* Cap the card height relative to the viewport and footer,
@@ -509,6 +515,32 @@ h2 {
         gap: 2rem;
     }
 }
+/* Contact base grid structure (required even when media queries change gaps/columns) */
+.contact-form {
+    display: grid;
+    gap: 1.8rem;
+}
+
+.contact-form-main {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.contact-column {
+    display: grid;
+    gap: 1.2rem;
+}
+
+.contact-field {
+    display: grid;
+    gap: 0.4rem;
+}
+    /* label above control */
+    .contact-field input,
+    .contact-field textarea {
+        width: 100%;
+    }
+/* stretch controls */
 
 @media (max-height: 820px) {
     .contact-card {
@@ -770,6 +802,22 @@ h2 {
 #slide-hard {
     --slide-bg: var(--landing-hard-bg);
     --slide-vignette: var(--vignette-left);
+}
+/* === FIX 2: add breathing room + consistent gaps on the "Hard" slide === */
+#slide-hard .container.section {
+    /* top/bottom padding responsive to height */
+    padding-block: clamp(24px, 6vh, 64px);
+}
+#slide-hard h2 {
+    margin-bottom: 8px;
+}
+
+#slide-hard p.muted {
+    margin-bottom: 18px;
+}
+
+#slide-hard .grid-1 {
+    gap: 18px;
 }
 
 /* How/Different: content on right ⇒ fade on right */
@@ -1068,6 +1116,7 @@ h2 {
    Allow it to shrink and scroll instead of clipping under the footer. */
 .v-stack > #contact.contact-hero {
     min-height: 0; /* critical: grid child may be shorter than content */
-    overflow: auto; /* row scrolls, page stays locked */
+    overflow: auto;
+    overscroll-behavior: contain; /* keep wheel/trackpad events contained */
     padding: clamp(24px, 6vh, 56px) 0;
 }
