@@ -1120,3 +1120,19 @@ h2 {
     overscroll-behavior: contain; /* keep wheel/trackpad events contained */
     padding: clamp(24px, 6vh, 56px) 0;
 }
+
+/* Label + "Optional" badge styling (was removed during cleanup) */
+.contact-field label {
+    font-weight: 600;
+    display: inline-flex; /* put the two spans on one line */
+    align-items: baseline; /* baseline-align the badge with the text */
+    gap: 0.5rem; /* <-- creates the space between Title and Optional */
+}
+
+.contact-field .optional {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
